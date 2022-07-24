@@ -1,19 +1,18 @@
 package me.hikingcarrot7.afnd.controller;
 
+import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.states.AFNDState;
+import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
+import me.hikingcarrot7.afnd.core.states.imp.IdleState;
+import me.hikingcarrot7.afnd.core.utils.Pair;
 import me.hikingcarrot7.afnd.view.MainView;
 import me.hikingcarrot7.afnd.view.components.AbstractButton;
 import me.hikingcarrot7.afnd.view.components.Button;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.ToggleButton;
 import me.hikingcarrot7.afnd.view.components.automata.VAFND;
-import me.hikingcarrot7.afnd.model.automata.AFND;
-import me.hikingcarrot7.afnd.model.states.AFNDState;
-import me.hikingcarrot7.afnd.model.states.AFNDStateManager;
-import me.hikingcarrot7.afnd.model.states.IdleState;
-import me.hikingcarrot7.afnd.model.utils.Pair;
 
-import java.awt.Cursor;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -32,12 +31,12 @@ public class AFNDController implements Observer {
   private final VAFND vafnd;
   private AbstractButton latestPressedButton;
 
-  public AFNDController(MainView view, AFND afnd, VAFND vafnd, Menu menu) {
+  public AFNDController(MainView view, AFNDGraph afndGraph, VAFND vafnd, Menu menu) {
     this.view = view;
     this.latestPressedButton = null;
     this.menu = menu;
     this.vafnd = vafnd;
-    this.afndStateManager = new AFNDStateManager(afnd);
+    this.afndStateManager = new AFNDStateManager(afndGraph);
     this.bindings = new ArrayList<>();
   }
 

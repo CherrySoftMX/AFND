@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.view.components.automata.conexiones;
 
-import me.hikingcarrot7.afnd.model.utils.MathHelper;
+import me.hikingcarrot7.afnd.core.utils.MathHelper;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.VArch;
 import me.hikingcarrot7.afnd.view.components.VNode;

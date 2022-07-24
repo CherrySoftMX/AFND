@@ -1,8 +1,8 @@
 package me.hikingcarrot7.afnd.controller;
 
 import me.hikingcarrot7.afnd.controller.events.EventHandler;
-import me.hikingcarrot7.afnd.model.automata.AFND;
-import me.hikingcarrot7.afnd.model.states.*;
+import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.states.imp.*;
 import me.hikingcarrot7.afnd.view.MainView;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.automata.VAFND;
@@ -26,28 +26,28 @@ public class SetupManager {
     loadCustomFont();
 
     VAFND vafnd = VAFND.getInstance();
-    AFND afnd = new AFND();
+    AFNDGraph afndGraph = new AFNDGraph();
     me.hikingcarrot7.afnd.view.components.Menu menu = new me.hikingcarrot7.afnd.view.components.Menu(vafnd);
 
-    AFNDController afndController = new AFNDController(view, afnd, vafnd, menu);
+    AFNDController afndController = new AFNDController(view, afndGraph, vafnd, menu);
     EventHandler eventHandler = EventHandler.getInstance();
 
     vafnd.addKeyListener(eventHandler);
     vafnd.addMouseListener(eventHandler);
     vafnd.addMouseMotionListener(eventHandler);
 
-    afndController.addBinding(Menu.BUTTON_ADD_ESTADO_INICIAL, AddAFNDEstadoState.getInstance());
-    afndController.addBinding(Menu.BUTTON_ADD_ESTADO_NORMAL, AddAFNDEstadoState.getInstance());
-    afndController.addBinding(Menu.BUTTON_ADD_ESTADO_INICIAL_FINAL, AddAFNDEstadoState.getInstance());
-    afndController.addBinding(Menu.BUTTON_ADD_ESTADO_FINAL, AddAFNDEstadoState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ADD_ESTADO_INICIAL, AddingNodeState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ADD_ESTADO_NORMAL, AddingNodeState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ADD_ESTADO_INICIAL_FINAL, AddingNodeState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ADD_ESTADO_FINAL, AddingNodeState.getInstance());
 
-    afndController.addBinding(Menu.BUTTON_MOVER_ESTADO, MoverAFNDEstadoState.getInstance());
-    afndController.addBinding(Menu.BUTTON_ADD_CONEXION_NORMAL, AddAFNDConexionNormalState.getInstance());
-    afndController.addBinding(Menu.BUTTON_ELIMINAR_ESTADO, BorrarAFNDEstadoState.getInstance());
-    afndController.addBinding(Menu.BUTTON_ADD_CONEXION_BUCLE, AddAFNDConexionBucleState.getInstance());
-    afndController.addBinding(Menu.BUTTON_ELIMINAR_CONEXION, BorrarAFNDConexionState.getInstance());
-    afndController.addBinding(Menu.BUTTON_COMPROBAR_AUTOMATA, ComprobarAFNDState.getInstance());
-    afndController.addBinding(Menu.BUTTON_COMPROBACION_PASOS_AUTOMATA, PasoAPasoAFNDState.getInstance());
+    afndController.addBinding(Menu.BUTTON_MOVER_ESTADO, MovingNodeState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ADD_CONEXION_NORMAL, AddingConectionState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ELIMINAR_ESTADO, DeletingNodeState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ADD_CONEXION_BUCLE, AddingLoopConnectionState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ELIMINAR_CONEXION, DeletingConnectionState.getInstance());
+    afndController.addBinding(Menu.BUTTON_COMPROBAR_AUTOMATA, VerifyingInputState.getInstance());
+    afndController.addBinding(Menu.BUTTON_COMPROBACION_PASOS_AUTOMATA, ResolvingStepByStepState.getInstance());
 
     eventHandler.addObserver(afndController);
 

@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.view.graphics;
 
-import me.hikingcarrot7.afnd.model.utils.Pair;
+import me.hikingcarrot7.afnd.core.utils.Pair;
 
 import java.awt.Color;
 import java.util.ArrayList;
