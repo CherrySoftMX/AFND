@@ -80,7 +80,7 @@ public class ResolvingStepByStepState implements AFNDState {
 
   private void pintarSiguientePaso(AFNDGraph<String> afndGraph, VAFND vafnd) {
     if (recorridoIterator == null) {
-      recorridoIterator = afndGraph.getRecorrido().iterator();
+      recorridoIterator = afndGraph.getPath().iterator();
     }
     if (recorridoIterator.hasNext()) {
       Pair<Connection<?>, String> pair = recorridoIterator.next();
@@ -119,7 +119,7 @@ public class ResolvingStepByStepState implements AFNDState {
     comprobado = false;
     palabraAceptada = false;
     recorridoIterator = null;
-    afndGraph.clearRecorrido();
+    afndGraph.clearPath();
     vafnd.removeComponent(messageBox);
     clearAllMarks(vafnd);
     AFNDState.super.clearState(afndGraph, vafnd, afndStateManager);

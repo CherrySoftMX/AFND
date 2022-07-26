@@ -10,13 +10,13 @@ import java.util.stream.Stream;
 public abstract class Graph<E> {
   protected int elementCount;
 
-  public abstract void insertElement(E element) throws GrafoLlenoException, NodoYaExisteException;
+  public abstract boolean insertElement(E element) throws GrafoLlenoException, NodoYaExisteException;
 
-  public abstract void removeElement(E element) throws NodoNoExistenteException;
+  public abstract boolean removeElement(E element) throws NodoNoExistenteException;
 
-  public abstract void insertConnection(E origin, E destination, Object element) throws NodoNoExistenteException;
+  public abstract boolean insertConnection(E origin, E destination, Object element) throws NodoNoExistenteException;
 
-  public abstract void removeConnection(E origin, E destination) throws ArcoNoExistenteException, NodoNoExistenteException;
+  public abstract boolean removeConnection(E origin, E destination) throws ArcoNoExistenteException, NodoNoExistenteException;
 
   public abstract boolean existConnection(E origin, E destination) throws NodoNoExistenteException;
 

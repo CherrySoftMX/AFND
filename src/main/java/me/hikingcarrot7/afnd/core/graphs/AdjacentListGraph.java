@@ -14,35 +14,27 @@ public class AdjacentListGraph<T> extends Graph<T> {
   }
 
   @Override
-  public void insertElement(T element) throws GrafoLlenoException, NodoYaExisteException {
+  public boolean insertElement(T element) {
     throwIfMaxCapacityReached();
     if (existElement(element)) {
-      return;
+      return false;
     }
     Node<T> newNode = new Node<>(element);
     adjTable.add(newNode);
     elementCount++;
-  }
-
-  public void addNode(Node<T> node) throws GrafoLlenoException, NodoYaExisteException {
-    if (cardinality() == MAX_NODES) {
-      throw new GrafoLlenoException();
-    }
-    if (indexOf(node.getElement()) >= 0) {
-      throw new NodoYaExisteException();
-    }
-    adjTable.add(node);
-    elementCount++;
+    return true;
   }
 
   @Override
-  public void removeElement(T element) throws NodoNoExistenteException {
+  public boolean removeElement(T element) throws NodoNoExistenteException {
     if (existElement(element)) {
       Node<T> nodeToRemove = getNode(element);
       adjTable.remove(nodeToRemove);
       elementCount--;
       removeAllRefsTo(nodeToRemove);
+      return true;
     }
+    return false;
   }
 
   private void removeAllRefsTo(Node<T> nodeToRemove) {
@@ -53,24 +45,28 @@ public class AdjacentListGraph<T> extends Graph<T> {
   }
 
   @Override
-  public void insertConnection(T origin, T destination, Object element) {
+  public boolean insertConnection(T origin, T destination, Object element) {
     boolean noConnection = !existConnection(origin, destination);
     boolean bothElementsExist = existElements(origin, destination);
     if (noConnection && bothElementsExist) {
       Node<T> originNode = getNode(origin);
       Node<T> destinationNode = getNode(destination);
       originNode.addConnection(destinationNode, element);
+      return true;
     }
+    return false;
   }
 
   @Override
-  public void removeConnection(T origin, T destination) {
+  public boolean removeConnection(T origin, T destination) {
     if (existConnection(origin, destination)) {
       Node<T> originNode = getNode(origin);
       Node<T> destinationNode = getNode(destination);
       originNode.getConnections()
           .removeIf(conn -> conn.getDestination().equals(destinationNode));
+      return true;
     }
+    return false;
   }
 
   @Override
@@ -95,7 +91,7 @@ public class AdjacentListGraph<T> extends Graph<T> {
     return -1;
   }
 
-  protected Node<T> getNode(T element) {
+  protected Node<T> getNode(Object element) {
     int numNode = indexOf(element);
     if (numNode >= 0) {
       return adjTable.get(numNode);

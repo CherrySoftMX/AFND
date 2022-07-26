@@ -1,9 +1,6 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
 import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
-import me.hikingcarrot7.afnd.core.graphs.Node;
-import me.hikingcarrot7.afnd.core.graphs.exceptions.GrafoLlenoException;
-import me.hikingcarrot7.afnd.core.graphs.exceptions.NodoYaExisteException;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
@@ -45,7 +42,7 @@ public class AddingNodeState implements AFNDState {
     if (event.getID() == KeyEvent.KEY_PRESSED) {
       KeyEvent keyEvent = (KeyEvent) event;
       if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-        if (addEstado(afndGraph, vafnd, previewNode.getCoords(), buttonID)) {
+        if (addState(afndGraph, vafnd, previewNode.getCoords(), buttonID)) {
           clearState(afndGraph, vafnd, afndStateManager);
         } else {
           dialogueballoon.setText("Ese estado ya existe!");
@@ -59,11 +56,11 @@ public class AddingNodeState implements AFNDState {
       }
     }
     if (!namingState && event.getID() == MouseEvent.MOUSE_CLICKED) {
-      previewNewEstado(afndGraph, vafnd, (MouseEvent) event, buttonID);
+      previewNewState(afndGraph, vafnd, (MouseEvent) event, buttonID);
     }
   }
 
-  private void previewNewEstado(AFNDGraph<String> afndGraph, VAFND vafnd, MouseEvent e, int buttonID) {
+  private void previewNewState(AFNDGraph<String> afndGraph, VAFND vafnd, MouseEvent e, int buttonID) {
     switch (buttonID) {
       case Menu.ESTADO_INICIAL_ID:
       case Menu.ESTADO_INICIAL_FINAL_ID:
@@ -74,9 +71,9 @@ public class AddingNodeState implements AFNDState {
         }
     }
 
-    int verticePresionado = GraphUtils.getVerticePresionado(afndGraph, vafnd.getVNodes(), e.getPoint());
+    int pressedNode = GraphUtils.getVerticePresionado(afndGraph, vafnd.getVNodes(), e.getPoint());
 
-    if (verticePresionado < 0) {
+    if (pressedNode < 0) {
       previewNode = factory.createEstado(buttonID, "", e.getPoint());
       vafnd.addVNode(previewNode);
 
@@ -93,38 +90,28 @@ public class AddingNodeState implements AFNDState {
     }
   }
 
-  private boolean addEstado(AFNDGraph<String> afndGraph, VAFND vafnd, Point coords, int buttonID) {
-    String name = textTyper.getText();
-    Node<String> newNode = new Node<>(name);
-    try {
-      if (name.length() <= 0) {
-        throw new IllegalStateException();
-      }
-      switch (buttonID) {
-        case Menu.ESTADO_INICIAL_ID:
-          afndGraph.setInitialState(newNode);
-          afndGraph.addNode(newNode);
-          break;
-        case Menu.ESTADO_INICIAL_FINAL_ID:
-          afndGraph.setInitialState(newNode);
-          afndGraph.addFinalState(newNode);
-          afndGraph.addNode(newNode);
-          break;
-        case Menu.ESTADO_FINAL_ID:
-          afndGraph.addFinalState(newNode);
-          afndGraph.addNode(newNode);
-          break;
-        default:
-          afndGraph.addNode(newNode);
-      }
-      vafnd.addVNode(factory.createEstado(buttonID, name, coords));
-      vafnd.repaint();
-    } catch (IllegalStateException | GrafoLlenoException |
-             NodoYaExisteException e) {
+  private boolean addState(AFNDGraph<String> afndGraph, VAFND vafnd, Point center, int buttonID) {
+    String element = textTyper.getText();
+    boolean elementInserted;
+    if (element.length() <= 0) {
       return false;
     }
-
-    return true;
+    switch (buttonID) {
+      case Menu.ESTADO_INICIAL_ID:
+        elementInserted = afndGraph.insertAsInitialState(element);
+        break;
+      case Menu.ESTADO_INICIAL_FINAL_ID:
+        elementInserted = afndGraph.insertAsInitialAndFinalState(element);
+        break;
+      case Menu.ESTADO_FINAL_ID:
+        elementInserted = afndGraph.insertAsFinalState(element);
+        break;
+      default:
+        elementInserted = afndGraph.insertElement(element);
+    }
+    vafnd.addVNode(factory.createEstado(buttonID, element, center));
+    vafnd.repaint();
+    return elementInserted;
   }
 
   private void nombrarEstado(VAFND vafnd, KeyEvent event) {
