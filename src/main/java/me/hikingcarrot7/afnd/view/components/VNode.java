@@ -16,7 +16,7 @@ public class VNode extends Blob {
   public static final Color COLOR_SELECTED_VERTICE_RELLENO = new Color(158, 244, 162);
   public static final Color COLOR_SELECTED_VERTICE_STROKE = new Color(23, 229, 31);
 
-  public static final int RADIO_NODO = 25;
+  public static final int NODE_RADIUS = 25;
   public static final int STROKE_WIDTH = 5;
 
   public static final ColorPalette DEFAULT_VNODE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
@@ -71,7 +71,7 @@ public class VNode extends Blob {
   }
 
   public VNode(String name, int xCenter, int yCenter) {
-    super(xCenter, yCenter, RADIO_NODO, name, DEFAULT_VNODE_COLOR_PALETTE);
+    super(xCenter, yCenter, NODE_RADIUS, name, DEFAULT_VNODE_COLOR_PALETTE);
   }
 
   @Override
@@ -80,10 +80,10 @@ public class VNode extends Blob {
     Color defaultColor = g.getColor();
 
     g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
-    g.fillOval(xCenter - RADIO_NODO, yCenter - RADIO_NODO, RADIO_NODO * 2, RADIO_NODO * 2);
+    g.fillOval(xCenter - NODE_RADIUS, yCenter - NODE_RADIUS, NODE_RADIUS * 2, NODE_RADIUS * 2);
     g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
     g.setStroke(new BasicStroke(STROKE_WIDTH));
-    g.drawOval(xCenter - RADIO_NODO, yCenter - RADIO_NODO, RADIO_NODO * 2, RADIO_NODO * 2);
+    g.drawOval(xCenter - NODE_RADIUS, yCenter - NODE_RADIUS, NODE_RADIUS * 2, NODE_RADIUS * 2);
     g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
     GraphicsUtils.dibujarStringEnPunto(g, name, xCenter, yCenter);
 

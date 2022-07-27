@@ -1,4 +1,4 @@
-package me.hikingcarrot7.afnd.core.automata;
+package me.hikingcarrot7.afnd.core.afnd;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,15 +12,6 @@ class AFNDGraphTest {
   void setUp() {
     afndGraph = new AFNDGraph<>();
     afndGraph.insertElement(5);
-  }
-
-  @Test
-  void givenElementToRemove_whenIsInitialState_thenInitialStateIsSetToNull() {
-    afndGraph.setInitialState(5);
-
-    afndGraph.removeElement(5);
-
-    assertFalse(afndGraph.hasInitialState());
   }
 
   @Test

@@ -89,13 +89,13 @@ public class ConexionBucle extends VArch {
     }
 
     private Point getPuntoInicioDerecho() {
-        return new Point((int) (VNode.RADIO_NODO * Math.cos(-Math.PI / 4)),
-                (int) (VNode.RADIO_NODO * Math.sin(-Math.PI / 4)));
+        return new Point((int) (VNode.NODE_RADIUS * Math.cos(-Math.PI / 4)),
+                (int) (VNode.NODE_RADIUS * Math.sin(-Math.PI / 4)));
     }
 
     private Point getPuntoInicioIzquierdo() {
-        return new Point((int) (VNode.RADIO_NODO * Math.cos(Math.PI + Math.PI / 4)),
-                (int) ((VNode.RADIO_NODO) * Math.sin(Math.PI + Math.PI / 4)));
+        return new Point((int) (VNode.NODE_RADIUS * Math.cos(Math.PI + Math.PI / 4)),
+                (int) ((VNode.NODE_RADIUS) * Math.sin(Math.PI + Math.PI / 4)));
     }
 
     private Point getPuntoControlDerecho() {

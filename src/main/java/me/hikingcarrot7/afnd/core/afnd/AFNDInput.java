@@ -1,9 +1,7 @@
-package me.hikingcarrot7.afnd.core.automata;
+package me.hikingcarrot7.afnd.core.afnd;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class AFNDInput implements Iterable<Character> {
   private String input;
@@ -33,10 +31,6 @@ public class AFNDInput implements Iterable<Character> {
 
   public AFNDInput makeCopy() {
     return new AFNDInput(input);
-  }
-
-  public String getAsString() {
-    return toString();
   }
 
   @Override

@@ -1,10 +1,9 @@
 package me.hikingcarrot7.afnd.controller;
 
-import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
 import me.hikingcarrot7.afnd.core.states.imp.IdleState;
-import me.hikingcarrot7.afnd.core.utils.Pair;
 import me.hikingcarrot7.afnd.view.MainView;
 import me.hikingcarrot7.afnd.view.components.AbstractButton;
 import me.hikingcarrot7.afnd.view.components.Button;
@@ -16,16 +15,11 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class AFNDController implements Observer {
-
-  private final List<Pair<AbstractButton, AFNDState>> bindings;
+  private final Map<AbstractButton, AFNDState> bindings;
   private final AFNDStateManager afndStateManager;
-
   private final MainView view;
   private final Menu menu;
   private final VAFND vafnd;
@@ -37,17 +31,15 @@ public class AFNDController implements Observer {
     this.menu = menu;
     this.vafnd = vafnd;
     this.afndStateManager = new AFNDStateManager(afndGraph);
-    this.bindings = new ArrayList<>();
+    this.bindings = new HashMap<>();
   }
 
   @Override
   public void update(Observable o, Object arg) {
     InputEvent event = (InputEvent) arg;
-
     if (event instanceof KeyEvent) {
       handleKeyEvent((KeyEvent) event);
     }
-
     if (event instanceof MouseEvent) {
       handleMouseEvent((MouseEvent) event);
     }
@@ -67,7 +59,7 @@ public class AFNDController implements Observer {
     AbstractButton button = null;
     switch (e.getID()) {
       case MouseEvent.MOUSE_CLICKED:
-        button = getMouseOverButton(e.getPoint());
+        button = getButtonUnder(e.getPoint());
         if (button != null) {
           if (button != latestPressedButton) {
             blurLatestPressedButton();
@@ -75,7 +67,7 @@ public class AFNDController implements Observer {
 
           button.click(e);
           afndStateManager.exitCurrentState();
-          AFNDState boundedAFNDState = getBoundAFNDState(button);
+          AFNDState boundedAFNDState = bindings.get(button);
 
           if (button instanceof ToggleButton) {
             afndStateManager.setCurrentState(((ToggleButton) button).isToggled() ? boundedAFNDState : IdleState.getInstance());
@@ -88,7 +80,7 @@ public class AFNDController implements Observer {
         vafnd.requestFocus();
         break;
       case MouseEvent.MOUSE_MOVED:
-        button = getMouseOverButton(e.getPoint());
+        button = getButtonUnder(e.getPoint());
         view.setCursor(Cursor.getPredefinedCursor(button != null ? Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR));
         break;
     }
@@ -101,22 +93,14 @@ public class AFNDController implements Observer {
   }
 
   private void deliverInputEvent(InputEvent e) {
-    afndStateManager.dispatchInputEvent(latestPressedButton != null ? latestPressedButton.getID() : -1, e);
+    int buttonID = latestPressedButton != null ? latestPressedButton.getID() : -1;
+    afndStateManager.dispatchInputEvent(buttonID, e);
   }
 
-  private AbstractButton getMouseOverButton(Point point) {
-    for (Pair<AbstractButton, AFNDState> pair : bindings) {
-      if (pair.getLeft().isClicked(point)) {
-        return pair.getLeft();
-      }
-    }
-    return null;
-  }
-
-  private AFNDState getBoundAFNDState(AbstractButton button) {
-    for (Pair<AbstractButton, AFNDState> pair : bindings) {
-      if (pair.getLeft() == button) {
-        return pair.getRight();
+  private AbstractButton getButtonUnder(Point point) {
+    for (AbstractButton button : bindings.keySet()) {
+      if (button.isClicked(point)) {
+        return button;
       }
     }
     return null;
@@ -129,11 +113,7 @@ public class AFNDController implements Observer {
   }
 
   public void addBinding(AbstractButton button, AFNDState state) {
-    bindings.add(new Pair<>(button, state));
-  }
-
-  public void removeBinding(AbstractButton button, AFNDState state) {
-    bindings.remove(new Pair<>(button, state));
+    bindings.put(button, state);
   }
 
 }

@@ -1,7 +1,7 @@
 package me.hikingcarrot7.afnd.controller;
 
 import me.hikingcarrot7.afnd.controller.events.EventHandler;
-import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.imp.*;
 import me.hikingcarrot7.afnd.view.MainView;
 import me.hikingcarrot7.afnd.view.components.Menu;
@@ -27,7 +27,7 @@ public class SetupManager {
 
     VAFND vafnd = VAFND.getInstance();
     AFNDGraph afndGraph = new AFNDGraph();
-    me.hikingcarrot7.afnd.view.components.Menu menu = new me.hikingcarrot7.afnd.view.components.Menu(vafnd);
+    Menu menu = new Menu(vafnd);
 
     AFNDController afndController = new AFNDController(view, afndGraph, vafnd, menu);
     EventHandler eventHandler = EventHandler.getInstance();

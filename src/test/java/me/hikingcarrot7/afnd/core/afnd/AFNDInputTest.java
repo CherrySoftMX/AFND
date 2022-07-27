@@ -1,4 +1,4 @@
-package me.hikingcarrot7.afnd.core.automata;
+package me.hikingcarrot7.afnd.core.afnd;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ class AFNDInputTest {
     String firstChar = input.getFirstChar();
 
     assertEquals("t", firstChar);
-    assertEquals("test", input.getAsString());
+    assertEquals("test", input.toString());
   }
 
   @Test
@@ -35,7 +35,7 @@ class AFNDInputTest {
     boolean shouldBeTrue = input.removeFirstChar();
 
     assertTrue(shouldBeTrue);
-    assertEquals("est", input.getAsString());
+    assertEquals("est", input.toString());
   }
 
   @Test
@@ -54,11 +54,11 @@ class AFNDInputTest {
     AFNDInput inputCopy = input.makeCopy();
 
     assertNotEquals(inputCopy, input);
-    assertEquals("est", inputCopy.getAsString());
+    assertEquals("est", inputCopy.toString());
   }
 
   private void emptyInput(AFNDInput input) {
-    for (char ch : input.getAsString().toCharArray()) {
+    for (char ch : input.toString().toCharArray()) {
       input.removeFirstChar();
     }
   }

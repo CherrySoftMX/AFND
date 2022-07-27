@@ -96,7 +96,7 @@ public class Blob implements Drawable, Movable {
         this.yCenter = yCenter;
     }
 
-    @Override public Point getCoords() {
+    @Override public Point getPos() {
         return new Point(xCenter, yCenter);
     }
 

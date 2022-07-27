@@ -1,8 +1,7 @@
-package me.hikingcarrot7.afnd.core.automata;
+package me.hikingcarrot7.afnd.core.afnd;
 
 import me.hikingcarrot7.afnd.core.graphs.Connection;
 import me.hikingcarrot7.afnd.core.graphs.Node;
-import me.hikingcarrot7.afnd.core.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,12 +9,16 @@ import java.util.List;
 
 public class AFNDResolver {
   private final AFNDGraph<?> afnd;
-  private List<Pair<Connection<?>, String>> path;
+  private List<MatchResultStep> path;
   private MatchResult latestMatchResult;
 
   public AFNDResolver(AFNDGraph<?> afnd) {
     this.afnd = afnd;
     this.path = new ArrayList<>();
+  }
+
+  public MatchResult matches(String input) {
+    return matches(new AFNDInput(input));
   }
 
   public MatchResult matches(AFNDInput input) {
@@ -53,7 +56,7 @@ public class AFNDResolver {
         AFNDInput inputCopy = input.makeCopy();
         inputCopy.removeFirstChar();
         if (matches(connection.getDestination(), inputCopy)) {
-          path.add(new Pair<>(connection, inputCopy.getAsString()));
+          path.add(new MatchResultStep(connection, inputCopy.toString()));
           return true;
         }
       }

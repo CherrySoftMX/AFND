@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
@@ -105,7 +105,7 @@ public class AddingConectionState implements AFNDState {
         previewArch.setDestino(destino);
         previewArch.setPreviewMode(false);
 
-        textTyper = new TextTyper(previewArch.getBlob().getCoords(), 1);
+        textTyper = new TextTyper(previewArch.getBlob().getPos(), 1);
         dialogueballoon = new DialogueBalloon(vafnd, previewArch.getBlob(), "Inserte la condición");
         insertandoCondicion = true;
 

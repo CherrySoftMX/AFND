@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.core.utils;
 
-import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.view.components.VArch;
 import me.hikingcarrot7.afnd.view.components.VNode;
 import me.hikingcarrot7.afnd.view.components.automata.VAFND;
@@ -17,7 +17,7 @@ public class GraphUtils {
   public static int getVerticePresionado(AFNDGraph<?> afndGraph, List<VNode> vnodes, Point mouse) {
     for (int i = 0; i < afndGraph.cardinality(); i++) {
       Point center = new Point(vnodes.get(i).getXCenter(), vnodes.get(i).getYCenter());
-      if (MathHelper.distanciaEntreDosPuntos(center, mouse) <= VNode.RADIO_NODO) {
+      if (MathHelper.distanciaEntreDosPuntos(center, mouse) <= VNode.NODE_RADIUS) {
         return i;
       }
     }

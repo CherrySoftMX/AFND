@@ -12,6 +12,6 @@ public interface Movable {
 
   void setYCenter(int yPos);
 
-  Point getCoords();
+  Point getPos();
 
 }

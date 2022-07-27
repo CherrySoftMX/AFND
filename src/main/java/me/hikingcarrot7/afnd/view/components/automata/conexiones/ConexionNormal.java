@@ -49,8 +49,8 @@ public class ConexionNormal extends VArch {
             GeneralPath path = new GeneralPath();
             path.moveTo(origen.getXCenter(), origen.getYCenter());
 
-            Point puntoMedio = MathHelper.puntoMedio(origen.getCoords(), destino.getCoords());
-            Point puntoControl = MathHelper.puntoControl(origen.getCoords(), destino.getCoords(), ALTURA_CURVATURA);
+            Point puntoMedio = MathHelper.puntoMedio(origen.getPos(), destino.getPos());
+            Point puntoControl = MathHelper.puntoControl(origen.getPos(), destino.getPos(), ALTURA_CURVATURA);
 
             path.curveTo(
                     puntoMedio.x + puntoControl.x,
@@ -62,8 +62,8 @@ public class ConexionNormal extends VArch {
 
             g.draw(path);
 
-            updateBlobPosition(g, origen.getCoords(), destino.getCoords());
-            updateTrianglePosition(g, origen.getCoords(), destino.getCoords(), ALTURA_CURVATURA);
+            updateBlobPosition(g, origen.getPos(), destino.getPos());
+            updateTrianglePosition(g, origen.getPos(), destino.getPos(), ALTURA_CURVATURA);
         }
 
         g.setStroke(defaultStroke);
@@ -79,7 +79,7 @@ public class ConexionNormal extends VArch {
         triangle.setDestinoX(destino.x);
         triangle.setDestinoY(destino.y);
         triangle.setLength(TRIANGLE_LENGTH);
-        triangle.setOffset(VNode.RADIO_NODO + STROKE_WIDTH);
+        triangle.setOffset(VNode.NODE_RADIUS + STROKE_WIDTH);
     }
 
     @Override public void updateBlobPosition(Graphics2D g, Point origen, Point destino) {

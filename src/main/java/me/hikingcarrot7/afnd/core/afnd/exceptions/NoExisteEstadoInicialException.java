@@ -1,4 +1,4 @@
-package me.hikingcarrot7.afnd.core.automata.exceptions;
+package me.hikingcarrot7.afnd.core.afnd.exceptions;
 
 public class NoExisteEstadoInicialException extends RuntimeException {
   /**

@@ -118,7 +118,7 @@ public class DialogueBalloon implements Box, Drawable {
     int realHeight = getRealBoxHeight(textBounds);
     int realWidth = getRealBoxWidth(textBounds);
 
-    return relativeTo.getYCenter() - VNode.RADIO_NODO >= realHeight
+    return relativeTo.getYCenter() - VNode.NODE_RADIUS >= realHeight
       && relativeTo.getXCenter() + realWidth / 2 <= vgraph.getWidth() - Menu.MENU_WIDTH
       && relativeTo.getXCenter() - realWidth / 2 >= 0;
   }
@@ -127,20 +127,20 @@ public class DialogueBalloon implements Box, Drawable {
     int realHeight = getRealBoxHeight(textBounds);
     int realWidth = getRealBoxWidth(textBounds);
 
-    return relativeTo.getYCenter() + VNode.RADIO_NODO + realHeight <= vgraph.getHeight()
+    return relativeTo.getYCenter() + VNode.NODE_RADIUS + realHeight <= vgraph.getHeight()
       && relativeTo.getXCenter() + realWidth / 2 <= vgraph.getWidth() - Menu.MENU_WIDTH;
   }
 
   private boolean canPlaceOnRight(VAFND vgraph, Movable relativeTo, Rectangle textBounds) {
     int realWidth = getRealBoxWidth(textBounds);
 
-    return relativeTo.getXCenter() + VNode.RADIO_NODO + realWidth <= vgraph.getWidth() - Menu.MENU_WIDTH;
+    return relativeTo.getXCenter() + VNode.NODE_RADIUS + realWidth <= vgraph.getWidth() - Menu.MENU_WIDTH;
   }
 
   private boolean canPlaceOnLeft(VAFND vgraph, Movable relativeTo, Rectangle textBounds) {
     int realWidth = getRealBoxWidth(textBounds);
 
-    return relativeTo.getXCenter() - VNode.RADIO_NODO - realWidth >= 0;
+    return relativeTo.getXCenter() - VNode.NODE_RADIUS - realWidth >= 0;
   }
 
   @Override

@@ -101,7 +101,7 @@ public class TextTyper implements Drawable, Movable {
   }
 
   @Override
-  public Point getCoords() {
+  public Point getPos() {
     return new Point(xCenter, yCenter);
   }
 }

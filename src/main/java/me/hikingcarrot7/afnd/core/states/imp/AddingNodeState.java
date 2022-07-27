@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
@@ -9,8 +9,8 @@ import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
 import me.hikingcarrot7.afnd.view.components.VNode;
 import me.hikingcarrot7.afnd.view.components.automata.VAFND;
-import me.hikingcarrot7.afnd.view.components.automata.estados.AFNDEstadoFactory;
-import me.hikingcarrot7.afnd.view.components.automata.estados.AFNDEstadoFactoryImp;
+import me.hikingcarrot7.afnd.view.components.automata.estados.AFNDStateFactory;
+import me.hikingcarrot7.afnd.view.components.automata.estados.AFNDStateFactoryImp;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -28,12 +28,12 @@ public class AddingNodeState implements AFNDState {
   }
 
   private AddingNodeState() {
-    factory = AFNDEstadoFactoryImp.getInstance();
+    factory = AFNDStateFactoryImp.getInstance();
   }
 
-  private final AFNDEstadoFactory factory;
+  private final AFNDStateFactory factory;
   private TextTyper textTyper;
-  private DialogueBalloon dialogueballoon;
+  private DialogueBalloon dialogueBalloon;
   private VNode previewNode;
   private boolean namingState = false;
 
@@ -42,10 +42,10 @@ public class AddingNodeState implements AFNDState {
     if (event.getID() == KeyEvent.KEY_PRESSED) {
       KeyEvent keyEvent = (KeyEvent) event;
       if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-        if (addState(afndGraph, vafnd, previewNode.getCoords(), buttonID)) {
+        if (addState(afndGraph, vafnd, previewNode.getPos(), buttonID)) {
           clearState(afndGraph, vafnd, afndStateManager);
         } else {
-          dialogueballoon.setText("Ese estado ya existe!");
+          dialogueBalloon.setText("Ese estado ya existe!");
           vafnd.repaint();
           return;
         }
@@ -74,14 +74,14 @@ public class AddingNodeState implements AFNDState {
     int pressedNode = GraphUtils.getVerticePresionado(afndGraph, vafnd.getVNodes(), e.getPoint());
 
     if (pressedNode < 0) {
-      previewNode = factory.createEstado(buttonID, "", e.getPoint());
+      previewNode = factory.createState(buttonID, "", e.getPoint());
       vafnd.addVNode(previewNode);
 
       textTyper = new TextTyper(e.getPoint(), 6);
       vafnd.addComponent(textTyper, VAFND.MIDDLE_LAYER);
 
-      dialogueballoon = new DialogueBalloon(vafnd, previewNode, "Inserte el nombre");
-      vafnd.addComponent(dialogueballoon, VAFND.MIDDLE_LAYER);
+      dialogueBalloon = new DialogueBalloon(vafnd, previewNode, "Inserte el nombre");
+      vafnd.addComponent(dialogueBalloon, VAFND.MIDDLE_LAYER);
 
       namingState = true;
 
@@ -109,7 +109,7 @@ public class AddingNodeState implements AFNDState {
       default:
         elementInserted = afndGraph.insertElement(element);
     }
-    vafnd.addVNode(factory.createEstado(buttonID, element, center));
+    vafnd.addVNode(factory.createState(buttonID, element, center));
     vafnd.repaint();
     return elementInserted;
   }
@@ -122,7 +122,7 @@ public class AddingNodeState implements AFNDState {
   @Override
   public void clearState(AFNDGraph<String> afndGraph, VAFND vafnd, AFNDStateManager afndStateManager) {
     vafnd.removeComponent(textTyper);
-    vafnd.removeComponent(dialogueballoon);
+    vafnd.removeComponent(dialogueBalloon);
     vafnd.removeVNode(previewNode);
     namingState = false;
     AFNDState.super.clearState(afndGraph, vafnd, afndStateManager);

@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
@@ -78,7 +78,7 @@ public class AddingLoopConnectionState implements AFNDState {
 
         previewArch = new ConexionBucle(origen, origen, true);
 
-        textTyper = new TextTyper(previewArch.getBlob().getCoords(), 1);
+        textTyper = new TextTyper(previewArch.getBlob().getPos(), 1);
         dialogueballoon = new DialogueBalloon(vafnd, previewArch.getBlob(), "Inserte la condición");
 
         vafnd.addVArch(previewArch, VAFND.MIN_LAYER);

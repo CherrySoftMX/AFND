@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.core.states;
 
-import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
+import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.imp.IdleState;
 import me.hikingcarrot7.afnd.view.components.automata.VAFND;
 

@@ -1,19 +1,14 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.automata.AFNDGraph;
-import me.hikingcarrot7.afnd.core.automata.exceptions.CadenaVaciaException;
-import me.hikingcarrot7.afnd.core.automata.exceptions.NoExisteEstadoInicialException;
+import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
+import me.hikingcarrot7.afnd.core.afnd.MatchResult;
+import me.hikingcarrot7.afnd.core.afnd.MatchResultStep;
+import me.hikingcarrot7.afnd.core.graphs.Connection;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
+import me.hikingcarrot7.afnd.view.components.*;
 import me.hikingcarrot7.afnd.view.components.automata.VAFND;
 import me.hikingcarrot7.afnd.view.graphics.Box;
-import me.hikingcarrot7.afnd.core.graphs.Connection;
-import me.hikingcarrot7.afnd.core.utils.Pair;
-import me.hikingcarrot7.afnd.view.components.Menu;
-import me.hikingcarrot7.afnd.view.components.TextBox;
-import me.hikingcarrot7.afnd.view.components.Triangle;
-import me.hikingcarrot7.afnd.view.components.VArch;
-import me.hikingcarrot7.afnd.view.components.VNode;
 
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -29,10 +24,11 @@ public class ResolvingStepByStepState implements AFNDState {
     return instance;
   }
 
-  private boolean comprobado = false;
-  private boolean palabraAceptada = false;
-  private Iterator<Pair<Connection<?>, String>> recorridoIterator;
+  private boolean inputTested = false;
+  private boolean inputMatched = false;
   private final TextBox messageBox;
+  private Iterator<MatchResultStep> pathIterator;
+  private MatchResult result;
 
   private ResolvingStepByStepState() {
     messageBox = new TextBox.TextBoxBuilder()
@@ -43,48 +39,46 @@ public class ResolvingStepByStepState implements AFNDState {
   @Override
   public void updateGraphState(AFNDGraph<String> afndGraph, VAFND vafnd, AFNDStateManager afndStateManager, InputEvent event, int buttonID) {
     if (event.getID() == MouseEvent.MOUSE_CLICKED) {
-      if (palabraAceptada) {
-        pintarSiguientePaso(afndGraph, vafnd);
+      if (inputMatched) {
+        paintNextStep(vafnd);
       } else {
-        comprobarAutomata(afndGraph, vafnd);
+        testInput(afndGraph, vafnd);
       }
     }
-    if (!comprobado) {
-      comprobarAutomata(afndGraph, vafnd);
+    if (!inputTested) {
+      testInput(afndGraph, vafnd);
     }
     vafnd.repaint();
   }
 
-  private boolean comprobarAutomata(AFNDGraph<String> afndGraph, VAFND vafnd) {
+  private void testInput(AFNDGraph<String> afndGraph, VAFND vafnd) {
     String text = Menu.TEXT_FIELD.getText();
     try {
-      boolean matches = afndGraph.matches(text);
+      result = afndGraph.matches(text);
       vafnd.addComponent(messageBox, VAFND.MAX_LAYER);
-      if (matches) {
+      if (result.matches()) {
         messageBox.setTitle("Palabra ACEPTADA, presiona sobre el aútomata para iniciar el recorrido");
         messageBox.setColorPalette(TextBox.GREEN_TEXTBOX_COLOR_PALETTE);
-        palabraAceptada = true;
+        inputMatched = true;
       } else {
         messageBox.setTitle("Palabra NO ACEPTADA, no podemos iniciar el recorrido");
         messageBox.setColorPalette(TextBox.RED_TEXTBOX_COLOR_PALETTE);
-        palabraAceptada = false;
+        inputMatched = false;
       }
-      comprobado = true;
-      return matches;
-    } catch (CadenaVaciaException | NoExisteEstadoInicialException e) {
+      inputTested = true;
+    } catch (IllegalStateException e) {
       vafnd.getDefaultTextBox().setTitle(e.getMessage());
-      comprobado = true;
-      return false;
+      inputTested = true;
     }
   }
 
-  private void pintarSiguientePaso(AFNDGraph<String> afndGraph, VAFND vafnd) {
-    if (recorridoIterator == null) {
-      recorridoIterator = afndGraph.getPath().iterator();
+  private void paintNextStep(VAFND vafnd) {
+    if (pathIterator == null) {
+      pathIterator = result.pathIterator();
     }
-    if (recorridoIterator.hasNext()) {
-      Pair<Connection<?>, String> pair = recorridoIterator.next();
-      Connection<?> connection = pair.getLeft();
+    if (pathIterator.hasNext()) {
+      MatchResultStep step = pathIterator.next();
+      Connection<?> connection = step.getConnection();
       clearAllMarks(vafnd);
 
       VNode origen = vafnd.getVNode(connection.getOrigin().getElement().toString());
@@ -96,7 +90,7 @@ public class ResolvingStepByStepState implements AFNDState {
       varch.setColorPalette(VArch.SELECTED_VARCH_COLOR_PALETTE);
       varch.getTriangle().setColorPalette(VArch.SELECTED_VARCH_COLOR_PALETTE);
 
-      messageBox.setTitle("Palabra por ser consumida: " + pair.getRight());
+      messageBox.setTitle("Palabra por ser consumida: " + step.inputSnapshot());
     } else {
       clearAllMarks(vafnd);
       messageBox.setTitle("La palabra ha sido consumida");
@@ -116,10 +110,9 @@ public class ResolvingStepByStepState implements AFNDState {
 
   @Override
   public void clearState(AFNDGraph<String> afndGraph, VAFND vafnd, AFNDStateManager afndStateManager) {
-    comprobado = false;
-    palabraAceptada = false;
-    recorridoIterator = null;
-    afndGraph.clearPath();
+    inputTested = false;
+    inputMatched = false;
+    pathIterator = null;
     vafnd.removeComponent(messageBox);
     clearAllMarks(vafnd);
     AFNDState.super.clearState(afndGraph, vafnd, afndStateManager);

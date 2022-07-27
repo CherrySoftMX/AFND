@@ -4,8 +4,8 @@ import me.hikingcarrot7.afnd.view.components.VNode;
 
 import java.awt.Point;
 
-public interface AFNDEstadoFactory {
+public interface AFNDStateFactory {
 
-  VNode createEstado(int id, String data, Point centerCoords);
+  VNode createState(int id, String data, Point center);
 
 }
