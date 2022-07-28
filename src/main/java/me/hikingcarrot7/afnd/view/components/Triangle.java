@@ -1,5 +1,7 @@
 package me.hikingcarrot7.afnd.view.components;
 
+import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 
@@ -19,13 +21,13 @@ public class Triangle implements Drawable {
   private ColorPalette colorPalette;
 
   public static final ColorPalette DEFAULT_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VNode.COLOR_VERTICE_RELLENO)
-    .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VNode.COLOR_VERTICE_STROKE)
+    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualNode.NODE_FILL_COLOR)
+    .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualNode.NODE_STROKE_COLOR)
     .build();
 
   public static final ColorPalette VARCH_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VArch.COLOR_ARCH)
-    .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VArch.COLOR_ARCH)
+    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.COLOR_ARCH)
+    .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualConnection.COLOR_ARCH)
     .build();
 
   public static final ColorPalette RED_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()

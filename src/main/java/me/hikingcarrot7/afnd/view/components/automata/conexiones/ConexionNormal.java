@@ -2,8 +2,8 @@ package me.hikingcarrot7.afnd.view.components.automata.conexiones;
 
 import me.hikingcarrot7.afnd.core.utils.MathHelper;
 import me.hikingcarrot7.afnd.view.components.Menu;
-import me.hikingcarrot7.afnd.view.components.VArch;
-import me.hikingcarrot7.afnd.view.components.VNode;
+import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
 import me.hikingcarrot7.afnd.view.graphics.Movable;
@@ -18,7 +18,7 @@ import java.awt.geom.GeneralPath;
  *
  * @author HikingCarrot7
  */
-public class ConexionNormal extends VArch {
+public class ConexionNormal extends VisualConnection {
 
     public ConexionNormal(Movable origen, Movable destino, String condicion, ColorPalette colorPalette) {
         super(origen, destino, condicion, colorPalette);
@@ -44,52 +44,52 @@ public class ConexionNormal extends VArch {
         g.setStroke(new BasicStroke(STROKE_WIDTH));
 
         if (previewMode)
-            g.drawLine(origen.getXCenter(), origen.getYCenter(), destino.getXCenter(), destino.getYCenter());
+            g.drawLine(origin.xCenter(), origin.yCenter(), destination.xCenter(), destination.yCenter());
         else {
             GeneralPath path = new GeneralPath();
-            path.moveTo(origen.getXCenter(), origen.getYCenter());
+            path.moveTo(origin.xCenter(), origin.yCenter());
 
-            Point puntoMedio = MathHelper.puntoMedio(origen.getPos(), destino.getPos());
-            Point puntoControl = MathHelper.puntoControl(origen.getPos(), destino.getPos(), ALTURA_CURVATURA);
+            Point puntoMedio = MathHelper.puntoMedio(origin.getPos(), destination.getPos());
+            Point puntoControl = MathHelper.puntoControl(origin.getPos(), destination.getPos(), ALTURA_CURVATURA);
 
             path.curveTo(
                     puntoMedio.x + puntoControl.x,
                     puntoMedio.y + puntoControl.y,
                     puntoMedio.x + puntoControl.x,
                     puntoMedio.y + puntoControl.y,
-                    destino.getXCenter(),
-                    destino.getYCenter());
+                    destination.xCenter(),
+                    destination.yCenter());
 
             g.draw(path);
 
-            updateBlobPosition(g, origen.getPos(), destino.getPos());
-            updateTrianglePosition(g, origen.getPos(), destino.getPos(), ALTURA_CURVATURA);
+            updateBlobPosition(g, origin.getPos(), destination.getPos());
+            updateTrianglePosition(g, origin.getPos(), destination.getPos(), ALTURA_CURVATURA);
         }
 
         g.setStroke(defaultStroke);
         g.setColor(defaultColor);
     }
 
-    @Override public void updateTrianglePosition(Graphics2D g, Point origen, Point destino, int alturaCurvatura) {
-        Point puntoMedio = MathHelper.puntoMedio(origen, destino);
-        Point puntoControl = MathHelper.puntoControl(origen, destino, alturaCurvatura);
+    @Override public void updateTrianglePosition(Graphics2D g, Point origin, Point destination, int alturaCurvatura) {
+        Point puntoMedio = MathHelper.puntoMedio(origin, destination);
+        Point puntoControl = MathHelper.puntoControl(origin, destination, alturaCurvatura);
 
         triangle.setOrigenX(puntoMedio.x + puntoControl.x);
         triangle.setOrigenY(puntoMedio.y + puntoControl.y);
-        triangle.setDestinoX(destino.x);
-        triangle.setDestinoY(destino.y);
+        triangle.setDestinoX(destination.x);
+        triangle.setDestinoY(destination.y);
         triangle.setLength(TRIANGLE_LENGTH);
-        triangle.setOffset(VNode.NODE_RADIUS + STROKE_WIDTH);
+        triangle.setOffset(VisualNode.NODE_RADIUS + STROKE_WIDTH);
     }
 
-    @Override public void updateBlobPosition(Graphics2D g, Point origen, Point destino) {
-        Point puntoMedio = MathHelper.puntoMedio(origen, destino);
-        Point puntoControl = MathHelper.puntoControl(origen, destino, ALTURA_CURVATURA);
+    @Override public void updateBlobPosition(Graphics2D g, Point origin, Point destination) {
+        Point puntoMedio = MathHelper.puntoMedio(origin, destination);
+        Point puntoControl = MathHelper.puntoControl(origin, destination, ALTURA_CURVATURA);
         g.setColor(Menu.GRAY_TEXT_COLOR);
-        int textWidth = GraphicsUtils.getStringWidth(g, condicion);
+        int textWidth = GraphicsUtils.getStringWidth(g, condition);
         int blobRadio = textWidth / 2 + BLOB_PADDING * 2;
 
-        blob.setName(condicion);
+        blob.setElement(condition);
         blob.setRadio(blobRadio);
         blob.setXCenter(puntoMedio.x + puntoControl.x);
         blob.setYCenter(puntoMedio.y + puntoControl.y);

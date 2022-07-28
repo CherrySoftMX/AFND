@@ -1,29 +1,23 @@
 package me.hikingcarrot7.afnd.view.graphics;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import java.awt.*;
 
-/**
- * @author HikingCarrot7
- */
 public class GraphicsUtils {
-
-  public static void dibujarStringEnPunto(Graphics2D g, String text, Point p) {
-    dibujarStringEnPunto(g, text, (float) p.getX(), (float) p.getY());
+  public static void drawStringOnPoint(Graphics2D g, String text, Point pos) {
+    drawStringOnPoint(g, text, pos.x, pos.y);
   }
 
-  public static void dibujarStringEnPunto(Graphics2D g, String text, float x, float y) {
+  public static void drawStringOnPoint(Graphics2D g, String text, float x, float y) {
     Rectangle bounds = getStringBounds(g, text);
     g.drawString(text, x - (float) bounds.getWidth() / 2, y + (float) bounds.getHeight() / 2);
   }
 
   public static Rectangle getStringBounds(Graphics2D g, String text) {
     return new Rectangle(new Dimension(
-      getStringWidth(g, text),
-      g.getFontMetrics().getAscent()));
+        getStringWidth(g, text),
+        g.getFontMetrics().getAscent())
+    );
   }
 
   public static int getStringWidth(Graphics2D g, String text) {
@@ -72,10 +66,6 @@ public class GraphicsUtils {
         break;
     }
     return new Point((int) xPos, (int) yPos);
-  }
-
-  public static Point getBoxPositionOnScreen(Dimension screenDimension, Dimension boxDimension, Box.BoxPosition boxPosition) {
-    return getBoxPositionOnScreen(screenDimension, boxDimension, boxPosition, 0);
   }
 
   public static boolean intersects(Rectangle rec1, Rectangle rec2) {

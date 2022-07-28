@@ -1,6 +1,7 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.automata.VAFND;
+import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.DialogueBalloonFactory;
 import me.hikingcarrot7.afnd.view.graphics.Box;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
@@ -39,7 +40,7 @@ public class DialogueBalloon implements Box, Drawable {
   private int width;
   private int height;
   private String text;
-  private VAFND vgraph;
+  private VisualAFND vgraph;
   private Blob relativeTo;
   private ColorPalette colorPalette;
   private BoxPosition boxPosition;
@@ -58,14 +59,14 @@ public class DialogueBalloon implements Box, Drawable {
     this(xPos, yPos, width, height, text, DEFAULT_GLOBE_COLOR_PALETTE, BoxPosition.TOP);
   }
 
-  public DialogueBalloon(VAFND vgraph, Blob relativeTo, String text, ColorPalette colorPalette) {
+  public DialogueBalloon(VisualAFND vgraph, Blob relativeTo, String text, ColorPalette colorPalette) {
     this.relativeTo = relativeTo;
     this.text = text;
     this.colorPalette = colorPalette;
     this.vgraph = vgraph;
   }
 
-  public DialogueBalloon(VAFND vgraph, Blob relativeTo, String text) {
+  public DialogueBalloon(VisualAFND vgraph, Blob relativeTo, String text) {
     this(vgraph, relativeTo, text, DEFAULT_GLOBE_COLOR_PALETTE);
   }
 
@@ -84,63 +85,63 @@ public class DialogueBalloon implements Box, Drawable {
     g.setColor(defaultColor);
   }
 
-  private void drawRelativeTo(Graphics2D g, VAFND vgraph, Blob relativeTo, String text) {
+  private void drawRelativeTo(Graphics2D g, VisualAFND vgraph, Blob relativeTo, String text) {
     Rectangle bounds = GraphicsUtils.getStringBounds(g, text);
     int xPos = 0;
     int yPos = 0;
     BoxPosition boxPosition = null;
 
     if (canPlaceOnTop(vgraph, relativeTo, bounds)) {
-      xPos = relativeTo.getXCenter() - bounds.width / 2 - 7;
-      yPos = relativeTo.getYCenter() - relativeTo.getRadio() - (bounds.height + PADDING * 2) - TRIANGLE_HEIGHT - MARGIN;
+      xPos = relativeTo.xCenter() - bounds.width / 2 - 7;
+      yPos = relativeTo.yCenter() - relativeTo.getRadio() - (bounds.height + PADDING * 2) - TRIANGLE_HEIGHT - MARGIN;
       boxPosition = BoxPosition.TOP;
 
     } else if (canPlaceOnRight(vgraph, relativeTo, bounds)) {
-      xPos = relativeTo.getXCenter() + relativeTo.getRadio() + MARGIN + TRIANGLE_HEIGHT;
-      yPos = relativeTo.getYCenter() - (bounds.height / 2 + PADDING);
+      xPos = relativeTo.xCenter() + relativeTo.getRadio() + MARGIN + TRIANGLE_HEIGHT;
+      yPos = relativeTo.yCenter() - (bounds.height / 2 + PADDING);
       boxPosition = BoxPosition.RIGHT;
 
     } else if (canPlaceOnBottom(vgraph, relativeTo, bounds)) {
-      xPos = relativeTo.getXCenter() - bounds.width / 2 - 7;
-      yPos = relativeTo.getYCenter() + relativeTo.getRadio() + TRIANGLE_HEIGHT + MARGIN;
+      xPos = relativeTo.xCenter() - bounds.width / 2 - 7;
+      yPos = relativeTo.yCenter() + relativeTo.getRadio() + TRIANGLE_HEIGHT + MARGIN;
       boxPosition = BoxPosition.BOTTOM;
 
     } else if (canPlaceOnLeft(vgraph, relativeTo, bounds)) {
-      xPos = relativeTo.getXCenter() - (bounds.width + PADDING * 2) - TRIANGLE_HEIGHT - MARGIN - relativeTo.getRadio();
-      yPos = relativeTo.getYCenter() - (bounds.height / 2 + PADDING);
+      xPos = relativeTo.xCenter() - (bounds.width + PADDING * 2) - TRIANGLE_HEIGHT - MARGIN - relativeTo.getRadio();
+      yPos = relativeTo.yCenter() - (bounds.height / 2 + PADDING);
       boxPosition = BoxPosition.LEFT;
     }
 
     drawBox(g, xPos, yPos, bounds.width + PADDING * 2, bounds.height + PADDING * 2, boxPosition);
   }
 
-  private boolean canPlaceOnTop(VAFND vgraph, Movable relativeTo, Rectangle textBounds) {
+  private boolean canPlaceOnTop(VisualAFND vgraph, Movable relativeTo, Rectangle textBounds) {
     int realHeight = getRealBoxHeight(textBounds);
     int realWidth = getRealBoxWidth(textBounds);
 
-    return relativeTo.getYCenter() - VNode.NODE_RADIUS >= realHeight
-      && relativeTo.getXCenter() + realWidth / 2 <= vgraph.getWidth() - Menu.MENU_WIDTH
-      && relativeTo.getXCenter() - realWidth / 2 >= 0;
+    return relativeTo.yCenter() - VisualNode.NODE_RADIUS >= realHeight
+      && relativeTo.xCenter() + realWidth / 2 <= vgraph.getWidth() - Menu.MENU_WIDTH
+      && relativeTo.xCenter() - realWidth / 2 >= 0;
   }
 
-  private boolean canPlaceOnBottom(VAFND vgraph, Movable relativeTo, Rectangle textBounds) {
+  private boolean canPlaceOnBottom(VisualAFND vgraph, Movable relativeTo, Rectangle textBounds) {
     int realHeight = getRealBoxHeight(textBounds);
     int realWidth = getRealBoxWidth(textBounds);
 
-    return relativeTo.getYCenter() + VNode.NODE_RADIUS + realHeight <= vgraph.getHeight()
-      && relativeTo.getXCenter() + realWidth / 2 <= vgraph.getWidth() - Menu.MENU_WIDTH;
+    return relativeTo.yCenter() + VisualNode.NODE_RADIUS + realHeight <= vgraph.getHeight()
+      && relativeTo.xCenter() + realWidth / 2 <= vgraph.getWidth() - Menu.MENU_WIDTH;
   }
 
-  private boolean canPlaceOnRight(VAFND vgraph, Movable relativeTo, Rectangle textBounds) {
+  private boolean canPlaceOnRight(VisualAFND vgraph, Movable relativeTo, Rectangle textBounds) {
     int realWidth = getRealBoxWidth(textBounds);
 
-    return relativeTo.getXCenter() + VNode.NODE_RADIUS + realWidth <= vgraph.getWidth() - Menu.MENU_WIDTH;
+    return relativeTo.xCenter() + VisualNode.NODE_RADIUS + realWidth <= vgraph.getWidth() - Menu.MENU_WIDTH;
   }
 
-  private boolean canPlaceOnLeft(VAFND vgraph, Movable relativeTo, Rectangle textBounds) {
+  private boolean canPlaceOnLeft(VisualAFND vgraph, Movable relativeTo, Rectangle textBounds) {
     int realWidth = getRealBoxWidth(textBounds);
 
-    return relativeTo.getXCenter() - VNode.NODE_RADIUS - realWidth >= 0;
+    return relativeTo.xCenter() - VisualNode.NODE_RADIUS - realWidth >= 0;
   }
 
   @Override
@@ -155,7 +156,7 @@ public class DialogueBalloon implements Box, Drawable {
     g.draw(shape);
 
     g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
-    GraphicsUtils.dibujarStringEnPunto(g, text, xPos + width / 2, yPos + height / 2);
+    GraphicsUtils.drawStringOnPoint(g, text, xPos + width / 2, yPos + height / 2);
   }
 
   private int getRealBoxHeight(Rectangle textBounds) {

@@ -2,13 +2,13 @@ package me.hikingcarrot7.afnd.core.states.imp;
 
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
-import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
+import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
 import me.hikingcarrot7.afnd.view.components.DialogueBalloon;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
-import me.hikingcarrot7.afnd.view.components.VNode;
-import me.hikingcarrot7.afnd.view.components.automata.VAFND;
+import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
 import me.hikingcarrot7.afnd.view.components.automata.estados.AFNDStateFactory;
 import me.hikingcarrot7.afnd.view.components.automata.estados.AFNDStateFactoryImp;
 
@@ -34,63 +34,63 @@ public class AddingNodeState implements AFNDState {
   private final AFNDStateFactory factory;
   private TextTyper textTyper;
   private DialogueBalloon dialogueBalloon;
-  private VNode previewNode;
+  private VisualNode previewNode;
   private boolean namingState = false;
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, VAFND vafnd, AFNDStateManager afndStateManager, InputEvent event, int buttonID) {
+  public void updateGraphState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
     if (event.getID() == KeyEvent.KEY_PRESSED) {
       KeyEvent keyEvent = (KeyEvent) event;
       if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-        if (addState(afndGraph, vafnd, previewNode.getPos(), buttonID)) {
-          clearState(afndGraph, vafnd, afndStateManager);
+        if (addState(afndGraph, visualAFND, previewNode.getPos(), buttonID)) {
+          clearState(afndGraph, visualAFND, afndStateDispatcher);
         } else {
           dialogueBalloon.setText("Ese estado ya existe!");
-          vafnd.repaint();
+          visualAFND.repaint();
           return;
         }
       }
       if (namingState) {
-        nombrarEstado(vafnd, keyEvent);
+        nombrarEstado(visualAFND, keyEvent);
         return;
       }
     }
     if (!namingState && event.getID() == MouseEvent.MOUSE_CLICKED) {
-      previewNewState(afndGraph, vafnd, (MouseEvent) event, buttonID);
+      previewNewState(afndGraph, visualAFND, (MouseEvent) event, buttonID);
     }
   }
 
-  private void previewNewState(AFNDGraph<String> afndGraph, VAFND vafnd, MouseEvent e, int buttonID) {
+  private void previewNewState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, MouseEvent e, int buttonID) {
     switch (buttonID) {
       case Menu.ESTADO_INICIAL_ID:
       case Menu.ESTADO_INICIAL_FINAL_ID:
         if (afndGraph.hasInitialState()) {
-          vafnd.getDefaultTextBox().setTitle("Ya has establecido el estado inicial!");
-          vafnd.repaint();
+          visualAFND.getDefaultTextBox().setTitle("Ya has establecido el estado inicial!");
+          visualAFND.repaint();
           return;
         }
     }
 
-    int pressedNode = GraphUtils.getVerticePresionado(afndGraph, vafnd.getVNodes(), e.getPoint());
+    int pressedNode = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
 
     if (pressedNode < 0) {
       previewNode = factory.createState(buttonID, "", e.getPoint());
-      vafnd.addVNode(previewNode);
+      visualAFND.addVNode(previewNode);
 
       textTyper = new TextTyper(e.getPoint(), 6);
-      vafnd.addComponent(textTyper, VAFND.MIDDLE_LAYER);
+      visualAFND.addComponent(textTyper, VisualAFND.MIDDLE_LAYER);
 
-      dialogueBalloon = new DialogueBalloon(vafnd, previewNode, "Inserte el nombre");
-      vafnd.addComponent(dialogueBalloon, VAFND.MIDDLE_LAYER);
+      dialogueBalloon = new DialogueBalloon(visualAFND, previewNode, "Inserte el nombre");
+      visualAFND.addComponent(dialogueBalloon, VisualAFND.MIDDLE_LAYER);
 
       namingState = true;
 
-      vafnd.getDefaultTextBox().setTitle("Ponle un nombre al estado, acepta con ENTER");
-      vafnd.repaint();
+      visualAFND.getDefaultTextBox().setTitle("Ponle un nombre al estado, acepta con ENTER");
+      visualAFND.repaint();
     }
   }
 
-  private boolean addState(AFNDGraph<String> afndGraph, VAFND vafnd, Point center, int buttonID) {
+  private boolean addState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, Point center, int buttonID) {
     String element = textTyper.getText();
     boolean elementInserted;
     if (element.length() <= 0) {
@@ -109,23 +109,23 @@ public class AddingNodeState implements AFNDState {
       default:
         elementInserted = afndGraph.insertElement(element);
     }
-    vafnd.addVNode(factory.createState(buttonID, element, center));
-    vafnd.repaint();
+    visualAFND.addVNode(factory.createState(buttonID, element, center));
+    visualAFND.repaint();
     return elementInserted;
   }
 
-  private void nombrarEstado(VAFND vafnd, KeyEvent event) {
+  private void nombrarEstado(VisualAFND visualAFND, KeyEvent event) {
     textTyper.handleInputEvent(event);
-    vafnd.repaint();
+    visualAFND.repaint();
   }
 
   @Override
-  public void clearState(AFNDGraph<String> afndGraph, VAFND vafnd, AFNDStateManager afndStateManager) {
-    vafnd.removeComponent(textTyper);
-    vafnd.removeComponent(dialogueBalloon);
-    vafnd.removeVNode(previewNode);
+  public void clearState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher) {
+    visualAFND.removeComponent(textTyper);
+    visualAFND.removeComponent(dialogueBalloon);
+    visualAFND.removeVNode(previewNode);
     namingState = false;
-    AFNDState.super.clearState(afndGraph, vafnd, afndStateManager);
+    AFNDState.super.clearState(afndGraph, visualAFND, afndStateDispatcher);
   }
 
 }

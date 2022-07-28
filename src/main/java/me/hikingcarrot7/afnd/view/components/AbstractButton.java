@@ -58,7 +58,7 @@ public abstract class AbstractButton implements Drawable {
 
         for (int i = 0; i < content.size(); i++) {
             String line = content.get(i);
-            GraphicsUtils.dibujarStringEnPunto(g, line,
+            GraphicsUtils.drawStringOnPoint(g, line,
                     xPos + width / 2,
                     yPos + heightPerLine / 2 + i * heightPerLine - 1);
         }

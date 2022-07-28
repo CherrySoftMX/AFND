@@ -1,11 +1,11 @@
 package me.hikingcarrot7.afnd.view.components.automata.estados;
 
-import me.hikingcarrot7.afnd.view.components.VNode;
+import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
 
 import java.awt.Point;
 
 public interface AFNDStateFactory {
 
-  VNode createState(int id, String data, Point center);
+  VisualNode createState(int id, String data, Point center);
 
 }

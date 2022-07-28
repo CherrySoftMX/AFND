@@ -49,7 +49,7 @@ public class TextTyper implements Drawable, Movable {
 
   @Override
   public void draw(Graphics2D g) {
-    GraphicsUtils.dibujarStringEnPunto(g, text, xCenter, yCenter);
+    GraphicsUtils.drawStringOnPoint(g, text, xCenter, yCenter);
   }
 
   public void handleInputEvent(KeyEvent e) {
@@ -65,7 +65,7 @@ public class TextTyper implements Drawable, Movable {
   }
 
   @Override
-  public int getXCenter() {
+  public int xCenter() {
     return xCenter;
   }
 
@@ -75,7 +75,7 @@ public class TextTyper implements Drawable, Movable {
   }
 
   @Override
-  public int getYCenter() {
+  public int yCenter() {
     return yCenter;
   }
 

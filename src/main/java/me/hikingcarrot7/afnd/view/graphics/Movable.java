@@ -4,11 +4,11 @@ import java.awt.Point;
 
 public interface Movable {
 
-  int getXCenter();
+  int xCenter();
 
   void setXCenter(int xPos);
 
-  int getYCenter();
+  int yCenter();
 
   void setYCenter(int yPos);
 

@@ -2,8 +2,8 @@ package me.hikingcarrot7.afnd.core.states.imp;
 
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
-import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
-import me.hikingcarrot7.afnd.view.components.automata.VAFND;
+import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
+import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
 
 import java.awt.event.InputEvent;
 
@@ -22,7 +22,7 @@ public class IdleState implements AFNDState {
   }
 
   @Override
-  public void updateGraphState(AFNDGraph<String> graph, VAFND vgraph, AFNDStateManager graphStateManager, InputEvent event, int buttonID) {
+  public void updateGraphState(AFNDGraph<String> graph, VisualAFND vgraph, AFNDStateDispatcher graphStateManager, InputEvent event, int buttonID) {
 
   }
 

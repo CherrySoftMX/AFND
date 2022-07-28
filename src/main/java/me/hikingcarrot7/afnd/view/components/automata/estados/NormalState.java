@@ -1,11 +1,13 @@
 package me.hikingcarrot7.afnd.view.components.automata.estados;
 
-import me.hikingcarrot7.afnd.view.components.VNode;
+import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
 
-public class NormalState extends VNode {
+import java.awt.*;
 
-  public NormalState(String name, int xCenter, int yCenter) {
-    super(name, xCenter, yCenter);
+public class NormalState extends VisualNode {
+
+  public NormalState(String element, Point pos) {
+    super(element, pos);
   }
 
 }

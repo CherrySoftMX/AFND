@@ -2,10 +2,10 @@ package me.hikingcarrot7.afnd.core.states.imp;
 
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
-import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
-import me.hikingcarrot7.afnd.view.components.VArch;
-import me.hikingcarrot7.afnd.view.components.VNode;
-import me.hikingcarrot7.afnd.view.components.automata.VAFND;
+import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
+import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
+import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
 
 import java.awt.event.InputEvent;
@@ -27,34 +27,34 @@ public class DeletingNodeState implements AFNDState {
   }
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, VAFND vafnd, AFNDStateManager afndStateManager, InputEvent event, int buttonID) {
+  public void updateGraphState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
     if (event.getID() == MouseEvent.MOUSE_PRESSED) {
-      eliminarVertice(afndGraph, vafnd, event);
-      vafnd.repaint();
+      eliminarVertice(afndGraph, visualAFND, event);
+      visualAFND.repaint();
     }
   }
 
-  private void eliminarVertice(AFNDGraph<String> afndGraph, VAFND vafnd, InputEvent event) {
+  private void eliminarVertice(AFNDGraph<String> afndGraph, VisualAFND visualAFND, InputEvent event) {
     MouseEvent e = (MouseEvent) event;
-    int nVerticeSeleccionado = GraphUtils.getVerticePresionado(afndGraph, vafnd.getVNodes(), e.getPoint());
+    int nVerticeSeleccionado = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
     if (nVerticeSeleccionado >= 0) {
-      VNode vnode = vafnd.getVNode(nVerticeSeleccionado);
-      afndGraph.removeElement(vnode.getName());
-      vafnd.removeVNode(vnode);
-      removeAllAdjacentVArchs(vnode, vafnd);
+      VisualNode vnode = visualAFND.getVNode(nVerticeSeleccionado);
+      afndGraph.removeElement(vnode.getElement());
+      visualAFND.removeVNode(vnode);
+      removeAllAdjacentVArchs(vnode, visualAFND);
     }
   }
 
-  private void removeAllAdjacentVArchs(VNode vnode, VAFND vafnd) {
-    List<VArch> varchs = vafnd.getVArchs();
-    List<VArch> adjacentVArchs = varchs.stream()
-        .filter(varch -> ((VNode) varch.getOrigen()).getName().equals(vnode.getName())
-            || ((VNode) varch.getDestino()).getName().equals(vnode.getName()))
+  private void removeAllAdjacentVArchs(VisualNode vnode, VisualAFND visualAFND) {
+    List<VisualConnection> varches = visualAFND.getVisualConnections();
+    List<VisualConnection> adjacentVisualConnections = varches.stream()
+        .filter(varch -> ((VisualNode) varch.getOrigin()).getElement().equals(vnode.getElement())
+            || ((VisualNode) varch.getDestination()).getElement().equals(vnode.getElement()))
         .collect(Collectors.toList());
-    for (int i = varchs.size() - 1; i >= 0; i--) {
-      VArch varch = varchs.get(i);
-      if (adjacentVArchs.contains(varch)) {
-        vafnd.removeVArch(varch);
+    for (int i = varches.size() - 1; i >= 0; i--) {
+      VisualConnection varch = varches.get(i);
+      if (adjacentVisualConnections.contains(varch)) {
+        visualAFND.removeVArch(varch);
       }
     }
   }

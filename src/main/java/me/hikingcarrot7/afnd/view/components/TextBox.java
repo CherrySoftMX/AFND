@@ -1,6 +1,7 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.automata.VAFND;
+import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
 import me.hikingcarrot7.afnd.view.graphics.Box;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
@@ -26,21 +27,21 @@ public class TextBox implements Box, Drawable {
   public static final Color DEFAULT_TEXTBOX_FILL_COLOR = new Color(255, 141, 141);
 
   public static final ColorPalette DEFAULT_TEXTBOX_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, DEFAULT_TEXTBOX_FILL_COLOR)
-    .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
-    .build();
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, DEFAULT_TEXTBOX_FILL_COLOR)
+      .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
+      .build();
 
   public static final ColorPalette RED_TEXTBOX_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VArch.RED_VARCH_COLOR)
-    .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.WHITE)
-    .build();
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.RED_VARCH_COLOR)
+      .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.WHITE)
+      .build();
 
   public static final ColorPalette GREEN_TEXTBOX_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VArch.COLOR_SELECTED_ARCH)
-    .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
-    .build();
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.COLOR_SELECTED_ARCH)
+      .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
+      .build();
 
-  private final VAFND vgraph;
+  private final VisualAFND vgraph;
   private int width = -1;
   private int height = -1;
   private String title;
@@ -49,7 +50,7 @@ public class TextBox implements Box, Drawable {
   private ColorPalette colorPalette;
   private BoxPosition boxPosition;
 
-  public TextBox(VAFND vgraph, String title, ArrayList<String> content, String footer, BoxPosition boxPosition, ColorPalette colorPalette) {
+  public TextBox(VisualAFND vgraph, String title, ArrayList<String> content, String footer, BoxPosition boxPosition, ColorPalette colorPalette) {
     this.title = title;
     this.content = content;
     this.footer = footer;
@@ -71,8 +72,8 @@ public class TextBox implements Box, Drawable {
       height = calculateHeight(g);
     }
 
-    Point coords = GraphicsUtils.getBoxPositionOnScreen(vgraph.getSize(), new Dimension(getWidth(), getHeight()), boxPosition, MARGIN);
-    drawBox(g, coords.x, coords.y, getWidth(), getHeight(), boxPosition);
+    Point pos = GraphicsUtils.getBoxPositionOnScreen(vgraph.getSize(), new Dimension(getWidth(), getHeight()), boxPosition, MARGIN);
+    drawBox(g, pos.x, pos.y, getWidth(), getHeight(), boxPosition);
 
     g.setStroke(defaultStroke);
     g.setColor(defaultColor);
@@ -99,8 +100,7 @@ public class TextBox implements Box, Drawable {
       yStartPos += TITLE_MARGIN_BOTTOM;
     }
 
-    for (int i = 0; i < content.size(); i++) {
-      String line = content.get(i);
+    for (String line : content) {
       int lineHeight = GraphicsUtils.getStringHeight(g, line);
       g.drawString(line, xStartPos + CONTENT_INDENTATION, yStartPos + lineHeight);
 
@@ -119,8 +119,8 @@ public class TextBox implements Box, Drawable {
   private int calculateWidth(Graphics2D g) {
     int width = GraphicsUtils.getStringWidth(g, title);
 
-    for (int i = 0; i < content.size(); i++) {
-      int lineWidth = GraphicsUtils.getStringWidth(g, content.get(i)) + CONTENT_INDENTATION;
+    for (String s : content) {
+      int lineWidth = GraphicsUtils.getStringWidth(g, s) + CONTENT_INDENTATION;
       if (lineWidth > width) {
         width = lineWidth;
       }
@@ -147,8 +147,8 @@ public class TextBox implements Box, Drawable {
       height += TITLE_MARGIN_BOTTOM;
     }
 
-    for (int i = 0; i < content.size(); i++) {
-      height += GraphicsUtils.getStringHeight(g, content.get(i));
+    for (String s : content) {
+      height += GraphicsUtils.getStringHeight(g, s);
       height += LINE_SPACING;
     }
 
@@ -275,7 +275,7 @@ public class TextBox implements Box, Drawable {
     }
 
     public TextBox build() {
-      return new TextBox(VAFND.getInstance(), title, content, footer, boxPosition, colorPalette);
+      return new TextBox(VisualAFND.getInstance(), title, content, footer, boxPosition, colorPalette);
     }
 
   }

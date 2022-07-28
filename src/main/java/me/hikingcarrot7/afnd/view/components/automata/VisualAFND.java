@@ -2,8 +2,6 @@ package me.hikingcarrot7.afnd.view.components.automata;
 
 import me.hikingcarrot7.afnd.core.utils.Pair;
 import me.hikingcarrot7.afnd.view.components.TextBox;
-import me.hikingcarrot7.afnd.view.components.VArch;
-import me.hikingcarrot7.afnd.view.components.VNode;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 import me.hikingcarrot7.afnd.view.graphics.Movable;
 
@@ -14,30 +12,30 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class VAFND extends JPanel implements Drawable {
+public final class VisualAFND extends JPanel implements Drawable {
   public static final Font DEFAULT_FONT = new Font("Open Sans SemiBold", Font.PLAIN, 14);
   public static final int MAX_LAYER = Integer.MAX_VALUE;
   public static final int MIDDLE_LAYER = Integer.MAX_VALUE / 2;
   public static final int MIN_LAYER = Integer.MIN_VALUE;
 
-  private static VAFND instance;
+  private static VisualAFND instance;
 
-  public synchronized static VAFND getInstance() {
+  public synchronized static VisualAFND getInstance() {
     if (instance == null) {
-      instance = new VAFND();
+      instance = new VisualAFND();
     }
     return instance;
   }
 
-  private final List<VNode> vnodes;
-  private final List<Pair<VArch, Integer>> varchs;
+  private final List<VisualNode> visualNodes;
+  private final List<Pair<VisualConnection, Integer>> visualConnections;
   private final List<Pair<Drawable, Integer>> components;
   private final List<JComponent> swingComponents;
   private TextBox defaultTextBox;
 
-  private VAFND() {
-    vnodes = new ArrayList<>();
-    varchs = new ArrayList<>();
+  private VisualAFND() {
+    visualNodes = new ArrayList<>();
+    visualConnections = new ArrayList<>();
     components = new ArrayList<>();
     swingComponents = new ArrayList<>();
     setLayout(null);
@@ -56,8 +54,8 @@ public final class VAFND extends JPanel implements Drawable {
 
   @Override
   public void draw(Graphics2D g) {
-    varchs.forEach(pair -> pair.getLeft().draw(g));
-    vnodes.forEach(vnode -> vnode.draw(g));
+    visualConnections.forEach(pair -> pair.getLeft().draw(g));
+    visualNodes.forEach(vnode -> vnode.draw(g));
     components.forEach(pair -> pair.getLeft().draw(g));
     if (!defaultTextBox.isEmpty()) {
       defaultTextBox.draw(g);
@@ -75,66 +73,66 @@ public final class VAFND extends JPanel implements Drawable {
     }
   }
 
-  public void addVNode(VNode vnode) {
-    vnodes.add(vnode);
+  public void addVNode(VisualNode visualNode) {
+    visualNodes.add(visualNode);
   }
 
-  public VNode getVNode(int idx) {
-    return vnodes.get(idx);
+  public VisualNode getVNode(int idx) {
+    return visualNodes.get(idx);
   }
 
-  public VNode getVNode(String name) {
-    for (VNode vnode : vnodes) {
-      if (vnode.getName().equals(name)) {
-        return vnode;
+  public VisualNode getVNode(String name) {
+    for (VisualNode visualNode : visualNodes) {
+      if (visualNode.getElement().equals(name)) {
+        return visualNode;
       }
     }
     return null;
   }
 
-  public void removeVNode(VNode vnode) {
-    vnodes.remove(vnode);
+  public void removeVNode(VisualNode vnode) {
+    visualNodes.remove(vnode);
   }
 
-  public List<VNode> getVNodes() {
-    return vnodes;
+  public List<VisualNode> getVNodes() {
+    return visualNodes;
   }
 
-  public void addVArch(VArch varch, int zIndex) {
-    varchs.add(new Pair<>(varch, zIndex));
+  public void addVArch(VisualConnection varch, int zIndex) {
+    visualConnections.add(new Pair<>(varch, zIndex));
     addComponent(varch.getBlob(), MIDDLE_LAYER);
     addComponent(varch.getTriangle(), MIDDLE_LAYER);
-    varchs.sort(Comparator.comparing(Pair::getRight));
+    visualConnections.sort(Comparator.comparing(Pair::getRight));
   }
 
-  public void removeVArch(VArch varch) {
-    varchs.removeIf(pair -> pair.getLeft() == varch);
+  public void removeVArch(VisualConnection varch) {
+    visualConnections.removeIf(pair -> pair.getLeft() == varch);
     components.removeIf(pair -> pair.getLeft() == varch.getBlob()
         || pair.getLeft() == varch.getTriangle());
   }
 
-  public void setVArchZIndex(VArch varch, int zIndex) {
-    for (Pair<VArch, Integer> vArchIntegerPair : varchs) {
-      VArch currentVArch = vArchIntegerPair.getLeft();
-      if (currentVArch == varch) {
+  public void setVArchZIndex(VisualConnection varch, int zIndex) {
+    for (Pair<VisualConnection, Integer> vArchIntegerPair : visualConnections) {
+      VisualConnection currentVisualConnection = vArchIntegerPair.getLeft();
+      if (currentVisualConnection == varch) {
         vArchIntegerPair.setRight(zIndex);
       }
     }
-    varchs.sort(Comparator.comparing(Pair::getRight));
+    visualConnections.sort(Comparator.comparing(Pair::getRight));
   }
 
-  public VArch getVArch(Movable origen, Movable destino) {
-    for (Pair<VArch, Integer> vArchIntegerPair : varchs) {
-      VArch varch = vArchIntegerPair.getLeft();
-      if (varch.getOrigen() == origen && varch.getDestino() == destino) {
-        return varch;
+  public VisualConnection getVArch(Movable origen, Movable destino) {
+    for (Pair<VisualConnection, Integer> vArchIntegerPair : visualConnections) {
+      VisualConnection visualConnection = vArchIntegerPair.getLeft();
+      if (visualConnection.getOrigin() == origen && visualConnection.getDestination() == destino) {
+        return visualConnection;
       }
     }
     return null;
   }
 
-  public List<VArch> getVArchs() {
-    return varchs.stream().map(Pair::getLeft).collect(Collectors.toList());
+  public List<VisualConnection> getVisualConnections() {
+    return visualConnections.stream().map(Pair::getLeft).collect(Collectors.toList());
   }
 
   public void addComponent(Drawable drawable, int zIndex) {
@@ -152,15 +150,6 @@ public final class VAFND extends JPanel implements Drawable {
   public void addSwingComponent(JComponent component) {
     swingComponents.add(component);
     add(component);
-  }
-
-  public void removeSwingComponent(JComponent component) {
-    swingComponents.remove(component);
-    remove(component);
-  }
-
-  public List<Drawable> getGraphComponents() {
-    return components.stream().map(Pair::getLeft).collect(Collectors.toList());
   }
 
   public TextBox getDefaultTextBox() {

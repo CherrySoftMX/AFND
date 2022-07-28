@@ -2,14 +2,14 @@ package me.hikingcarrot7.afnd.controller;
 
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
-import me.hikingcarrot7.afnd.core.states.AFNDStateManager;
+import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.core.states.imp.IdleState;
 import me.hikingcarrot7.afnd.view.MainView;
 import me.hikingcarrot7.afnd.view.components.AbstractButton;
 import me.hikingcarrot7.afnd.view.components.Button;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.ToggleButton;
-import me.hikingcarrot7.afnd.view.components.automata.VAFND;
+import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -19,18 +19,18 @@ import java.util.*;
 
 public class AFNDController implements Observer {
   private final Map<AbstractButton, AFNDState> bindings;
-  private final AFNDStateManager afndStateManager;
+  private final AFNDStateDispatcher afndStateDispatcher;
   private final MainView view;
   private final Menu menu;
-  private final VAFND vafnd;
+  private final VisualAFND visualAFND;
   private AbstractButton latestPressedButton;
 
-  public AFNDController(MainView view, AFNDGraph afndGraph, VAFND vafnd, Menu menu) {
+  public AFNDController(MainView view, AFNDGraph afndGraph, VisualAFND visualAFND, Menu menu) {
     this.view = view;
     this.latestPressedButton = null;
     this.menu = menu;
-    this.vafnd = vafnd;
-    this.afndStateManager = new AFNDStateManager(afndGraph);
+    this.visualAFND = visualAFND;
+    this.afndStateDispatcher = new AFNDStateDispatcher(afndGraph);
     this.bindings = new HashMap<>();
   }
 
@@ -47,8 +47,8 @@ public class AFNDController implements Observer {
 
   private void handleKeyEvent(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-      afndStateManager.exitCurrentState();
-      afndStateManager.setCurrentState(IdleState.getInstance());
+      afndStateDispatcher.exitCurrentState();
+      afndStateDispatcher.setCurrentState(IdleState.getInstance());
       blurLatestPressedButton();
     } else {
       deliverInputEvent(e);
@@ -66,18 +66,18 @@ public class AFNDController implements Observer {
           }
 
           button.click(e);
-          afndStateManager.exitCurrentState();
+          afndStateDispatcher.exitCurrentState();
           AFNDState boundedAFNDState = bindings.get(button);
 
           if (button instanceof ToggleButton) {
-            afndStateManager.setCurrentState(((ToggleButton) button).isToggled() ? boundedAFNDState : IdleState.getInstance());
+            afndStateDispatcher.setCurrentState(((ToggleButton) button).isToggled() ? boundedAFNDState : IdleState.getInstance());
           } else {
-            afndStateManager.setCurrentState(boundedAFNDState);
+            afndStateDispatcher.setCurrentState(boundedAFNDState);
           }
 
           latestPressedButton = button;
         }
-        vafnd.requestFocus();
+        visualAFND.requestFocus();
         break;
       case MouseEvent.MOUSE_MOVED:
         button = getButtonUnder(e.getPoint());
@@ -94,7 +94,7 @@ public class AFNDController implements Observer {
 
   private void deliverInputEvent(InputEvent e) {
     int buttonID = latestPressedButton != null ? latestPressedButton.getID() : -1;
-    afndStateManager.dispatchInputEvent(buttonID, e);
+    afndStateDispatcher.dispatchInputEvent(buttonID, e);
   }
 
   private AbstractButton getButtonUnder(Point point) {

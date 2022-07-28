@@ -1,8 +1,8 @@
 package me.hikingcarrot7.afnd.view.components.automata.conexiones;
 
 import me.hikingcarrot7.afnd.view.components.Menu;
-import me.hikingcarrot7.afnd.view.components.VArch;
-import me.hikingcarrot7.afnd.view.components.VNode;
+import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
 import me.hikingcarrot7.afnd.view.graphics.Movable;
@@ -17,7 +17,7 @@ import java.awt.geom.GeneralPath;
  *
  * @author HikingCarrot7
  */
-public class ConexionBucle extends VArch {
+public class ConexionBucle extends VisualConnection {
 
     public ConexionBucle(Movable origen, Movable destino, String condicion, ColorPalette colorPalette) {
         super(origen, destino, condicion, colorPalette);
@@ -48,14 +48,14 @@ public class ConexionBucle extends VArch {
         Point puntoControlIzquierdo = getPuntoControlIzquierdo();
 
         GeneralPath path = new GeneralPath();
-        path.moveTo(origen.getXCenter() + puntoInicioIzquierdo.x, origen.getYCenter() + puntoInicioIzquierdo.y);
+        path.moveTo(origin.xCenter() + puntoInicioIzquierdo.x, origin.yCenter() + puntoInicioIzquierdo.y);
         path.curveTo(
-                origen.getXCenter() + puntoControlIzquierdo.x,
-                origen.getYCenter() + puntoControlIzquierdo.y,
-                origen.getXCenter() + puntoControlDerecho.x,
-                origen.getYCenter() + puntoControlDerecho.y,
-                origen.getXCenter() + puntoInicioDerecho.x,
-                origen.getYCenter() + puntoInicioDerecho.y);
+                origin.xCenter() + puntoControlIzquierdo.x,
+                origin.yCenter() + puntoControlIzquierdo.y,
+                origin.xCenter() + puntoControlDerecho.x,
+                origin.yCenter() + puntoControlDerecho.y,
+                origin.xCenter() + puntoInicioDerecho.x,
+                origin.yCenter() + puntoInicioDerecho.y);
 
         g.draw(path);
 
@@ -66,36 +66,36 @@ public class ConexionBucle extends VArch {
         g.setColor(defaultColor);
     }
 
-    @Override public void updateTrianglePosition(Graphics2D g, Point origen, Point destino, int alturaCurvatura) {
-        triangle.setOrigenX(this.origen.getXCenter() + origen.x);
-        triangle.setOrigenY(this.origen.getYCenter() + origen.y);
-        triangle.setDestinoX(this.destino.getXCenter() + destino.x);
-        triangle.setDestinoY(this.destino.getYCenter() + destino.y);
+    @Override public void updateTrianglePosition(Graphics2D g, Point origin, Point destination, int alturaCurvatura) {
+        triangle.setOrigenX(this.origin.xCenter() + origin.x);
+        triangle.setOrigenY(this.origin.yCenter() + origin.y);
+        triangle.setDestinoX(this.destination.xCenter() + destination.x);
+        triangle.setDestinoY(this.destination.yCenter() + destination.y);
         triangle.setLength(TRIANGLE_LENGTH);
-        triangle.setOffset(VNode.STROKE_WIDTH);
+        triangle.setOffset(VisualNode.STROKE_WIDTH);
     }
 
-    @Override public void updateBlobPosition(Graphics2D g, Point origen, Point destino) {
+    @Override public void updateBlobPosition(Graphics2D g, Point origin, Point destination) {
         Point puntoControlDerecho = getPuntoControlDerecho();
 
         g.setColor(Menu.GRAY_TEXT_COLOR);
-        int textWidth = GraphicsUtils.getStringWidth(g, condicion);
+        int textWidth = GraphicsUtils.getStringWidth(g, condition);
         int blobRadio = textWidth / 2 + BLOB_PADDING * 2;
 
-        blob.setName(condicion);
+        blob.setElement(condition);
         blob.setRadio(blobRadio);
-        blob.setXCenter(this.origen.getXCenter());
-        blob.setYCenter(this.origen.getYCenter() + puntoControlDerecho.y);
+        blob.setXCenter(this.origin.xCenter());
+        blob.setYCenter(this.origin.yCenter() + puntoControlDerecho.y);
     }
 
     private Point getPuntoInicioDerecho() {
-        return new Point((int) (VNode.NODE_RADIUS * Math.cos(-Math.PI / 4)),
-                (int) (VNode.NODE_RADIUS * Math.sin(-Math.PI / 4)));
+        return new Point((int) (VisualNode.NODE_RADIUS * Math.cos(-Math.PI / 4)),
+                (int) (VisualNode.NODE_RADIUS * Math.sin(-Math.PI / 4)));
     }
 
     private Point getPuntoInicioIzquierdo() {
-        return new Point((int) (VNode.NODE_RADIUS * Math.cos(Math.PI + Math.PI / 4)),
-                (int) ((VNode.NODE_RADIUS) * Math.sin(Math.PI + Math.PI / 4)));
+        return new Point((int) (VisualNode.NODE_RADIUS * Math.cos(Math.PI + Math.PI / 4)),
+                (int) ((VisualNode.NODE_RADIUS) * Math.sin(Math.PI + Math.PI / 4)));
     }
 
     private Point getPuntoControlDerecho() {
