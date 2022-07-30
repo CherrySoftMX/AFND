@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
 

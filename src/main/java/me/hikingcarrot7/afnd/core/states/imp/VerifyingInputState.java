@@ -7,9 +7,9 @@ import me.hikingcarrot7.afnd.core.graphs.Connection;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.view.components.*;
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
-import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
-import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.Box;
 
 import java.awt.event.InputEvent;
@@ -65,21 +65,21 @@ public class VerifyingInputState implements AFNDState {
   private void paintPath(VisualAFND visualAFND) {
     for (MatchResultStep step : result.getPath()) {
       Connection<?> connection = step.getConnection();
-      VisualNode origin = visualAFND.getVNode(connection.getOrigin().getElement().toString());
-      VisualNode destination = visualAFND.getVNode(connection.getDestination().getElement().toString());
+      VisualNode origin = visualAFND.getVNode(connection.getOrigin().element().toString());
+      VisualNode destination = visualAFND.getVNode(connection.getDestination().element().toString());
       VisualConnection varch = visualAFND.getVArch(origin, destination);
-      origin.setColorPalette(VisualNode.SELECTED_RUTA_VNODE_COLOR_PALETTE);
-      destination.setColorPalette(VisualNode.SELECTED_RUTA_VNODE_COLOR_PALETTE);
-      varch.setColorPalette(VisualConnection.SELECTED_VARCH_COLOR_PALETTE);
-      varch.getTriangle().setColorPalette(VisualConnection.SELECTED_VARCH_COLOR_PALETTE);
+      origin.setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
+      destination.setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
+      varch.setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
+      varch.getTriangle().setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
     }
   }
 
   @Override
   public void clearState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher) {
-    visualAFND.getVNodes().forEach(vnode -> vnode.setColorPalette(VisualNode.DEFAULT_VNODE_COLOR_PALETTE));
+    visualAFND.getVNodes().forEach(vnode -> vnode.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE));
     visualAFND.getVisualConnections().forEach(varch -> {
-      varch.setColorPalette(VisualConnection.DEFAULT_VARCH_COLOR_PALETTE);
+      varch.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
       varch.getTriangle().setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
       visualAFND.setVArchZIndex(varch, VisualAFND.MIN_LAYER);
     });

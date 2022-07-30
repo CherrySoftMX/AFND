@@ -7,10 +7,10 @@ import me.hikingcarrot7.afnd.core.utils.GraphUtils;
 import me.hikingcarrot7.afnd.view.components.DialogueBalloon;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
-import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
-import me.hikingcarrot7.afnd.view.components.automata.estados.AFNDStateFactory;
-import me.hikingcarrot7.afnd.view.components.automata.estados.AFNDStateFactoryImp;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
+import me.hikingcarrot7.afnd.view.components.afnd.estados.AFNDStateFactory;
+import me.hikingcarrot7.afnd.view.components.afnd.estados.AFNDStateFactoryImp;
 
 import java.awt.*;
 import java.awt.event.InputEvent;

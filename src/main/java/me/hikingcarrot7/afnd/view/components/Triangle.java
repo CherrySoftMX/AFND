@@ -1,7 +1,7 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
-import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 
@@ -59,7 +59,7 @@ public class Triangle implements Drawable {
     AffineTransform originalTransform = g.getTransform();
     Color defaultColor = g.getColor();
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
 
     AffineTransform at = AffineTransform.getTranslateInstance(origenX, origenY);
     at.concatenate(AffineTransform.getRotateInstance(angle));
@@ -68,7 +68,7 @@ public class Triangle implements Drawable {
     g.fillPolygon(new int[]{distancia, distancia - length, distancia - length, distancia},
       new int[]{0, -length, length, 0}, 4);
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
     g.setStroke(new BasicStroke(strokeWidth));
     g.drawPolygon(new int[]{distancia, distancia - length, distancia - length, distancia},
       new int[]{0, -length, length, 0}, 4);

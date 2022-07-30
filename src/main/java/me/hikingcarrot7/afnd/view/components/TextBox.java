@@ -1,7 +1,7 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
-import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.graphics.Box;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
@@ -17,7 +17,7 @@ import java.awt.Stroke;
 import java.util.ArrayList;
 
 public class TextBox implements Box, Drawable {
-  public static final int RADIO_BORDER = 10;
+  public static final int RADIUS_BORDER = 10;
   public static final int MARGIN = 15;
   public static final int PADDING = 7;
   public static final int LINE_SPACING = 8;
@@ -32,7 +32,7 @@ public class TextBox implements Box, Drawable {
       .build();
 
   public static final ColorPalette RED_TEXTBOX_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.RED_VARCH_COLOR)
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.RED_CONNECTION_COLOR)
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.WHITE)
       .build();
 
@@ -83,10 +83,10 @@ public class TextBox implements Box, Drawable {
   public void drawBox(Graphics2D g, int xPos, int yPos, int width, int height, BoxPosition boxPosition) {
     Shape shape = TextBoxFactory.getInstance().createShape(xPos, yPos, width, height, boxPosition);
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
     g.fill(shape);
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
     drawTextBoxContent(g, xPos, yPos);
   }
 

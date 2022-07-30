@@ -9,7 +9,7 @@ import me.hikingcarrot7.afnd.view.components.AbstractButton;
 import me.hikingcarrot7.afnd.view.components.Button;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.ToggleButton;
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
 
 import java.awt.*;
 import java.awt.event.InputEvent;

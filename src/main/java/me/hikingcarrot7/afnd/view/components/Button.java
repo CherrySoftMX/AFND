@@ -28,10 +28,10 @@ public class Button extends AbstractButton {
 
     g.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), fontSize));
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
     g.fillRect(xPos, yPos, width, height);
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
     super.drawContent(g);
 
     g.setFont(defaultFont);

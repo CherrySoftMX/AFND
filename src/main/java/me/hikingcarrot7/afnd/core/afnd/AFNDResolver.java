@@ -44,7 +44,7 @@ public class AFNDResolver {
   }
 
   private boolean matches(Node<?> destination, AFNDInput input) {
-    if (afnd.isFinalState(destination.getElement()) && input.isEmpty()) {
+    if (afnd.isFinalState(destination.element()) && input.isEmpty()) {
       return true;
     }
     if (input.isEmpty()) {

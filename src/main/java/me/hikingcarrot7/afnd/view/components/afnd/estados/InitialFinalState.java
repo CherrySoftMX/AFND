@@ -1,4 +1,4 @@
-package me.hikingcarrot7.afnd.view.components.automata.estados;
+package me.hikingcarrot7.afnd.view.components.afnd.estados;
 
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 
@@ -17,7 +17,7 @@ public class InitialFinalState extends InitialState {
     Stroke defaultStroke = g.getStroke();
     Color defaultColor = g.getColor();
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
     g.setStroke(new BasicStroke(FinalState.INTERN_CIRCLE_STROKE_WIDTH));
     g.drawOval(
         xCenter() - NODE_RADIUS + FinalState.INTERN_CIRCLE_OFFSET,

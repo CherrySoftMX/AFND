@@ -5,7 +5,7 @@ import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.imp.*;
 import me.hikingcarrot7.afnd.view.MainView;
 import me.hikingcarrot7.afnd.view.components.Menu;
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
 
 import java.awt.*;
 import java.io.File;
@@ -42,7 +42,7 @@ public class SetupManager {
     afndController.addBinding(Menu.BUTTON_ADD_ESTADO_FINAL, AddingNodeState.getInstance());
 
     afndController.addBinding(Menu.BUTTON_MOVER_ESTADO, MovingNodeState.getInstance());
-    afndController.addBinding(Menu.BUTTON_ADD_CONEXION_NORMAL, AddingConectionState.getInstance());
+    afndController.addBinding(Menu.BUTTON_ADD_CONEXION_NORMAL, AddingConnectionState.getInstance());
     afndController.addBinding(Menu.BUTTON_ELIMINAR_ESTADO, DeletingNodeState.getInstance());
     afndController.addBinding(Menu.BUTTON_ADD_CONEXION_BUCLE, AddingLoopConnectionState.getInstance());
     afndController.addBinding(Menu.BUTTON_ELIMINAR_CONEXION, DeletingConnectionState.getInstance());

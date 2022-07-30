@@ -6,37 +6,37 @@ import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
 import me.hikingcarrot7.afnd.view.components.DialogueBalloon;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
-import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
-import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
-import me.hikingcarrot7.afnd.view.components.automata.conexiones.ConexionNormal;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
+import me.hikingcarrot7.afnd.view.components.afnd.conexiones.NormalConnection;
 import me.hikingcarrot7.afnd.view.graphics.Movable;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class AddingConectionState implements AFNDState {
-  private static AddingConectionState instance;
+public class AddingConnectionState implements AFNDState {
+  private static AddingConnectionState instance;
 
-  public synchronized static AddingConectionState getInstance() {
+  public synchronized static AddingConnectionState getInstance() {
     if (instance == null) {
-      instance = new AddingConectionState();
+      instance = new AddingConnectionState();
     }
     return instance;
   }
 
-  private AddingConectionState() {
+  private AddingConnectionState() {
   }
 
-  private boolean insertandoCondicion;
-  private VisualNode origen;
-  private VisualNode destino;
+  private boolean insertingCondition;
+  private VisualNode origin;
+  private VisualNode destination;
   private Movable cursor;
   private VisualConnection previewArch;
   private VisualConnection previousArch;
   private TextTyper textTyper;
-  private DialogueBalloon dialogueballoon;
+  private DialogueBalloon dialogueBalloon;
 
   @Override
   public void updateGraphState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
@@ -45,9 +45,9 @@ public class AddingConectionState implements AFNDState {
       if (event.getID() == MouseEvent.MOUSE_CLICKED) {
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
           if (origenSeleccionado()) {
-            selectDestino(afndGraph, visualAFND, mouseEvent);
+            selectDestination(afndGraph, visualAFND, mouseEvent);
           } else {
-            selectOrigen(afndGraph, visualAFND, mouseEvent);
+            selectOrigin(afndGraph, visualAFND, mouseEvent);
           }
         } else {
           clearState(afndGraph, visualAFND, afndStateDispatcher);
@@ -62,64 +62,63 @@ public class AddingConectionState implements AFNDState {
 
     if (event.getID() == KeyEvent.KEY_PRESSED) {
       KeyEvent keyEvent = (KeyEvent) event;
-      if (insertandoCondicion && keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+      if (insertingCondition && keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
         if (addArch(afndGraph, visualAFND)) {
           clearState(afndGraph, visualAFND, afndStateDispatcher);
         } else {
-          dialogueballoon.setText("El valor es inválido");
+          dialogueBalloon.setText("El valor es inválido");
           visualAFND.repaint();
         }
       }
-      if (insertandoCondicion) {
+      if (insertingCondition) {
         insertarEstado(visualAFND, keyEvent);
       }
     }
-
   }
 
-  private void selectOrigen(AFNDGraph<String> afndGraph, VisualAFND visualAFND, MouseEvent e) {
-    if (origen == null) {
-      int verticePresionado = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
-      if (verticePresionado >= 0 && afndGraph.cardinality() > 1) {
-        origen = visualAFND.getVNode(verticePresionado);
-        origen.setColorPalette(VisualNode.SELECTED_VNODE_COLOR_PALETTE);
+  private void selectOrigin(AFNDGraph<String> afndGraph, VisualAFND visualAFND, MouseEvent e) {
+    if (origin == null) {
+      int pressedNode = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
+      if (pressedNode >= 0 && afndGraph.cardinality() > 1) {
+        origin = visualAFND.getVNode(pressedNode);
+        origin.setColorPalette(VisualNode.SELECTED_NODE_COLOR_PALETTE);
         visualAFND.getDefaultTextBox().setTitle("Da click derecho a otro estado para crear una conexión.");
       }
     }
   }
 
-  private void selectDestino(AFNDGraph<String> afndGraph, VisualAFND visualAFND, MouseEvent e) {
-    int nVerticePresionado = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
+  private void selectDestination(AFNDGraph<String> afndGraph, VisualAFND visualAFND, MouseEvent e) {
+    int pressedNode = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
 
-    if (nVerticePresionado >= 0) {
-      destino = visualAFND.getVNode(nVerticePresionado);
+    if (pressedNode >= 0) {
+      destination = visualAFND.getVNode(pressedNode);
 
-      if (destino != origen) {
-        if (afndGraph.existConnection(origen.getElement(), destino.getElement())) {
-          previousArch = visualAFND.getVArch(origen, destino);
-          afndGraph.removeConnection(origen.getElement(), destino.getElement());
+      if (destination != origin) {
+        if (afndGraph.existConnection(origin.element(), destination.element())) {
+          previousArch = visualAFND.getVArch(origin, destination);
+          afndGraph.removeConnection(origin.element(), destination.element());
           visualAFND.removeVArch(previousArch);
         }
 
-        destino = visualAFND.getVNode(nVerticePresionado);
-        previewArch.setDestination(destino);
+        destination = visualAFND.getVNode(pressedNode);
+        previewArch.setDestination(destination);
         previewArch.setPreviewMode(false);
 
-        textTyper = new TextTyper(previewArch.getBlob().getPos(), 1);
-        dialogueballoon = new DialogueBalloon(visualAFND, previewArch.getBlob(), "Inserte la condición");
-        insertandoCondicion = true;
+        textTyper = new TextTyper(previewArch.getConditionNode().getPos(), 1);
+        dialogueBalloon = new DialogueBalloon(visualAFND, previewArch.getConditionNode(), "Inserte la condición");
+        insertingCondition = true;
 
-        visualAFND.addComponent(dialogueballoon, VisualAFND.MIDDLE_LAYER);
+        visualAFND.addComponent(dialogueBalloon, VisualAFND.MIDDLE_LAYER);
         visualAFND.getDefaultTextBox().setTitle("Asígnale una condición a la conexión.");
       }
     }
   }
 
   private void updateArchPreview(VisualAFND visualAFND, MouseEvent e) {
-    if (origen != null) {
+    if (origin != null) {
       if (cursor == null) {
         cursor = new VisualNode("CURSOR_PREVIEW", e.getPoint());
-        previewArch = new ConexionNormal(origen, cursor, true);
+        previewArch = new NormalConnection(origin, cursor, true);
         visualAFND.addVArch(previewArch, VisualAFND.MIN_LAYER);
       } else {
         cursor.setXCenter(e.getX());
@@ -141,23 +140,23 @@ public class AddingConectionState implements AFNDState {
 
     String text = textTyper.getText();
 
-    afndGraph.insertConnection(origen.getElement(), destino.getElement(), text);
-    visualAFND.addVArch(new ConexionNormal(origen, destino, text), VisualAFND.MIN_LAYER);
+    afndGraph.insertConnection(origin.element(), destination.element(), text);
+    visualAFND.addVArch(new NormalConnection(origin, destination, text), VisualAFND.MIN_LAYER);
     previousArch = null;
     return true;
   }
 
   private boolean origenSeleccionado() {
-    return origen != null;
+    return origin != null;
   }
 
   @Override
   public void clearState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher) {
     if (previousArch != null) {
       afndGraph.insertConnection(
-          ((VisualNode) previousArch.getOrigin()).getElement(),
-          ((VisualNode) previousArch.getDestination()).getElement(),
-          previousArch.getCondition());
+          ((VisualNode) previousArch.getOrigin()).element(),
+          ((VisualNode) previousArch.getDestination()).element(),
+          previousArch.getConditionNode().element());
 
       visualAFND.addVArch(previousArch, VisualAFND.MIN_LAYER);
     }
@@ -168,18 +167,18 @@ public class AddingConectionState implements AFNDState {
       visualAFND.removeVArch(previewArch);
     }
 
-    if (origen != null) {
-      origen.setColorPalette(VisualNode.DEFAULT_VNODE_COLOR_PALETTE);
+    if (origin != null) {
+      origin.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE);
     }
 
-    visualAFND.removeComponent(dialogueballoon);
+    visualAFND.removeComponent(dialogueBalloon);
 
     cursor = null;
-    origen = null;
-    destino = null;
+    origin = null;
+    destination = null;
     previewArch = null;
-    dialogueballoon = null;
-    insertandoCondicion = false;
+    dialogueBalloon = null;
+    insertingCondition = false;
     AFNDState.super.clearState(afndGraph, visualAFND, afndStateDispatcher);
   }
 

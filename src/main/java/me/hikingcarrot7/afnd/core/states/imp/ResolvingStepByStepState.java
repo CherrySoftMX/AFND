@@ -7,9 +7,9 @@ import me.hikingcarrot7.afnd.core.graphs.Connection;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.view.components.*;
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
-import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
-import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.Box;
 
 import java.awt.event.InputEvent;
@@ -83,14 +83,14 @@ public class ResolvingStepByStepState implements AFNDState {
       Connection<?> connection = step.getConnection();
       clearAllMarks(visualAFND);
 
-      VisualNode origen = visualAFND.getVNode(connection.getOrigin().getElement().toString());
-      VisualNode destino = visualAFND.getVNode(connection.getDestination().getElement().toString());
+      VisualNode origen = visualAFND.getVNode(connection.getOrigin().element().toString());
+      VisualNode destino = visualAFND.getVNode(connection.getDestination().element().toString());
       VisualConnection varch = visualAFND.getVArch(origen, destino);
 
-      origen.setColorPalette(VisualNode.SELECTED_RUTA_VNODE_COLOR_PALETTE);
-      destino.setColorPalette(VisualNode.SELECTED_RUTA_VNODE_COLOR_PALETTE);
-      varch.setColorPalette(VisualConnection.SELECTED_VARCH_COLOR_PALETTE);
-      varch.getTriangle().setColorPalette(VisualConnection.SELECTED_VARCH_COLOR_PALETTE);
+      origen.setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
+      destino.setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
+      varch.setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
+      varch.getTriangle().setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
 
       messageBox.setTitle("Palabra por ser consumida: " + step.inputSnapshot());
     } else {
@@ -102,9 +102,9 @@ public class ResolvingStepByStepState implements AFNDState {
   }
 
   private void clearAllMarks(VisualAFND visualAFND) {
-    visualAFND.getVNodes().forEach(vnode -> vnode.setColorPalette(VisualNode.DEFAULT_VNODE_COLOR_PALETTE));
+    visualAFND.getVNodes().forEach(vnode -> vnode.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE));
     visualAFND.getVisualConnections().forEach(varch -> {
-      varch.setColorPalette(VisualConnection.DEFAULT_VARCH_COLOR_PALETTE);
+      varch.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
       varch.getTriangle().setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
       visualAFND.setVArchZIndex(varch, VisualAFND.MIN_LAYER);
     });

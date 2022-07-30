@@ -6,17 +6,16 @@ import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
 import me.hikingcarrot7.afnd.view.components.DialogueBalloon;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
-import me.hikingcarrot7.afnd.view.components.automata.VisualConnection;
-import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
-import me.hikingcarrot7.afnd.view.components.automata.conexiones.ConexionBucle;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
+import me.hikingcarrot7.afnd.view.components.afnd.conexiones.LoopConnection;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public class AddingLoopConnectionState implements AFNDState {
-
   private static AddingLoopConnectionState instance;
 
   public synchronized static AddingLoopConnectionState getInstance() {
@@ -29,12 +28,12 @@ public class AddingLoopConnectionState implements AFNDState {
   private AddingLoopConnectionState() {
   }
 
-  private boolean insertandoCondicion;
+  private boolean insertingCondition;
   private VisualNode origen;
   private VisualConnection previewArch;
   private VisualConnection previousArch;
   private TextTyper textTyper;
-  private DialogueBalloon dialogueballoon;
+  private DialogueBalloon dialogueBalloon;
 
   @Override
   public void updateGraphState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
@@ -45,16 +44,16 @@ public class AddingLoopConnectionState implements AFNDState {
 
     if (event.getID() == KeyEvent.KEY_PRESSED) {
       KeyEvent keyEvent = (KeyEvent) event;
-      if (insertandoCondicion && keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+      if (insertingCondition && keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
         if (addArch(afndGraph, visualAFND)) {
           clearState(afndGraph, visualAFND, afndStateDispatcher);
         } else {
-          dialogueballoon.setText("El valor es inválido");
+          dialogueBalloon.setText("El valor es inválido");
           visualAFND.repaint();
         }
       }
 
-      if (insertandoCondicion) {
+      if (insertingCondition) {
         insertarEstado(visualAFND, keyEvent);
       }
     }
@@ -64,27 +63,27 @@ public class AddingLoopConnectionState implements AFNDState {
 
   private void selectOrigen(AFNDGraph<String> afndGraph, VisualAFND visualAFND, MouseEvent e) {
     if (origen == null) {
-      int verticePresionado = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
-      if (verticePresionado >= 0) {
-        origen = visualAFND.getVNode(verticePresionado);
+      int pressedNode = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
+      if (pressedNode >= 0) {
+        origen = visualAFND.getVNode(pressedNode);
 
-        if (afndGraph.existConnection(origen.getElement(), origen.getElement())) {
+        if (afndGraph.existConnection(origen.element(), origen.element())) {
           previousArch = visualAFND.getVArch(origen, origen);
-          afndGraph.removeConnection(origen.getElement(), origen.getElement());
+          afndGraph.removeConnection(origen.element(), origen.element());
           visualAFND.removeVArch(previousArch);
         }
 
-        origen.setColorPalette(VisualNode.SELECTED_VNODE_COLOR_PALETTE);
+        origen.setColorPalette(VisualNode.SELECTED_NODE_COLOR_PALETTE);
 
-        previewArch = new ConexionBucle(origen, origen, true);
+        previewArch = new LoopConnection(origen, origen, true);
 
-        textTyper = new TextTyper(previewArch.getBlob().getPos(), 1);
-        dialogueballoon = new DialogueBalloon(visualAFND, previewArch.getBlob(), "Inserte la condición");
+        textTyper = new TextTyper(previewArch.getConditionNode().getPos(), 1);
+        dialogueBalloon = new DialogueBalloon(visualAFND, previewArch.getConditionNode(), "Inserte la condición");
 
         visualAFND.addVArch(previewArch, VisualAFND.MIN_LAYER);
-        visualAFND.addComponent(dialogueballoon, VisualAFND.MIDDLE_LAYER);
+        visualAFND.addComponent(dialogueBalloon, VisualAFND.MIDDLE_LAYER);
         visualAFND.getDefaultTextBox().setTitle("Inserte la condición para el estado");
-        insertandoCondicion = true;
+        insertingCondition = true;
       }
     }
   }
@@ -102,8 +101,8 @@ public class AddingLoopConnectionState implements AFNDState {
 
     String text = textTyper.getText();
 
-    afndGraph.insertConnection(origen.getElement(), origen.getElement(), text);
-    visualAFND.addVArch(new ConexionBucle(origen, origen, text), VisualAFND.MIN_LAYER);
+    afndGraph.insertConnection(origen.element(), origen.element(), text);
+    visualAFND.addVArch(new LoopConnection(origen, origen, text), VisualAFND.MIN_LAYER);
     previousArch = null;
     return true;
   }
@@ -112,9 +111,9 @@ public class AddingLoopConnectionState implements AFNDState {
   public void clearState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher) {
     if (previousArch != null) {
       afndGraph.insertConnection(
-          ((VisualNode) previousArch.getOrigin()).getElement(),
-          ((VisualNode) previousArch.getDestination()).getElement(),
-          previousArch.getCondition());
+          ((VisualNode) previousArch.getOrigin()).element(),
+          ((VisualNode) previousArch.getDestination()).element(),
+          previousArch.condition());
 
       visualAFND.addVArch(previousArch, VisualAFND.MIN_LAYER);
     }
@@ -124,15 +123,15 @@ public class AddingLoopConnectionState implements AFNDState {
     }
 
     if (origen != null) {
-      origen.setColorPalette(VisualNode.DEFAULT_VNODE_COLOR_PALETTE);
+      origen.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE);
     }
 
-    visualAFND.removeComponent(dialogueballoon);
+    visualAFND.removeComponent(dialogueBalloon);
 
     origen = null;
     previewArch = null;
-    dialogueballoon = null;
-    insertandoCondicion = false;
+    dialogueBalloon = null;
+    insertingCondition = false;
     visualAFND.getDefaultTextBox().clearTextBox();
     visualAFND.repaint();
   }

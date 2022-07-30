@@ -1,6 +1,6 @@
-package me.hikingcarrot7.afnd.view.components.automata.estados;
+package me.hikingcarrot7.afnd.view.components.afnd.estados;
 
-import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 
 import java.awt.*;
 

@@ -12,7 +12,7 @@ public abstract class Graph<E> {
 
   public abstract boolean insertElement(E element) throws GrafoLlenoException, NodoYaExisteException;
 
-  public abstract boolean removeElement(E element) throws NodoNoExistenteException;
+  public abstract boolean removeElement(E element);
 
   public abstract boolean insertConnection(E origin, E destination, Object element) throws NodoNoExistenteException;
 

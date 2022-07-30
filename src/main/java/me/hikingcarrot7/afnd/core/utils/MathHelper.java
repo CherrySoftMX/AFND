@@ -12,11 +12,11 @@ public class MathHelper {
     return Math.sqrt(Math.pow((p2.getX() - p1.getX()), 2) + Math.pow((p2.getY() - p1.getY()), 2));
   }
 
-  public static Point puntoMedio(Point origen, Point destino) {
+  public static Point midPoint(Point origen, Point destino) {
     return new Point((origen.x + destino.x) / 2, (origen.y + destino.y) / 2);
   }
 
-  public static Point puntoControl(Point origen, Point destino, int alturaCurvatura) {
+  public static Point controlPoint(Point origen, Point destino, int alturaCurvatura) {
     double angle = Math.atan2(
       destino.y - origen.y,
       destino.x - origen.x) - Math.PI / 2;

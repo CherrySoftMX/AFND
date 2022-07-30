@@ -38,12 +38,8 @@ public class ColorPalette {
     this.colorCatalog = colors;
   }
 
-  public Color getSpecificColor(ColorKey key) {
+  public Color getColor(ColorKey key) {
     return colorCatalog.get(key);
-  }
-
-  public Map<ColorKey, Color> getColorCatalog() {
-    return colorCatalog;
   }
 
 }

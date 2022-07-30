@@ -41,14 +41,14 @@ public class ToggleButton extends AbstractButton implements Togglable {
     Font defaultFont = g.getFont();
 
     g.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), fontSize));
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
     g.fillRoundRect(xPos, yPos, width, height, ARC_WIDTH, ARC_HEIGHT);
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
     g.setStroke(new BasicStroke(STROKE_WIDTH));
     g.drawRoundRect(xPos, yPos, width, height, ARC_WIDTH, ARC_HEIGHT);
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
     super.drawContent(g);
 
     g.setFont(defaultFont);

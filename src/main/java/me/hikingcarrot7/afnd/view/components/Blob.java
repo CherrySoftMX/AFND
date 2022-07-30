@@ -11,7 +11,8 @@ import java.awt.*;
 
 @Getter
 @Setter
-public class Blob implements Drawable, Movable {
+@Deprecated
+public abstract class Blob implements Drawable, Movable {
   protected String element;
   protected Point pos;
   protected int radio;
@@ -22,14 +23,10 @@ public class Blob implements Drawable, Movable {
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Menu.GRAY_TEXT_COLOR)
       .build();
 
-  public Blob() {
-    this("", new Point(), 0, DEFAULT_BLOB_COLOR_PALETTE);
-  }
-
   public Blob(String element, Point pos, int radio, ColorPalette colorPalette) {
+    this.element = element;
     this.pos = pos;
     this.radio = radio;
-    this.element = element;
     this.colorPalette = colorPalette;
   }
 
@@ -37,7 +34,7 @@ public class Blob implements Drawable, Movable {
   public void draw(Graphics2D g) {
     Color defaultColor = g.getColor();
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
     GraphicsUtils.drawStringOnPoint(g, element, pos);
 
     g.setColor(defaultColor);

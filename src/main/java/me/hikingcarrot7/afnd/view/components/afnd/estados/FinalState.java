@@ -1,6 +1,6 @@
-package me.hikingcarrot7.afnd.view.components.automata.estados;
+package me.hikingcarrot7.afnd.view.components.afnd.estados;
 
-import me.hikingcarrot7.afnd.view.components.automata.VisualNode;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 
 import java.awt.*;
@@ -20,7 +20,7 @@ public class FinalState extends VisualNode {
     Stroke defaultStroke = g.getStroke();
     Color defaultColor = g.getColor();
 
-    g.setColor(colorPalette.getSpecificColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
+    g.setColor(colorPalette.getColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
     g.setStroke(new BasicStroke(INTERN_CIRCLE_STROKE_WIDTH));
     g.drawOval(
         xCenter() - NODE_RADIUS + INTERN_CIRCLE_OFFSET,

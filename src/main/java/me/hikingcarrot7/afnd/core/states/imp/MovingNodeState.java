@@ -3,7 +3,7 @@ package me.hikingcarrot7.afnd.core.states.imp;
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
-import me.hikingcarrot7.afnd.view.components.automata.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
 
 import java.awt.event.InputEvent;

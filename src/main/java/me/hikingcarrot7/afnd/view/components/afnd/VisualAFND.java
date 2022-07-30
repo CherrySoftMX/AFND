@@ -1,4 +1,4 @@
-package me.hikingcarrot7.afnd.view.components.automata;
+package me.hikingcarrot7.afnd.view.components.afnd;
 
 import me.hikingcarrot7.afnd.core.utils.Pair;
 import me.hikingcarrot7.afnd.view.components.TextBox;
@@ -83,7 +83,7 @@ public final class VisualAFND extends JPanel implements Drawable {
 
   public VisualNode getVNode(String name) {
     for (VisualNode visualNode : visualNodes) {
-      if (visualNode.getElement().equals(name)) {
+      if (visualNode.element().equals(name)) {
         return visualNode;
       }
     }
@@ -100,14 +100,14 @@ public final class VisualAFND extends JPanel implements Drawable {
 
   public void addVArch(VisualConnection varch, int zIndex) {
     visualConnections.add(new Pair<>(varch, zIndex));
-    addComponent(varch.getBlob(), MIDDLE_LAYER);
+    addComponent(varch.getConditionNode(), MIDDLE_LAYER);
     addComponent(varch.getTriangle(), MIDDLE_LAYER);
     visualConnections.sort(Comparator.comparing(Pair::getRight));
   }
 
   public void removeVArch(VisualConnection varch) {
     visualConnections.removeIf(pair -> pair.getLeft() == varch);
-    components.removeIf(pair -> pair.getLeft() == varch.getBlob()
+    components.removeIf(pair -> pair.getLeft() == varch.getConditionNode()
         || pair.getLeft() == varch.getTriangle());
   }
 
@@ -121,10 +121,10 @@ public final class VisualAFND extends JPanel implements Drawable {
     visualConnections.sort(Comparator.comparing(Pair::getRight));
   }
 
-  public VisualConnection getVArch(Movable origen, Movable destino) {
+  public VisualConnection getVArch(Movable origin, Movable destination) {
     for (Pair<VisualConnection, Integer> vArchIntegerPair : visualConnections) {
       VisualConnection visualConnection = vArchIntegerPair.getLeft();
-      if (visualConnection.getOrigin() == origen && visualConnection.getDestination() == destino) {
+      if (visualConnection.getOrigin() == origin && visualConnection.getDestination() == destination) {
         return visualConnection;
       }
     }
