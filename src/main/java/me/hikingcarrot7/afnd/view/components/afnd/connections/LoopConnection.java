@@ -1,22 +1,23 @@
-package me.hikingcarrot7.afnd.view.components.afnd.conexiones;
+package me.hikingcarrot7.afnd.view.components.afnd.connections;
 
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
-import me.hikingcarrot7.afnd.view.graphics.Movable;
 
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 
 public class LoopConnection extends VisualConnection {
+  private Point startRightPoint;
+  private Point rightPointControl;
 
-  public LoopConnection(Movable origin, Movable destination, String condition) {
+  public LoopConnection(VisualNode origin, VisualNode destination, String condition) {
     super(origin, destination, condition);
   }
 
-  public LoopConnection(Movable origin, Movable destination, boolean previewMode) {
+  public LoopConnection(VisualNode origin, VisualNode destination, boolean previewMode) {
     super(origin, destination, previewMode);
   }
 
@@ -28,51 +29,50 @@ public class LoopConnection extends VisualConnection {
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
     g.setStroke(new BasicStroke(STROKE_WIDTH));
 
-    Point startRightPoint = calculateStartRightPoint();
+    startRightPoint = calculateStartRightPoint();
+    rightPointControl = calculateRightPointControl();
     Point startLeftPoint = calculateStartLeftPoint();
-    Point rightPointControl = calculateRightPointControl();
     Point leftPointControl = calculateLeftPointControl();
 
     GeneralPath path = new GeneralPath();
-    path.moveTo(origin.xCenter() + startLeftPoint.x, origin.yCenter() + startLeftPoint.y);
+    path.moveTo(originPos().x + startLeftPoint.x, originPos().y + startLeftPoint.y);
     path.curveTo(
-        origin.xCenter() + leftPointControl.x,
-        origin.yCenter() + leftPointControl.y,
-        origin.xCenter() + rightPointControl.x,
-        origin.yCenter() + rightPointControl.y,
-        origin.xCenter() + startRightPoint.x,
-        origin.yCenter() + startRightPoint.y);
+        originPos().x + leftPointControl.x,
+        originPos().y + leftPointControl.y,
+        originPos().x + rightPointControl.x,
+        originPos().y + rightPointControl.y,
+        originPos().x + startRightPoint.x,
+        originPos().y + startRightPoint.y
+    );
 
     g.draw(path);
 
-    updateTrianglePos(g, rightPointControl, startRightPoint, ALTURA_CURVATURA);
-    updateConditionNodePos(g, startLeftPoint, startRightPoint);
+    updateTrianglePos(g);
+    updateConditionNodePos(g);
 
     g.setStroke(defaultStroke);
     g.setColor(defaultColor);
   }
 
   @Override
-  public void updateTrianglePos(Graphics2D g, Point origin, Point destination, int alturaCurvatura) {
-    triangle.setOrigenX(this.origin.xCenter() + origin.x);
-    triangle.setOrigenY(this.origin.yCenter() + origin.y);
-    triangle.setDestinoX(this.destination.xCenter() + destination.x);
-    triangle.setDestinoY(this.destination.yCenter() + destination.y);
+  public void updateTrianglePos(Graphics2D g) {
+    triangle.setOrigenX(originPos().x + rightPointControl.x);
+    triangle.setOrigenY(originPos().y + rightPointControl.y);
+    triangle.setDestinoX(destinationPos().x + startRightPoint.x);
+    triangle.setDestinoY(destinationPos().y + startRightPoint.y);
     triangle.setLength(TRIANGLE_LENGTH);
     triangle.setOffset(VisualNode.STROKE_WIDTH);
   }
 
   @Override
-  public void updateConditionNodePos(Graphics2D g, Point origin, Point destination) {
-    Point rightPointControl = calculateRightPointControl();
-
+  public void updateConditionNodePos(Graphics2D g) {
     g.setColor(Menu.GRAY_TEXT_COLOR);
     int textWidth = GraphicsUtils.getStringWidth(g, conditionNode.element());
     int blobRadio = textWidth / 2 + BLOB_PADDING * 2;
 
     conditionNode.radius(blobRadio);
-    conditionNode.setXCenter(this.origin.xCenter());
-    conditionNode.setYCenter(this.origin.yCenter() + rightPointControl.y);
+    conditionNode.setXCenter(originPos().x);
+    conditionNode.setYCenter(originPos().y + rightPointControl.y);
   }
 
   private Point calculateStartRightPoint() {

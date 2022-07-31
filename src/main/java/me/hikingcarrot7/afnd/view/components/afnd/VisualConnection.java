@@ -2,16 +2,16 @@ package me.hikingcarrot7.afnd.view.components.afnd;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.hikingcarrot7.afnd.core.graphs.GraphConnection;
 import me.hikingcarrot7.afnd.view.components.Triangle;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
-import me.hikingcarrot7.afnd.view.graphics.Movable;
 
 import java.awt.*;
 
 @Getter
 @Setter
-public abstract class VisualConnection implements Drawable {
+public abstract class VisualConnection extends GraphConnection<String> implements Drawable {
   public static final int TRIANGLE_LENGTH = 7;
   public static final int STROKE_WIDTH = 2;
   public static final int BLOB_PADDING = 3;
@@ -32,33 +32,26 @@ public abstract class VisualConnection implements Drawable {
       .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, RED_CONNECTION_COLOR)
       .build();
 
-  protected Movable origin;
-  protected Movable destination;
   protected ConditionNode conditionNode;
   protected Triangle triangle;
   protected ColorPalette colorPalette;
   protected boolean previewMode;
 
-  public VisualConnection(Movable origin, Movable destination, String condition, ColorPalette colorPalette) {
-    this(origin, destination, condition, false, colorPalette);
-  }
-
-  public VisualConnection(Movable origin, Movable destination, String condition, boolean previewMode, ColorPalette colorPalette) {
+  public VisualConnection(VisualNode origin, VisualNode destination, String condition, boolean previewMode, ColorPalette colorPalette) {
     this(origin, destination, condition, previewMode);
     this.colorPalette = colorPalette;
   }
 
-  public VisualConnection(Movable origin, Movable destination, String condition) {
+  public VisualConnection(VisualNode origin, VisualNode destination, String condition) {
     this(origin, destination, condition, false);
   }
 
-  public VisualConnection(Movable origin, Movable destination, boolean previewMode) {
+  public VisualConnection(VisualNode origin, VisualNode destination, boolean previewMode) {
     this(origin, destination, "", previewMode);
   }
 
-  public VisualConnection(Movable origin, Movable destination, String condition, boolean previewMode) {
-    this.origin = origin;
-    this.destination = destination;
+  public VisualConnection(VisualNode origin, VisualNode destination, String condition, boolean previewMode) {
+    super(origin, destination, condition);
     this.previewMode = previewMode;
     this.colorPalette = DEFAULT_CONNECTION_COLOR_PALETTE;
     this.conditionNode = new ConditionNode(condition);
@@ -66,9 +59,9 @@ public abstract class VisualConnection implements Drawable {
     this.triangle.setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
   }
 
-  public abstract void updateTrianglePos(Graphics2D g, Point origin, Point destination, int alturaCurvatura);
+  public abstract void updateTrianglePos(Graphics2D g);
 
-  public abstract void updateConditionNodePos(Graphics2D g, Point origin, Point destination);
+  public abstract void updateConditionNodePos(Graphics2D g);
 
   public void setCondition(String condition) {
     conditionNode.setElement(condition);
@@ -76,6 +69,22 @@ public abstract class VisualConnection implements Drawable {
 
   public String condition() {
     return conditionNode.element();
+  }
+
+  public Point originPos() {
+    return getVisualOriginNode().getPos();
+  }
+
+  public Point destinationPos() {
+    return getVisualDestinationNode().getPos();
+  }
+
+  public VisualNode getVisualOriginNode() {
+    return (VisualNode) getOrigin();
+  }
+
+  public VisualNode getVisualDestinationNode() {
+    return (VisualNode) getDestination();
   }
 
 }

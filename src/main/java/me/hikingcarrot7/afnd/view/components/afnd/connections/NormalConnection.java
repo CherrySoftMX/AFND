@@ -1,4 +1,4 @@
-package me.hikingcarrot7.afnd.view.components.afnd.conexiones;
+package me.hikingcarrot7.afnd.view.components.afnd.connections;
 
 import me.hikingcarrot7.afnd.core.utils.MathHelper;
 import me.hikingcarrot7.afnd.view.components.Menu;
@@ -6,18 +6,17 @@ import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
-import me.hikingcarrot7.afnd.view.graphics.Movable;
 
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 
 public class NormalConnection extends VisualConnection {
 
-  public NormalConnection(Movable origin, Movable destination, String condition) {
+  public NormalConnection(VisualNode origin, VisualNode destination, String condition) {
     super(origin, destination, condition);
   }
 
-  public NormalConnection(Movable origin, Movable destination, boolean previewMode) {
+  public NormalConnection(VisualNode origin, VisualNode destination, boolean previewMode) {
     super(origin, destination, previewMode);
   }
 
@@ -30,26 +29,27 @@ public class NormalConnection extends VisualConnection {
     g.setStroke(new BasicStroke(STROKE_WIDTH));
 
     if (previewMode) {
-      g.drawLine(origin.xCenter(), origin.yCenter(), destination.xCenter(), destination.yCenter());
+      g.drawLine(originPos().x, originPos().y, destinationPos().x, destinationPos().y);
     } else {
       GeneralPath path = new GeneralPath();
-      path.moveTo(origin.xCenter(), origin.yCenter());
+      path.moveTo(originPos().x, originPos().y);
 
-      Point minPoint = MathHelper.midPoint(origin.getPos(), destination.getPos());
-      Point controlPoint = MathHelper.controlPoint(origin.getPos(), destination.getPos(), ALTURA_CURVATURA);
+      Point minPoint = MathHelper.midPoint(originPos(), destinationPos());
+      Point controlPoint = MathHelper.controlPoint(originPos(), destinationPos(), ALTURA_CURVATURA);
 
       path.curveTo(
           minPoint.x + controlPoint.x,
           minPoint.y + controlPoint.y,
           minPoint.x + controlPoint.x,
           minPoint.y + controlPoint.y,
-          destination.xCenter(),
-          destination.yCenter());
+          destinationPos().x,
+          destinationPos().y
+      );
 
       g.draw(path);
 
-      updateConditionNodePos(g, origin.getPos(), destination.getPos());
-      updateTrianglePos(g, origin.getPos(), destination.getPos(), ALTURA_CURVATURA);
+      updateConditionNodePos(g);
+      updateTrianglePos(g);
     }
 
     g.setStroke(defaultStroke);
@@ -57,27 +57,27 @@ public class NormalConnection extends VisualConnection {
   }
 
   @Override
-  public void updateTrianglePos(Graphics2D g, Point origin, Point destination, int alturaCurvatura) {
-    Point midPoint = MathHelper.midPoint(origin, destination);
-    Point controlPoint = MathHelper.controlPoint(origin, destination, alturaCurvatura);
+  public void updateTrianglePos(Graphics2D g) {
+    Point destinationPos = destinationPos();
+    Point midPoint = MathHelper.midPoint(originPos(), destinationPos);
+    Point controlPoint = MathHelper.controlPoint(originPos(), destinationPos, ALTURA_CURVATURA);
 
     triangle.setOrigenX(midPoint.x + controlPoint.x);
     triangle.setOrigenY(midPoint.y + controlPoint.y);
-    triangle.setDestinoX(destination.x);
-    triangle.setDestinoY(destination.y);
+    triangle.setDestinoX(destinationPos.x);
+    triangle.setDestinoY(destinationPos.y);
     triangle.setLength(TRIANGLE_LENGTH);
     triangle.setOffset(VisualNode.NODE_RADIUS + STROKE_WIDTH);
   }
 
   @Override
-  public void updateConditionNodePos(Graphics2D g, Point origin, Point destination) {
-    Point midPoint = MathHelper.midPoint(origin, destination);
-    Point controlPoint = MathHelper.controlPoint(origin, destination, ALTURA_CURVATURA);
+  public void updateConditionNodePos(Graphics2D g) {
+    Point midPoint = MathHelper.midPoint(originPos(), destinationPos());
+    Point controlPoint = MathHelper.controlPoint(originPos(), destinationPos(), ALTURA_CURVATURA);
     g.setColor(Menu.GRAY_TEXT_COLOR);
     int textWidth = GraphicsUtils.getStringWidth(g, conditionNode.element());
     int blobRadio = textWidth / 2 + BLOB_PADDING * 2;
 
-    // blob.setElement(condition);
     conditionNode.radius(blobRadio);
     conditionNode.setXCenter(midPoint.x + controlPoint.x);
     conditionNode.setYCenter(midPoint.y + controlPoint.y);
