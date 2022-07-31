@@ -1,8 +1,7 @@
 package me.hikingcarrot7.afnd.view;
 
-import java.awt.Dimension;
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
+import javax.swing.*;
+import java.awt.*;
 
 public class MainView extends JFrame {
 

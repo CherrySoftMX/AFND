@@ -9,8 +9,8 @@ import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
-import me.hikingcarrot7.afnd.view.components.afnd.estados.AFNDStateFactory;
-import me.hikingcarrot7.afnd.view.components.afnd.estados.AFNDStateFactoryImp;
+import me.hikingcarrot7.afnd.view.components.afnd.states.AFNDStateFactory;
+import me.hikingcarrot7.afnd.view.components.afnd.states.AFNDStateFactoryImp;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -90,13 +90,13 @@ public class AddingNodeState implements AFNDState {
     }
   }
 
-  private boolean addState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, Point center, int buttonID) {
+  private boolean addState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, Point center, int stateId) {
     String element = textTyper.getText();
     boolean elementInserted;
     if (element.length() <= 0) {
       return false;
     }
-    switch (buttonID) {
+    switch (stateId) {
       case Menu.ESTADO_INICIAL_ID:
         elementInserted = afndGraph.insertAsInitialState(element);
         break;
@@ -109,7 +109,7 @@ public class AddingNodeState implements AFNDState {
       default:
         elementInserted = afndGraph.insertElement(element);
     }
-    visualAFND.addVNode(factory.createState(buttonID, element, center));
+    visualAFND.addVNode(factory.createState(stateId, element, center));
     visualAFND.repaint();
     return elementInserted;
   }

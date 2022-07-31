@@ -24,66 +24,66 @@ public class Menu implements Drawable {
   public static final int COMPROBACION_PASOS_ID = 11;
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_ADD_ESTADO_INICIAL = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Estado inicial")
-    .setID(ESTADO_INICIAL_ID)
-    .build();
+      .addLine("Estado inicial")
+      .setID(ESTADO_INICIAL_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_ADD_ESTADO_NORMAL = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Estado normal")
-    .setID(ESTADO_NORMAL_ID)
-    .build();
+      .addLine("Estado normal")
+      .setID(ESTADO_NORMAL_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_ADD_ESTADO_FINAL = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Estado final")
-    .setID(ESTADO_FINAL_ID)
-    .build();
+      .addLine("Estado final")
+      .setID(ESTADO_FINAL_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_ADD_ESTADO_INICIAL_FINAL = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Estado inicial-")
-    .addLine("final")
-    .setID(ESTADO_INICIAL_FINAL_ID)
-    .build();
+      .addLine("Estado inicial-")
+      .addLine("final")
+      .setID(ESTADO_INICIAL_FINAL_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_MOVER_ESTADO = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Mover estado")
-    .setID(MOVER_ESTADO_ID)
-    .build();
+      .addLine("Mover estado")
+      .setID(MOVER_ESTADO_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_ELIMINAR_ESTADO = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Borrar estado")
-    .setID(ELIMINAR_ESTADO_ID)
-    .build();
+      .addLine("Borrar estado")
+      .setID(ELIMINAR_ESTADO_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_ADD_CONEXION_NORMAL = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Conexión")
-    .addLine("normal")
-    .setID(CONEXION_NORMAL_ID)
-    .build();
+      .addLine("Conexión")
+      .addLine("normal")
+      .setID(CONEXION_NORMAL_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_ADD_CONEXION_BUCLE = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Conexión")
-    .addLine("bucle")
-    .setID(CONEXION_BUCLE_ID)
-    .build();
+      .addLine("Conexión")
+      .addLine("bucle")
+      .setID(CONEXION_BUCLE_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_ELIMINAR_CONEXION = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("Borrar")
-    .addLine("conexión")
-    .setID(ELIMINAR_CONEXION_ID)
-    .build();
+      .addLine("Borrar")
+      .addLine("conexión")
+      .setID(ELIMINAR_CONEXION_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_COMPROBAR_AUTOMATA = new me.hikingcarrot7.afnd.view.components.AbstractButton.ButtonBuilder()
-    .addLine("COMPROBAR")
-    .setColorPalette(Button.BUTTON_COLOR_PALETTE)
-    .setDimension(50, 40)
-    .setFontSize(8)
-    .setID(COMPROBAR_AUTOMATA_ID)
-    .build();
+      .addLine("COMPROBAR")
+      .setColorPalette(Button.BUTTON_COLOR_PALETTE)
+      .setDimension(50, 40)
+      .setFontSize(8)
+      .setID(COMPROBAR_AUTOMATA_ID)
+      .build();
 
   public static me.hikingcarrot7.afnd.view.components.AbstractButton BUTTON_COMPROBACION_PASOS_AUTOMATA = new AbstractButton.ButtonBuilder()
-    .addLine("Paso a paso")
-    .setID(COMPROBACION_PASOS_ID)
-    .build();
+      .addLine("Paso a paso")
+      .setID(COMPROBACION_PASOS_ID)
+      .build();
 
   public static JTextField TEXT_FIELD = new JTextField();
 
@@ -158,8 +158,8 @@ public class Menu implements Drawable {
 
   public boolean clicked(Point point) {
     return GraphicsUtils.intersects(
-      new Rectangle(visualAFND.getWidth() - MENU_WIDTH, 0, MENU_WIDTH, visualAFND.getHeight()),
-      new Rectangle(point));
+        new Rectangle(visualAFND.getWidth() - MENU_WIDTH, 0, MENU_WIDTH, visualAFND.getHeight()),
+        new Rectangle(point));
   }
 
 }

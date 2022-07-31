@@ -8,9 +8,9 @@ import java.util.List;
 
 public class Button extends AbstractButton {
   public static final ColorPalette BUTTON_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, DEFAULT_COLOR)
-    .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.WHITE)
-    .build();
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, DEFAULT_COLOR)
+      .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.WHITE)
+      .build();
 
   public Button(List<String> content, int xPos, int yPos, int width, int height, int id, int fontSize, ColorPalette colorPalette) {
     super(content, xPos, yPos, width, height, id, fontSize, colorPalette);

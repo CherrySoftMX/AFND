@@ -9,7 +9,7 @@ import me.hikingcarrot7.afnd.view.components.TextTyper;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
-import me.hikingcarrot7.afnd.view.components.afnd.conexiones.LoopConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.connections.LoopConnection;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;

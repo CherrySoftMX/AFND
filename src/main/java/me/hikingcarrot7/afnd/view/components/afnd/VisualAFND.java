@@ -52,6 +52,15 @@ public final class VisualAFND extends JPanel implements Drawable {
     g2d.dispose();
   }
 
+  private void configGraphics(Graphics2D g) {
+    g.setFont(DEFAULT_FONT);
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    if (defaultTextBox == null) {
+      defaultTextBox = new TextBox.TextBoxBuilder().build();
+    }
+  }
+
   @Override
   public void draw(Graphics2D g) {
     visualConnections.forEach(pair -> pair.getLeft().draw(g));
@@ -62,15 +71,6 @@ public final class VisualAFND extends JPanel implements Drawable {
     }
     EventQueue.invokeLater(() -> swingComponents.forEach(Component::repaint));
     g.dispose();
-  }
-
-  private void configGraphics(Graphics2D g) {
-    g.setFont(DEFAULT_FONT);
-    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    if (defaultTextBox == null) {
-      defaultTextBox = new TextBox.TextBoxBuilder().build();
-    }
   }
 
   public void addVNode(VisualNode visualNode) {

@@ -5,9 +5,7 @@ import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 public class Triangle implements Drawable {
@@ -21,18 +19,18 @@ public class Triangle implements Drawable {
   private ColorPalette colorPalette;
 
   public static final ColorPalette DEFAULT_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualNode.NODE_FILL_COLOR)
-    .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualNode.NODE_STROKE_COLOR)
-    .build();
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualNode.NODE_FILL_COLOR)
+      .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualNode.NODE_STROKE_COLOR)
+      .build();
 
   public static final ColorPalette VARCH_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.COLOR_ARCH)
-    .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualConnection.COLOR_ARCH)
-    .build();
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.COLOR_ARCH)
+      .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualConnection.COLOR_ARCH)
+      .build();
 
   public static final ColorPalette RED_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, new Color(255, 80, 80))
-    .build();
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, new Color(255, 80, 80))
+      .build();
 
   public Triangle() {
     this(0, 0, 0, 0, 0, 0, 0, DEFAULT_TRIANGLE_COLOR_PALETTE);
@@ -66,12 +64,12 @@ public class Triangle implements Drawable {
     g.transform(at);
 
     g.fillPolygon(new int[]{distancia, distancia - length, distancia - length, distancia},
-      new int[]{0, -length, length, 0}, 4);
+        new int[]{0, -length, length, 0}, 4);
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
     g.setStroke(new BasicStroke(strokeWidth));
     g.drawPolygon(new int[]{distancia, distancia - length, distancia - length, distancia},
-      new int[]{0, -length, length, 0}, 4);
+        new int[]{0, -length, length, 0}, 4);
 
     g.setTransform(originalTransform);
     g.setColor(defaultColor);

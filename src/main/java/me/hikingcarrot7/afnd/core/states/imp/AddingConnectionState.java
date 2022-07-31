@@ -9,7 +9,7 @@ import me.hikingcarrot7.afnd.view.components.TextTyper;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
-import me.hikingcarrot7.afnd.view.components.afnd.conexiones.NormalConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.connections.NormalConnection;
 import me.hikingcarrot7.afnd.view.graphics.Movable;
 
 import java.awt.event.InputEvent;
@@ -32,7 +32,7 @@ public class AddingConnectionState implements AFNDState {
   private boolean insertingCondition;
   private VisualNode origin;
   private VisualNode destination;
-  private Movable cursor;
+  private VisualNode cursor;
   private VisualConnection previewArch;
   private VisualConnection previousArch;
   private TextTyper textTyper;

@@ -14,6 +14,7 @@ import java.awt.*;
 @Getter
 @Setter
 public class VisualNode extends GraphNode<String> implements Drawable, Movable {
+  public static final int VISUAL_NODE_ID = 0;
   public static final Color NODE_FILL_COLOR = new Color(81, 237, 236);
   public static final Color NODE_STROKE_COLOR = new Color(70, 206, 205);
   public static final Color SELECTED_NODE_FILL_COLOR = new Color(158, 244, 162);
@@ -24,6 +25,7 @@ public class VisualNode extends GraphNode<String> implements Drawable, Movable {
   protected Point pos;
   @Accessors(fluent = true)
   protected int radius;
+  protected boolean isPreviewNode;
   protected ColorPalette colorPalette;
 
   public static final ColorPalette DEFAULT_NODE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
@@ -71,7 +73,10 @@ public class VisualNode extends GraphNode<String> implements Drawable, Movable {
     g.setStroke(new BasicStroke(STROKE_WIDTH));
     g.drawOval(xCenter() - NODE_RADIUS, yCenter() - NODE_RADIUS, NODE_RADIUS * 2, NODE_RADIUS * 2);
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
-    GraphicsUtils.drawStringOnPoint(g, element(), pos);
+
+    if (!isPreviewNode()) {
+      GraphicsUtils.drawStringOnPoint(g, element(), pos);
+    }
 
     g.setStroke(defaultStroke);
     g.setColor(defaultColor);

@@ -104,6 +104,10 @@ public class AdjacentListGraph<T> extends Graph<T> {
     throw new ElementNotFoundException(element);
   }
 
+  protected List<Node<T>> getNodes() {
+    return adjTable;
+  }
+
   private void throwIfMaxCapacityReached() {
     if (cardinality() == MAX_NODES) {
       throw new MaxCapacityReachedException();

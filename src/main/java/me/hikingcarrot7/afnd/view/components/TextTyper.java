@@ -5,8 +5,7 @@ import me.hikingcarrot7.afnd.view.graphics.Drawable;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
 import me.hikingcarrot7.afnd.view.graphics.Movable;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class TextTyper implements Drawable, Movable {

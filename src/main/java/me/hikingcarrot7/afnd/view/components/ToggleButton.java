@@ -1,28 +1,22 @@
 package me.hikingcarrot7.afnd.view.components;
 
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
-import me.hikingcarrot7.afnd.view.graphics.Togglable;
+import me.hikingcarrot7.afnd.view.graphics.Toggleable;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.List;
 
-public class ToggleButton extends AbstractButton implements Togglable {
+public class ToggleButton extends AbstractButton implements Toggleable {
   public static final int ARC_WIDTH = 25;
   public static final int ARC_HEIGHT = 25;
   public static final int STROKE_WIDTH = 2;
 
   public static final ColorPalette TOGGLED_BUTTON_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-    .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, DEFAULT_COLOR)
-    .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, DEFAULT_COLOR)
-    .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.WHITE)
-    .build();
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, DEFAULT_COLOR)
+      .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, DEFAULT_COLOR)
+      .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.WHITE)
+      .build();
 
   private boolean toggled = false;
 
