@@ -64,7 +64,7 @@
               <transformers>
                 <transformer
                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>me.hikingcarrot7.afndGraph.AFNDApp</mainClass>
+                  <mainClass>me.hikingcarrot7.afnd.AFNDApp</mainClass>
                 </transformer>
               </transformers>
             </configuration>
