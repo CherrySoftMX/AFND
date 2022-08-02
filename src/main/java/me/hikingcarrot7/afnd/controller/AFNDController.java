@@ -9,7 +9,7 @@ import me.hikingcarrot7.afnd.view.components.AbstractButton;
 import me.hikingcarrot7.afnd.view.components.Button;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.ToggleButton;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -22,14 +22,14 @@ public class AFNDController implements Observer {
   private final AFNDStateDispatcher afndStateDispatcher;
   private final MainView view;
   private final Menu menu;
-  private final VisualAFND visualAFND;
+  private final AFNDPanel AFNDPanel;
   private AbstractButton latestPressedButton;
 
-  public AFNDController(MainView view, AFNDGraph afndGraph, VisualAFND visualAFND, Menu menu) {
+  public AFNDController(MainView view, AFNDGraph afndGraph, AFNDPanel AFNDPanel, Menu menu) {
     this.view = view;
     this.latestPressedButton = null;
     this.menu = menu;
-    this.visualAFND = visualAFND;
+    this.AFNDPanel = AFNDPanel;
     this.afndStateDispatcher = new AFNDStateDispatcher(afndGraph);
     this.bindings = new HashMap<>();
   }
@@ -77,7 +77,7 @@ public class AFNDController implements Observer {
 
           latestPressedButton = button;
         }
-        visualAFND.requestFocus();
+        AFNDPanel.requestFocus();
         break;
       case MouseEvent.MOUSE_MOVED:
         button = getButtonUnder(e.getPoint());

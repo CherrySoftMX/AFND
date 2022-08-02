@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.*;
 
@@ -22,7 +22,7 @@ public class DialogueBalloon implements Box, Drawable {
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
       .build();
 
-  private final VisualAFND vgraph;
+  private final AFNDPanel vgraph;
   private final VisualNode relativeTo;
   private final ColorPalette colorPalette;
   private final Point pos;
@@ -30,7 +30,7 @@ public class DialogueBalloon implements Box, Drawable {
   private Rectangle textBounds;
   private BoxPosition boxPosition;
 
-  public DialogueBalloon(VisualAFND vgraph, VisualNode relativeTo, String text, ColorPalette colorPalette) {
+  public DialogueBalloon(AFNDPanel vgraph, VisualNode relativeTo, String text, ColorPalette colorPalette) {
     this.vgraph = vgraph;
     this.relativeTo = relativeTo;
     this.colorPalette = colorPalette;
@@ -38,7 +38,7 @@ public class DialogueBalloon implements Box, Drawable {
     this.pos = new Point();
   }
 
-  public DialogueBalloon(VisualAFND vgraph, VisualNode relativeTo, String text) {
+  public DialogueBalloon(AFNDPanel vgraph, VisualNode relativeTo, String text) {
     this(vgraph, relativeTo, text, DEFAULT_GLOBE_COLOR_PALETTE);
   }
 
@@ -51,6 +51,11 @@ public class DialogueBalloon implements Box, Drawable {
 
     g.setStroke(defaultStroke);
     g.setColor(defaultColor);
+  }
+
+  @Override
+  public int getLayer() {
+    return AFNDPanel.MIDDLE_LAYER;
   }
 
   private void drawRelativeTo(Graphics2D g) {

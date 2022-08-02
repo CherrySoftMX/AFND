@@ -7,7 +7,7 @@ import me.hikingcarrot7.afnd.core.graphs.Connection;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.view.components.*;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.Box;
@@ -39,25 +39,25 @@ public class ResolvingStepByStepState implements AFNDState {
   }
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
+  public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
     if (event.getID() == MouseEvent.MOUSE_CLICKED) {
       if (inputMatched) {
-        paintNextStep(visualAFND);
+        paintNextStep(AFNDPanel);
       } else {
-        testInput(afndGraph, visualAFND);
+        testInput(afndGraph, AFNDPanel);
       }
     }
     if (!inputTested) {
-      testInput(afndGraph, visualAFND);
+      testInput(afndGraph, AFNDPanel);
     }
-    visualAFND.repaint();
+    AFNDPanel.repaint();
   }
 
-  private void testInput(AFNDGraph<String> afndGraph, VisualAFND visualAFND) {
+  private void testInput(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel) {
     String text = Menu.TEXT_FIELD.getText();
     try {
       result = afndGraph.matches(text);
-      visualAFND.addComponent(messageBox, VisualAFND.MAX_LAYER);
+      AFNDPanel.addComponent(messageBox);
       if (result.matches()) {
         messageBox.setTitle("Palabra ACEPTADA, presiona sobre el aútomata para iniciar el recorrido");
         messageBox.setColorPalette(TextBox.GREEN_TEXTBOX_COLOR_PALETTE);
@@ -69,23 +69,23 @@ public class ResolvingStepByStepState implements AFNDState {
       }
       inputTested = true;
     } catch (IllegalStateException e) {
-      visualAFND.getDefaultTextBox().setTitle(e.getMessage());
+      AFNDPanel.getDefaultTextBox().setTitle(e.getMessage());
       inputTested = true;
     }
   }
 
-  private void paintNextStep(VisualAFND visualAFND) {
+  private void paintNextStep(AFNDPanel panel) {
     if (pathIterator == null) {
       pathIterator = result.pathIterator();
     }
     if (pathIterator.hasNext()) {
       MatchResultStep step = pathIterator.next();
       Connection<?> connection = step.getConnection();
-      clearAllMarks(visualAFND);
+      clearAllMarks(panel);
 
-      VisualNode origen = visualAFND.getVNode(connection.getOrigin().element().toString());
-      VisualNode destino = visualAFND.getVNode(connection.getDestination().element().toString());
-      VisualConnection varch = visualAFND.getVArch(origen, destino);
+      VisualNode origen = panel.getVNode(connection.getOrigin().element().toString());
+      VisualNode destino = panel.getVNode(connection.getDestination().element().toString());
+      VisualConnection varch = panel.getVArch(origen, destino);
 
       origen.setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
       destino.setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
@@ -94,30 +94,30 @@ public class ResolvingStepByStepState implements AFNDState {
 
       messageBox.setTitle("Palabra por ser consumida: " + step.inputSnapshot());
     } else {
-      clearAllMarks(visualAFND);
+      clearAllMarks(panel);
       messageBox.setTitle("La palabra ha sido consumida");
     }
 
-    visualAFND.repaint();
+    panel.repaint();
   }
 
-  private void clearAllMarks(VisualAFND visualAFND) {
-    visualAFND.getVNodes().forEach(vnode -> vnode.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE));
-    visualAFND.getVisualConnections().forEach(varch -> {
+  private void clearAllMarks(AFNDPanel panel) {
+    panel.getVNodes().forEach(vnode -> vnode.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE));
+    panel.getVisualConnections().forEach(varch -> {
       varch.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
       varch.getTriangle().setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
-      visualAFND.setVArchZIndex(varch, VisualAFND.MIN_LAYER);
+      panel.setVArchZIndex(varch, AFNDPanel.MIN_LAYER);
     });
   }
 
   @Override
-  public void clearState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher) {
+  public void clearState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher) {
     inputTested = false;
     inputMatched = false;
     pathIterator = null;
-    visualAFND.removeComponent(messageBox);
-    clearAllMarks(visualAFND);
-    AFNDState.super.clearState(afndGraph, visualAFND, afndStateDispatcher);
+    AFNDPanel.removeComponent(messageBox);
+    clearAllMarks(AFNDPanel);
+    AFNDState.super.clearState(afndGraph, AFNDPanel, afndStateDispatcher);
   }
 
 }

@@ -1,19 +1,10 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
-import me.hikingcarrot7.afnd.view.graphics.Box;
-import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
-import me.hikingcarrot7.afnd.view.graphics.Drawable;
-import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
-import me.hikingcarrot7.afnd.view.graphics.TextBoxFactory;
+import me.hikingcarrot7.afnd.view.graphics.*;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Shape;
-import java.awt.Stroke;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class TextBox implements Box, Drawable {
@@ -41,7 +32,7 @@ public class TextBox implements Box, Drawable {
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
       .build();
 
-  private final VisualAFND vgraph;
+  private final AFNDPanel vgraph;
   private int width = -1;
   private int height = -1;
   private String title;
@@ -50,7 +41,7 @@ public class TextBox implements Box, Drawable {
   private ColorPalette colorPalette;
   private BoxPosition boxPosition;
 
-  public TextBox(VisualAFND vgraph, String title, ArrayList<String> content, String footer, BoxPosition boxPosition, ColorPalette colorPalette) {
+  public TextBox(AFNDPanel vgraph, String title, ArrayList<String> content, String footer, BoxPosition boxPosition, ColorPalette colorPalette) {
     this.title = title;
     this.content = content;
     this.footer = footer;
@@ -77,6 +68,11 @@ public class TextBox implements Box, Drawable {
 
     g.setStroke(defaultStroke);
     g.setColor(defaultColor);
+  }
+
+  @Override
+  public int getLayer() {
+    return AFNDPanel.MAX_LAYER;
   }
 
   @Override
@@ -275,7 +271,7 @@ public class TextBox implements Box, Drawable {
     }
 
     public TextBox build() {
-      return new TextBox(VisualAFND.getInstance(), title, content, footer, boxPosition, colorPalette);
+      return new TextBox(AFNDPanel.getInstance(), title, content, footer, boxPosition, colorPalette);
     }
 
   }

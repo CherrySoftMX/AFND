@@ -1,6 +1,7 @@
 package me.hikingcarrot7.afnd.view.components;
 
 import me.hikingcarrot7.afnd.controller.TextFormatter;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
 import me.hikingcarrot7.afnd.view.graphics.Movable;
@@ -11,39 +12,39 @@ import java.awt.event.KeyEvent;
 public class TextTyper implements Drawable, Movable {
   private int xCenter;
   private int yCenter;
-  private int maxCaracteres;
+  private int maxChars;
   private String text;
-  private TextFormatter textFormatter;
+  private final TextFormatter textFormatter;
 
   public static final TextFormatter DEFAULT_FORMATTER = keyCode -> keyCode > 33;
   public static final TextFormatter POSITIVE_INTEGER_FORMATTER = keyCode -> keyCode >= 48 && keyCode <= 57;
 
-  public TextTyper(int xCenter, int yCenter, String text, int maxCaracteres) {
-    this(xCenter, yCenter, text, maxCaracteres, DEFAULT_FORMATTER);
+  public TextTyper(int xCenter, int yCenter, String text, int maxChars) {
+    this(xCenter, yCenter, text, maxChars, DEFAULT_FORMATTER);
   }
 
-  public TextTyper(Point coords, String text, int maxCaracteres, TextFormatter textFormatter) {
-    this(coords.x, coords.y, text, maxCaracteres, textFormatter);
+  public TextTyper(Point pos, String text, int maxChars, TextFormatter textFormatter) {
+    this(pos.x, pos.y, text, maxChars, textFormatter);
   }
 
-  public TextTyper(int xCenter, int yCenter, String text, int maxCaracteres, TextFormatter textFormatter) {
+  public TextTyper(int xCenter, int yCenter, String text, int maxChars, TextFormatter textFormatter) {
     this.xCenter = xCenter;
     this.yCenter = yCenter;
     this.text = text;
-    this.maxCaracteres = maxCaracteres;
+    this.maxChars = maxChars;
     this.textFormatter = textFormatter;
   }
 
-  public TextTyper(Point coords, int maxCaracteres, TextFormatter textFormatter) {
-    this(coords.x, coords.y, "", maxCaracteres, textFormatter);
+  public TextTyper(Point coords, int maxChars, TextFormatter textFormatter) {
+    this(coords.x, coords.y, "", maxChars, textFormatter);
   }
 
-  public TextTyper(Point coords, int maxCaracteres) {
-    this(coords.x, coords.y, maxCaracteres);
+  public TextTyper(Point coords, int maxChars) {
+    this(coords.x, coords.y, maxChars);
   }
 
-  public TextTyper(int xCenter, int yCenter, int maxCaracteres) {
-    this(xCenter, yCenter, "", maxCaracteres);
+  public TextTyper(int xCenter, int yCenter, int maxChars) {
+    this(xCenter, yCenter, "", maxChars);
   }
 
   @Override
@@ -51,10 +52,15 @@ public class TextTyper implements Drawable, Movable {
     GraphicsUtils.drawStringOnPoint(g, text, xCenter, yCenter);
   }
 
+  @Override
+  public int getLayer() {
+    return AFNDPanel.MIDDLE_LAYER;
+  }
+
   public void handleInputEvent(KeyEvent e) {
-    if (text.length() >= 0 && e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+    if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
       text = quitarUltimoCharacter(text);
-    } else if (textFormatter.isValidCharacter(e.getKeyCode()) && text.length() < maxCaracteres) {
+    } else if (textFormatter.isValidCharacter(e.getKeyCode()) && text.length() < maxChars) {
       text += e.getKeyChar();
     }
   }
@@ -87,16 +93,16 @@ public class TextTyper implements Drawable, Movable {
     return text;
   }
 
-  public int getMaxCaracteres() {
-    return maxCaracteres;
+  public int getMaxChars() {
+    return maxChars;
   }
 
   public void setText(String text) {
     this.text = text;
   }
 
-  public void setMaxCaracteres(int maxCaracteres) {
-    this.maxCaracteres = maxCaracteres;
+  public void setMaxChars(int maxChars) {
+    this.maxChars = maxChars;
   }
 
   @Override

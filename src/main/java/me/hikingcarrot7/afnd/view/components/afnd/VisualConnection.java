@@ -87,4 +87,9 @@ public abstract class VisualConnection extends GraphConnection<String> implement
     return (VisualNode) getDestination();
   }
 
+  @Override
+  public int getLayer() {
+    return AFNDPanel.MIDDLE_LAYER;
+  }
+
 }

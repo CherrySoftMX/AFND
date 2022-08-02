@@ -2,7 +2,7 @@ package me.hikingcarrot7.afnd.core.states;
 
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.imp.IdleState;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 
 import java.awt.event.InputEvent;
 
@@ -16,11 +16,11 @@ public class AFNDStateDispatcher {
   }
 
   public void dispatchInputEvent(int buttonID, InputEvent event) {
-    currentState.updateGraphState(afndGraph, VisualAFND.getInstance(), this, event, buttonID);
+    currentState.updateGraphState(afndGraph, AFNDPanel.getInstance(), this, event, buttonID);
   }
 
   public void exitCurrentState() {
-    currentState.exitState(afndGraph, VisualAFND.getInstance(), this);
+    currentState.exitState(afndGraph, AFNDPanel.getInstance(), this);
   }
 
   public void setCurrentState(AFNDState newState) {

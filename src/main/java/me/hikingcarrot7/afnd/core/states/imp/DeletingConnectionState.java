@@ -6,7 +6,7 @@ import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.core.utils.GraphUtils;
 import me.hikingcarrot7.afnd.view.components.Triangle;
 import me.hikingcarrot7.afnd.view.components.afnd.ConditionNode;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 
@@ -30,70 +30,70 @@ public class DeletingConnectionState implements AFNDState {
   private VisualNode origin;
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
+  public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
     if (event.getID() == MouseEvent.MOUSE_PRESSED) {
       MouseEvent e = (MouseEvent) event;
       if (origin != null) {
-        removeArch(afndGraph, visualAFND, afndStateDispatcher, e);
+        removeArch(afndGraph, AFNDPanel, afndStateDispatcher, e);
         if (e.getButton() != MouseEvent.BUTTON1) {
-          clearState(afndGraph, visualAFND, afndStateDispatcher);
+          clearState(afndGraph, AFNDPanel, afndStateDispatcher);
         }
       } else {
-        clearState(afndGraph, visualAFND, afndStateDispatcher);
-        selectNode(afndGraph, visualAFND, afndStateDispatcher, (MouseEvent) event);
+        clearState(afndGraph, AFNDPanel, afndStateDispatcher);
+        selectNode(afndGraph, AFNDPanel, afndStateDispatcher, (MouseEvent) event);
       }
     }
   }
 
-  private void removeArch(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, MouseEvent e) {
-    int pressedNode = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
+  private void removeArch(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher, MouseEvent e) {
+    int pressedNode = GraphUtils.getPressedNode(afndGraph, AFNDPanel.getVNodes(), e.getPoint());
     if (pressedNode >= 0) {
-      VisualNode destination = visualAFND.getVNode(pressedNode);
+      VisualNode destination = AFNDPanel.getVNode(pressedNode);
       afndGraph.removeConnection(origin.element(), destination.element());
-      visualAFND.removeVArch(visualAFND.getVArch(origin, destination));
-      clearState(afndGraph, visualAFND, afndStateDispatcher);
+      AFNDPanel.removeVArch(AFNDPanel.getVArch(origin, destination));
+      clearState(afndGraph, AFNDPanel, afndStateDispatcher);
     }
   }
 
-  private void selectNode(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, MouseEvent e) {
-    int nVerticePresionado = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
+  private void selectNode(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher, MouseEvent e) {
+    int nVerticePresionado = GraphUtils.getPressedNode(afndGraph, AFNDPanel.getVNodes(), e.getPoint());
     if (nVerticePresionado >= 0) {
-      VisualNode pressedNode = visualAFND.getVNode(nVerticePresionado);
-      List<VisualConnection> adjacentArchs = GraphUtils.getAdjacentVArchs(pressedNode, visualAFND);
+      VisualNode pressedNode = AFNDPanel.getVNode(nVerticePresionado);
+      List<VisualConnection> adjacentArchs = GraphUtils.getAdjacentConnections(pressedNode, AFNDPanel);
       if (!adjacentArchs.isEmpty()) {
         origin = pressedNode;
         origin.setColorPalette(VisualNode.SELECTED_NODE_COLOR_PALETTE);
-        markAdjacentConnections(origin, visualAFND);
-        visualAFND.getDefaultTextBox().setTitle("Presione click izquierdo sobre algún estado adyacente para borrar la conexión");
-        visualAFND.repaint();
+        markAdjacentConnections(origin, AFNDPanel);
+        AFNDPanel.getDefaultTextBox().setTitle("Presione click izquierdo sobre algún estado adyacente para borrar la conexión");
+        AFNDPanel.repaint();
       } else {
-        clearState(afndGraph, visualAFND, afndStateDispatcher);
+        clearState(afndGraph, AFNDPanel, afndStateDispatcher);
       }
     }
   }
 
-  private void markAdjacentConnections(VisualNode vnode, VisualAFND vgraph) {
-    List<VisualConnection> adjacentArchs = GraphUtils.getAdjacentVArchs(vnode, vgraph);
+  private void markAdjacentConnections(VisualNode vnode, AFNDPanel vgraph) {
+    List<VisualConnection> adjacentArchs = GraphUtils.getAdjacentConnections(vnode, vgraph);
     adjacentArchs.forEach(varch -> {
       varch.setColorPalette(VisualConnection.RED_CONNECTION_COLOR_PALETTE);
       varch.getTriangle().setColorPalette(Triangle.RED_TRIANGLE_COLOR_PALETTE);
-      vgraph.setVArchZIndex(varch, VisualAFND.MAX_LAYER);
+      vgraph.setVArchZIndex(varch, AFNDPanel.MAX_LAYER);
     });
   }
 
   @Override
-  public void clearState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher) {
-    visualAFND.getVisualConnections().forEach(varch -> {
+  public void clearState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher) {
+    AFNDPanel.getVisualConnections().forEach(varch -> {
       varch.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
       varch.getConditionNode().setColorPalette(ConditionNode.DEFAULT_CONDITION_NODE_COLOR_PALETTE);
       varch.getTriangle().setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
-      visualAFND.setVArchZIndex(varch, VisualAFND.MIN_LAYER);
+      AFNDPanel.setVArchZIndex(varch, AFNDPanel.MIN_LAYER);
     });
     if (origin != null) {
       origin.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE);
     }
     origin = null;
-    AFNDState.super.clearState(afndGraph, visualAFND, afndStateDispatcher);
+    AFNDState.super.clearState(afndGraph, AFNDPanel, afndStateDispatcher);
   }
 
 }

@@ -60,7 +60,7 @@ public class AdjacentListGraph<T> extends Graph<T> {
     return false;
   }
 
-  protected GraphConnection<?> createConnection(Node<T> origin, Node<T> destination, Object element) {
+  protected Connection<?> createConnection(Node<T> origin, Node<T> destination, Object element) {
     return new GraphConnection<>(origin, destination, element);
   }
 

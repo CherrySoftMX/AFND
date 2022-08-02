@@ -4,7 +4,7 @@ import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 
 import java.awt.Point;
 
-public interface AFNDStateFactory {
+public interface VisualStateFactory {
 
   VisualNode createState(int stateId, String element, Point center);
 

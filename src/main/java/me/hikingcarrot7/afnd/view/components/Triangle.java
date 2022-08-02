@@ -1,5 +1,6 @@
 package me.hikingcarrot7.afnd.view.components;
 
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
@@ -73,6 +74,11 @@ public class Triangle implements Drawable {
 
     g.setTransform(originalTransform);
     g.setColor(defaultColor);
+  }
+
+  @Override
+  public int getLayer() {
+    return AFNDPanel.MIDDLE_LAYER;
   }
 
   public int getOrigenX() {

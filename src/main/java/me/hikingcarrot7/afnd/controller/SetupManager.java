@@ -5,7 +5,7 @@ import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.imp.*;
 import me.hikingcarrot7.afnd.view.MainView;
 import me.hikingcarrot7.afnd.view.components.Menu;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 
 import java.awt.*;
 import java.io.File;
@@ -25,16 +25,16 @@ public class SetupManager {
   private void init() {
     loadCustomFont();
 
-    VisualAFND visualAFND = VisualAFND.getInstance();
+    AFNDPanel panel = AFNDPanel.getInstance();
     AFNDGraph afndGraph = new AFNDGraph();
-    Menu menu = new Menu(visualAFND);
+    Menu menu = new Menu(panel);
 
-    AFNDController afndController = new AFNDController(view, afndGraph, visualAFND, menu);
+    AFNDController afndController = new AFNDController(view, afndGraph, panel, menu);
     EventHandler eventHandler = EventHandler.getInstance();
 
-    visualAFND.addKeyListener(eventHandler);
-    visualAFND.addMouseListener(eventHandler);
-    visualAFND.addMouseMotionListener(eventHandler);
+    panel.addKeyListener(eventHandler);
+    panel.addMouseListener(eventHandler);
+    panel.addMouseMotionListener(eventHandler);
 
     afndController.addBinding(Menu.BUTTON_ADD_ESTADO_INICIAL, AddingNodeState.getInstance());
     afndController.addBinding(Menu.BUTTON_ADD_ESTADO_NORMAL, AddingNodeState.getInstance());
@@ -51,9 +51,9 @@ public class SetupManager {
 
     eventHandler.addObserver(afndController);
 
-    visualAFND.addComponent(menu, VisualAFND.MAX_LAYER);
+    panel.addComponent(menu);
 
-    view.add(visualAFND, BorderLayout.CENTER);
+    view.add(panel, BorderLayout.CENTER);
     view.validate();
   }
 

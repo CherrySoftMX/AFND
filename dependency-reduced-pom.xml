@@ -22,7 +22,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>me.hikingcarrot7.afndGraph.AFNDApp</mainClass>
+                  <mainClass>me.hikingcarrot7.afnd.AFNDApp</mainClass>
                 </transformer>
               </transformers>
             </configuration>

@@ -3,9 +3,10 @@ package me.hikingcarrot7.afnd.core.states.imp;
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAFND;
-import me.hikingcarrot7.afnd.core.utils.GraphUtils;
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAutomata;
 
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 
@@ -24,47 +25,48 @@ public class MovingNodeState implements AFNDState {
 
   private int offsetX;
   private int offsetY;
-  private int nEstadoMover = -1;
+  private Point posStateToMove = null;
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, VisualAFND visualAFND, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
+  public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
     if (event.getID() == MouseEvent.MOUSE_RELEASED) {
-      nEstadoMover = -1;
-      visualAFND.getDefaultTextBox().clearTextBox();
-      visualAFND.repaint();
+      posStateToMove = null;
+      panel.getDefaultTextBox().clearTextBox();
+      panel.repaint();
       return;
     }
     if (event.getID() == MouseEvent.MOUSE_PRESSED) {
-      calcularOffsets(afndGraph, visualAFND, event);
+      calculateOffsets(panel, event);
     }
-    moverEstado(visualAFND, event);
-    visualAFND.repaint();
+    moveState(event);
+    panel.repaint();
   }
 
-  private void calcularOffsets(AFNDGraph<String> afndGraph, VisualAFND visualAFND, InputEvent event) {
+  private void calculateOffsets(AFNDPanel panel, InputEvent event) {
+    VisualAutomata visualAutomata = panel.getVisualAutomata();
     if (event instanceof MouseEvent) {
       MouseEvent e = (MouseEvent) event;
-      nEstadoMover = GraphUtils.getPressedNode(afndGraph, visualAFND.getVNodes(), e.getPoint());
-      if (esEstadoValido()) {
-        offsetX = e.getX() - visualAFND.getVNode(nEstadoMover).xCenter();
-        offsetY = e.getY() - visualAFND.getVNode(nEstadoMover).yCenter();
-        visualAFND.getDefaultTextBox().setTitle("Moviendo estado");
+      posStateToMove = visualAutomata.getPosOfNodeBellow(e.getPoint());
+      if (nodeSelected()) {
+        offsetX = e.getX() - posStateToMove.x;
+        offsetY = e.getY() - posStateToMove.y;
+        panel.getDefaultTextBox().setTitle("Moviendo estado");
       }
     }
   }
 
-  private void moverEstado(VisualAFND visualAFND, InputEvent event) {
-    if (esEstadoValido() && event instanceof MouseEvent) {
+  private void moveState(InputEvent event) {
+    if (nodeSelected() && event instanceof MouseEvent) {
       MouseEvent e = (MouseEvent) event;
-      int nuevaCoordenadaX = e.getX() - offsetX;
-      int nuevaCoordenadaY = e.getY() - offsetY;
-      visualAFND.getVNode(nEstadoMover).setXCenter(nuevaCoordenadaX);
-      visualAFND.getVNode(nEstadoMover).setYCenter(nuevaCoordenadaY);
+      int newCenterX = e.getX() - offsetX;
+      int newCenterY = e.getY() - offsetY;
+      posStateToMove.x = newCenterX;
+      posStateToMove.y = newCenterY;
     }
   }
 
-  private boolean esEstadoValido() {
-    return nEstadoMover >= 0;
+  private boolean nodeSelected() {
+    return posStateToMove != null;
   }
 
 }

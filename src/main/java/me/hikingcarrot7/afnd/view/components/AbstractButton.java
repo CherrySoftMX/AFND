@@ -1,5 +1,6 @@
 package me.hikingcarrot7.afnd.view.components;
 
+import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
@@ -57,6 +58,11 @@ public abstract class AbstractButton implements Drawable {
   public abstract void click(InputEvent event);
 
   public abstract void blur();
+
+  @Override
+  public int getLayer() {
+    return AFNDPanel.MAX_LAYER;
+  }
 
   public void setPosition(int xPos, int yPos) {
     this.xPos = xPos;
