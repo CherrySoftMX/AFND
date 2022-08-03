@@ -1,6 +1,5 @@
 package me.hikingcarrot7.afnd.view.components.afnd;
 
-import lombok.RequiredArgsConstructor;
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.graphs.Connection;
 import me.hikingcarrot7.afnd.core.graphs.Node;
@@ -13,19 +12,26 @@ import me.hikingcarrot7.afnd.view.components.afnd.states.VisualNodeFactory;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 
 import java.awt.*;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import static java.util.Objects.isNull;
 import static me.hikingcarrot7.afnd.core.utils.MathHelper.distanceBetweenTwoPoints;
 
-@RequiredArgsConstructor
 public class VisualAutomata extends AFNDGraph<String> implements Drawable {
   private final VisualNodeFactory visualNodeFactory;
   private final VisualConnectionFactory visualConnectionFactory;
+  private final VisualAutomataPainter painter;
   private VisualConnection previewConnection;
   private int stateId = NormalState.NORMAL_STATE_ID;
   private int connectionId;
+
+  public VisualAutomata(VisualNodeFactory visualNodeFactory, VisualConnectionFactory visualConnectionFactory) {
+    this.visualNodeFactory = visualNodeFactory;
+    this.visualConnectionFactory = visualConnectionFactory;
+    this.painter = new VisualAutomataPainter(this);
+  }
 
   public boolean insertElement(String element, Point pos) {
     boolean elementInserted = insertElement(element);
@@ -207,15 +213,7 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
 
   @Override
   public void draw(Graphics2D g) {
-    // Sort by layer
-    getConnections().forEach(conn -> {
-      VisualConnection visualConnection = (VisualConnection) conn;
-      visualConnection.draw(g);
-    });
-    getNodes().forEach(node -> {
-      VisualNode visualNode = (VisualNode) node;
-      visualNode.draw(g);
-    });
+    painter.paintAutomata(g);
   }
 
   public void forEachVisualNode(Consumer<VisualNode> consumer) {
@@ -237,6 +235,11 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
       VisualConnection visualConnection = (VisualConnection) conn;
       consumer.accept(visualConnection);
     });
+  }
+
+  @Override
+  protected List<Connection<?>> getConnections() {
+    return super.getConnections();
   }
 
   @Override
