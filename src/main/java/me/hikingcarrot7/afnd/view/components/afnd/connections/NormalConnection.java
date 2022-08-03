@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.geom.GeneralPath;
 
 public class NormalConnection extends VisualConnection {
+  public static final int NORMAL_CONNECTION_ID = 1;
 
   public NormalConnection(VisualNode origin, VisualNode destination, String condition) {
     super(origin, destination, condition);

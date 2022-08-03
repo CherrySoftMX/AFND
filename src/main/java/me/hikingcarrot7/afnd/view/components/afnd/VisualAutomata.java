@@ -7,8 +7,9 @@ import me.hikingcarrot7.afnd.core.graphs.Node;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.afnd.connections.LoopConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.connections.NormalConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.connections.VisualConnectionFactory;
 import me.hikingcarrot7.afnd.view.components.afnd.states.NormalState;
-import me.hikingcarrot7.afnd.view.components.afnd.states.VisualStateFactory;
+import me.hikingcarrot7.afnd.view.components.afnd.states.VisualNodeFactory;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 
 import java.awt.*;
@@ -20,7 +21,8 @@ import static me.hikingcarrot7.afnd.core.utils.MathHelper.distanceBetweenTwoPoin
 
 @RequiredArgsConstructor
 public class VisualAutomata extends AFNDGraph<String> implements Drawable {
-  private final VisualStateFactory stateFactory;
+  private final VisualNodeFactory visualNodeFactory;
+  private final VisualConnectionFactory visualConnectionFactory;
   private VisualConnection previewConnection;
   private int stateId = NormalState.NORMAL_STATE_ID;
   private int connectionId;
@@ -36,7 +38,7 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
 
   @Override
   protected Node<String> createNode(String element) {
-    return stateFactory.createState(stateId, element, new Point());
+    return visualNodeFactory.createVisualNode(stateId, element, new Point());
   }
 
   public void insertPreviewNode(int stateId, Point pos) {
@@ -94,7 +96,7 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
         .orElse(null);
   }
 
-  public void removeCursorPreview() {
+  public void removePreviewCursor() {
     VisualNode cursorPreview = cursorPreview();
     if (!isNull(cursorPreview)) {
       removeElement(cursorPreview.element());
@@ -146,12 +148,13 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
         .orElse(null);
   }
 
-  public boolean insertPreviewConnection(String origin) {
+  public boolean insertPreviewConnection(int connectionId, String origin) {
+    this.connectionId = connectionId;
     VisualNode cursorPreview = cursorPreview();
     if (isNull(cursorPreview)) {
       VisualNode visualNode = getVisualNode(origin);
       insertCursorPreview(new Point(visualNode.getPos().x, visualNode.getPos().y));
-      insertNormalConnection(origin, cursorPreview().element(), "");
+      insertConnection(origin, cursorPreview().element(), "");
       previewConnection = getVisualConnection(origin, cursorPreview().element());
       previewConnection.setPreviewMode(true);
       return true;
@@ -160,35 +163,33 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
   }
 
   public void removePreviewConnection() {
-    removeConnection(
-        previewConnection.getOrigin().element(),
-        previewConnection.getDestination().element()
-    );
-    removeCursorPreview();
-    previewConnection = null;
+    removePreviewCursor();
+    if (!isNull(previewConnection)) {
+      removeConnection(
+          previewConnection.getOrigin().element(),
+          previewConnection.getDestination().element()
+      );
+      previewConnection = null;
+    }
   }
 
   public boolean insertNormalConnection(String origin, String destination, String condition) {
-    this.connectionId = 1;
+    this.connectionId = NormalConnection.NORMAL_CONNECTION_ID;
+    removePreviewConnection();
     return insertConnection(origin, destination, condition);
   }
 
-  public boolean insertLoopConnection(String origin, String destination, String condition) {
-    this.connectionId = 2;
-    return insertConnection(origin, destination, condition);
+  public boolean insertLoopConnection(String origin, String condition) {
+    this.connectionId = LoopConnection.LOOP_CONNECTION_ID;
+    removePreviewConnection();
+    return insertConnection(origin, origin, condition);
   }
 
   @Override
   protected Connection<?> createConnection(Node<String> origin, Node<String> destination, Object element) {
-    VisualNode visualOriginNode = getVisualNode(origin.element());
-    VisualNode visualDestinationNode = getVisualNode(destination.element());
-    switch (connectionId) {
-      case 1:
-        return new NormalConnection(visualOriginNode, visualDestinationNode, element.toString());
-      case 2:
-        return new LoopConnection(visualOriginNode, visualDestinationNode, element.toString());
-    }
-    throw new RuntimeException();
+    VisualNode originNode = getVisualNode(origin.element());
+    VisualNode destinationNode = getVisualNode(destination.element());
+    return visualConnectionFactory.createVisualConnection(connectionId, originNode, destinationNode, element.toString());
   }
 
   public VisualConnection getVisualConnection(String origin, String destination) {

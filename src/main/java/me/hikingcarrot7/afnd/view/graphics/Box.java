@@ -15,7 +15,7 @@ public interface Box {
     BOTTOM_LEFT
   }
 
-  void drawBox(Graphics2D g, int xPos, int yPos, int width, int height, BoxPosition boxPosition);
+  void drawBox(Graphics2D g, BoxPosition boxPosition);
 
   int getWidth();
 

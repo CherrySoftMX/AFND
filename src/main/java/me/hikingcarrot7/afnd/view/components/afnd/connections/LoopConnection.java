@@ -10,15 +10,12 @@ import java.awt.*;
 import java.awt.geom.GeneralPath;
 
 public class LoopConnection extends VisualConnection {
+  public static final int LOOP_CONNECTION_ID = 2;
   private Point startRightPoint;
   private Point rightPointControl;
 
   public LoopConnection(VisualNode origin, VisualNode destination, String condition) {
     super(origin, destination, condition);
-  }
-
-  public LoopConnection(VisualNode origin, VisualNode destination, boolean previewMode) {
-    super(origin, destination, previewMode);
   }
 
   @Override
@@ -52,6 +49,9 @@ public class LoopConnection extends VisualConnection {
 
     g.setStroke(defaultStroke);
     g.setColor(defaultColor);
+
+    conditionNode.draw(g);
+    triangle.draw(g);
   }
 
   @Override

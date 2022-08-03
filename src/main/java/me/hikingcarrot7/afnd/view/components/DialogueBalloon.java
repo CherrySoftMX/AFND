@@ -22,7 +22,7 @@ public class DialogueBalloon implements Box, Drawable {
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
       .build();
 
-  private final AFNDPanel vgraph;
+  private final AFNDPanel panel;
   private final VisualNode relativeTo;
   private final ColorPalette colorPalette;
   private final Point pos;
@@ -30,16 +30,16 @@ public class DialogueBalloon implements Box, Drawable {
   private Rectangle textBounds;
   private BoxPosition boxPosition;
 
-  public DialogueBalloon(AFNDPanel vgraph, VisualNode relativeTo, String text, ColorPalette colorPalette) {
-    this.vgraph = vgraph;
+  public DialogueBalloon(AFNDPanel panel, VisualNode relativeTo, String text, ColorPalette colorPalette) {
+    this.panel = panel;
     this.relativeTo = relativeTo;
     this.colorPalette = colorPalette;
     this.text = text;
     this.pos = new Point();
   }
 
-  public DialogueBalloon(AFNDPanel vgraph, VisualNode relativeTo, String text) {
-    this(vgraph, relativeTo, text, DEFAULT_GLOBE_COLOR_PALETTE);
+  public DialogueBalloon(AFNDPanel panel, VisualNode relativeTo, String text) {
+    this(panel, relativeTo, text, DEFAULT_GLOBE_COLOR_PALETTE);
   }
 
   @Override
@@ -79,22 +79,22 @@ public class DialogueBalloon implements Box, Drawable {
       boxPosition = BoxPosition.LEFT;
     }
 
-    drawBox(g, pos.x, pos.y, textBounds.width + PADDING * 2, textBounds.height + PADDING * 2, boxPosition);
+    drawBox(g, boxPosition);
   }
 
   private boolean canPlaceOnTop() {
     return relativeTo.yCenter() - VisualNode.NODE_RADIUS >= getHeight()
-        && relativeTo.xCenter() + getWidth() / 2 <= vgraph.getWidth() - Menu.MENU_WIDTH
+        && relativeTo.xCenter() + getWidth() / 2 <= panel.getWidth() - Menu.MENU_WIDTH
         && relativeTo.xCenter() - getWidth() / 2 >= 0;
   }
 
   private boolean canPlaceOnBottom() {
-    return relativeTo.yCenter() + VisualNode.NODE_RADIUS + getHeight() <= vgraph.getHeight()
-        && relativeTo.xCenter() + getWidth() / 2 <= vgraph.getWidth() - Menu.MENU_WIDTH;
+    return relativeTo.yCenter() + VisualNode.NODE_RADIUS + getHeight() <= panel.getHeight()
+        && relativeTo.xCenter() + getWidth() / 2 <= panel.getWidth() - Menu.MENU_WIDTH;
   }
 
   private boolean canPlaceOnRight() {
-    return relativeTo.xCenter() + VisualNode.NODE_RADIUS + getWidth() <= vgraph.getWidth() - Menu.MENU_WIDTH;
+    return relativeTo.xCenter() + VisualNode.NODE_RADIUS + getWidth() <= panel.getWidth() - Menu.MENU_WIDTH;
   }
 
   private boolean canPlaceOnLeft() {
@@ -102,7 +102,7 @@ public class DialogueBalloon implements Box, Drawable {
   }
 
   @Override
-  public void drawBox(Graphics2D g, int xPos, int yPos, int width, int height, BoxPosition boxPosition) {
+  public void drawBox(Graphics2D g, BoxPosition boxPosition) {
     Dimension boxDimension = new Dimension(getBoxWidth(), getBoxHeight());
     Shape shape = DialogueBalloonFactory.getInstance().createShape(pos, boxDimension, boxPosition);
 

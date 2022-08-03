@@ -32,22 +32,22 @@ public class TextBox implements Box, Drawable {
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
       .build();
 
-  private final AFNDPanel vgraph;
-  private int width = -1;
-  private int height = -1;
+  private final AFNDPanel visualAutomata;
+  private final Dimension dimension = new Dimension(-1, -1);
+  private final BoxPosition boxPosition;
+  private final ArrayList<String> content;
+  private Point pos;
   private String title;
   private String footer;
-  private ArrayList<String> content;
   private ColorPalette colorPalette;
-  private BoxPosition boxPosition;
 
-  public TextBox(AFNDPanel vgraph, String title, ArrayList<String> content, String footer, BoxPosition boxPosition, ColorPalette colorPalette) {
+  public TextBox(AFNDPanel visualAutomata, String title, ArrayList<String> content, String footer, BoxPosition boxPosition, ColorPalette colorPalette) {
     this.title = title;
     this.content = content;
     this.footer = footer;
     this.boxPosition = boxPosition;
     this.colorPalette = colorPalette;
-    this.vgraph = vgraph;
+    this.visualAutomata = visualAutomata;
   }
 
   @Override
@@ -55,16 +55,16 @@ public class TextBox implements Box, Drawable {
     Stroke defaultStroke = g.getStroke();
     Color defaultColor = g.getColor();
 
-    if (width < 0) {
-      width = calculateWidth(g);
+    if (dimension.width < 0) {
+      dimension.width = calculateWidth(g);
     }
 
-    if (height < 0) {
-      height = calculateHeight(g);
+    if (dimension.height < 0) {
+      dimension.height = calculateHeight(g);
     }
 
-    Point pos = GraphicsUtils.getBoxPositionOnScreen(vgraph.getSize(), new Dimension(getWidth(), getHeight()), boxPosition, MARGIN);
-    drawBox(g, pos.x, pos.y, getWidth(), getHeight(), boxPosition);
+    pos = GraphicsUtils.getBoxPositionOnScreen(visualAutomata.getSize(), dimension, boxPosition, MARGIN);
+    drawBox(g, boxPosition);
 
     g.setStroke(defaultStroke);
     g.setColor(defaultColor);
@@ -76,19 +76,19 @@ public class TextBox implements Box, Drawable {
   }
 
   @Override
-  public void drawBox(Graphics2D g, int xPos, int yPos, int width, int height, BoxPosition boxPosition) {
-    Shape shape = TextBoxFactory.getInstance().createShape(xPos, yPos, width, height, boxPosition);
+  public void drawBox(Graphics2D g, BoxPosition boxPosition) {
+    Shape shape = TextBoxFactory.getInstance().createShape(pos.x, pos.y, getWidth(), getHeight(), boxPosition);
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
     g.fill(shape);
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
-    drawTextBoxContent(g, xPos, yPos);
+    drawTextBoxContent(g);
   }
 
-  private void drawTextBoxContent(Graphics2D g, int xPos, int yPos) {
-    int xStartPos = xPos + PADDING;
-    int yStartPos = yPos + PADDING;
+  private void drawTextBoxContent(Graphics2D g) {
+    int xStartPos = pos.x + PADDING;
+    int yStartPos = pos.y + PADDING;
 
     if (!title.isEmpty()) {
       yStartPos += GraphicsUtils.getStringHeight(g, title);
@@ -99,7 +99,6 @@ public class TextBox implements Box, Drawable {
     for (String line : content) {
       int lineHeight = GraphicsUtils.getStringHeight(g, line);
       g.drawString(line, xStartPos + CONTENT_INDENTATION, yStartPos + lineHeight);
-
       yStartPos += (lineHeight + LINE_SPACING);
     }
 
@@ -133,7 +132,6 @@ public class TextBox implements Box, Drawable {
 
   private int calculateHeight(Graphics2D g) {
     int height = 0;
-
     if (isEmpty()) {
       return height;
     }
@@ -160,56 +158,18 @@ public class TextBox implements Box, Drawable {
 
   @Override
   public int getWidth() {
-    return width;
+    return dimension.width;
   }
 
   @Override
   public int getHeight() {
-    return height;
-  }
-
-  public String getTitle() {
-    return title;
+    return dimension.height;
   }
 
   public void setTitle(String title) {
     this.title = title;
-    width = -1;
-    height = -1;
-  }
-
-  public ArrayList<String> getContent() {
-    return content;
-  }
-
-  public void setContent(ArrayList<String> content) {
-    this.content = content;
-    width = -1;
-    height = -1;
-  }
-
-  public void addLine(String line) {
-    content.add(line);
-    width = -1;
-    height = -1;
-  }
-
-  public String getFooter() {
-    return footer;
-  }
-
-  public void setFooter(String footer) {
-    this.footer = footer;
-    width = -1;
-    height = -1;
-  }
-
-  public BoxPosition getBoxPosition() {
-    return boxPosition;
-  }
-
-  public void setBoxPosition(BoxPosition boxPosition) {
-    this.boxPosition = boxPosition;
+    dimension.width = -1;
+    dimension.height = -1;
   }
 
   public ColorPalette getColorPalette() {
@@ -224,14 +184,13 @@ public class TextBox implements Box, Drawable {
     return title.isEmpty() && footer.isEmpty() && content.isEmpty();
   }
 
-  public void clearTextBox() {
+  public void clear() {
     title = "";
     footer = "";
     content.clear();
   }
 
   public static class TextBoxBuilder {
-
     private final ArrayList<String> content;
     private String title;
     private String footer;

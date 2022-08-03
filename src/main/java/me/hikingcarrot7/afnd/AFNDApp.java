@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd;
 
-import me.hikingcarrot7.afnd.controller.SetupManager;
+import me.hikingcarrot7.afnd.bootstrapper.AppBootstrapper;
 import me.hikingcarrot7.afnd.view.MainView;
 
 import java.awt.*;
@@ -11,7 +11,7 @@ public class AFNDApp {
       MainView view = new MainView();
       view.setLocationRelativeTo(null);
       view.setVisible(true);
-      new SetupManager(view);
+      new AppBootstrapper(view);
     });
   }
 }

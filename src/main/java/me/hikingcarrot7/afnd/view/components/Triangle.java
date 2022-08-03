@@ -10,10 +10,8 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 public class Triangle implements Drawable {
-  private int origenX;
-  private int origenY;
-  private int destinoX;
-  private int destinoY;
+  private final Point origin;
+  private final Point destination;
   private int length;
   private int offset;
   private int strokeWidth;
@@ -34,14 +32,12 @@ public class Triangle implements Drawable {
       .build();
 
   public Triangle() {
-    this(0, 0, 0, 0, 0, 0, 0, DEFAULT_TRIANGLE_COLOR_PALETTE);
+    this(0, 0, 0, DEFAULT_TRIANGLE_COLOR_PALETTE);
   }
 
-  public Triangle(int origenX, int origenY, int destinoX, int destinoY, int length, int offset, int strokeWidth, ColorPalette colorPalette) {
-    this.origenX = origenX;
-    this.origenY = origenY;
-    this.destinoX = destinoX;
-    this.destinoY = destinoY;
+  public Triangle(int length, int offset, int strokeWidth, ColorPalette colorPalette) {
+    this.origin = new Point();
+    this.destination = new Point();
     this.length = length;
     this.offset = offset;
     this.strokeWidth = strokeWidth;
@@ -50,26 +46,26 @@ public class Triangle implements Drawable {
 
   @Override
   public void draw(Graphics2D g) {
-    double dx = destinoX - origenX;
-    double dy = destinoY - origenY;
+    double dx = destination.x - origin.x;
+    double dy = destination.y - origin.y;
     double angle = Math.atan2(dy, dx);
-    int distancia = (int) (Math.sqrt(dx * dx + dy * dy) - offset);
+    int distance = (int) (Math.sqrt(dx * dx + dy * dy) - offset);
 
     AffineTransform originalTransform = g.getTransform();
     Color defaultColor = g.getColor();
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
 
-    AffineTransform at = AffineTransform.getTranslateInstance(origenX, origenY);
+    AffineTransform at = AffineTransform.getTranslateInstance(origin.x, origin.y);
     at.concatenate(AffineTransform.getRotateInstance(angle));
     g.transform(at);
 
-    g.fillPolygon(new int[]{distancia, distancia - length, distancia - length, distancia},
+    g.fillPolygon(new int[]{distance, distance - length, distance - length, distance},
         new int[]{0, -length, length, 0}, 4);
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
     g.setStroke(new BasicStroke(strokeWidth));
-    g.drawPolygon(new int[]{distancia, distancia - length, distancia - length, distancia},
+    g.drawPolygon(new int[]{distance, distance - length, distance - length, distance},
         new int[]{0, -length, length, 0}, 4);
 
     g.setTransform(originalTransform);
@@ -81,48 +77,24 @@ public class Triangle implements Drawable {
     return AFNDPanel.MIDDLE_LAYER;
   }
 
-  public int getOrigenX() {
-    return origenX;
-  }
-
   public void setOriginX(int origenX) {
-    this.origenX = origenX;
-  }
-
-  public int getOrigenY() {
-    return origenY;
+    origin.x = origenX;
   }
 
   public void setOriginY(int origenY) {
-    this.origenY = origenY;
+    origin.y = origenY;
   }
 
-  public int getDestinoX() {
-    return destinoX;
+  public void setDestinationX(int destinationX) {
+    destination.x = destinationX;
   }
 
-  public void setDestinationX(int destinoX) {
-    this.destinoX = destinoX;
+  public void setDestinationY(int destinationY) {
+    destination.y = destinationY;
   }
 
-  public int getDestinoY() {
-    return destinoY;
-  }
-
-  public void setDestinationY(int destinoY) {
-    this.destinoY = destinoY;
-  }
-
-  public int getLenght() {
-    return length;
-  }
-
-  public void setLength(int lenght) {
-    this.length = lenght;
-  }
-
-  public int getOffset() {
-    return offset;
+  public void setLength(int length) {
+    this.length = length;
   }
 
   public void setOffset(int offset) {
@@ -135,10 +107,6 @@ public class Triangle implements Drawable {
 
   public void setColorPalette(ColorPalette colorPalette) {
     this.colorPalette = colorPalette;
-  }
-
-  public int getStrokeWidth() {
-    return strokeWidth;
   }
 
   public void setStrokeWidth(int strokeWidth) {

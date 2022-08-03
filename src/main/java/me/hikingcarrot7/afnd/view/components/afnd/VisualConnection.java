@@ -71,10 +71,6 @@ public abstract class VisualConnection extends GraphConnection<String> implement
     super.setCondition(condition);
   }
 
-  public String condition() {
-    return conditionNode.element();
-  }
-
   public Point originPos() {
     return getOrigin().getPos();
   }

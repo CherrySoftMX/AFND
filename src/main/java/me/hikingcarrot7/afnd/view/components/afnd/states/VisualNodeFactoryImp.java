@@ -5,21 +5,23 @@ import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 
 import java.awt.*;
 
-public class VisualStateFactoryImp implements VisualStateFactory {
-  private static VisualStateFactoryImp instance;
+import static java.util.Objects.isNull;
 
-  public synchronized static VisualStateFactoryImp getInstance() {
-    if (instance == null) {
-      instance = new VisualStateFactoryImp();
+public class VisualNodeFactoryImp implements VisualNodeFactory {
+  private static VisualNodeFactoryImp instance;
+
+  public synchronized static VisualNodeFactory getInstance() {
+    if (isNull(instance)) {
+      instance = new VisualNodeFactoryImp();
     }
     return instance;
   }
 
-  private VisualStateFactoryImp() {
+  private VisualNodeFactoryImp() {
   }
 
   @Override
-  public VisualNode createState(int stateId, String element, Point pos) {
+  public VisualNode createVisualNode(int stateId, String element, Point pos) {
     switch (stateId) {
       case Menu.INITIAL_STATE_ID:
         return new InitialState(element, pos);
