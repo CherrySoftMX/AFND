@@ -1,22 +1,16 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
-import me.hikingcarrot7.afnd.core.states.AFNDState;
-import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
+import me.hikingcarrot7.afnd.core.states.AutomataState;
 import me.hikingcarrot7.afnd.view.components.DialogueBalloon;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualAutomata;
 
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 
 import static java.util.Objects.isNull;
 
-public class AddingNodeState implements AFNDState {
+public class AddingNodeState extends AutomataState {
   private static AddingNodeState instance;
 
   public synchronized static AddingNodeState getInstance() {
@@ -34,13 +28,11 @@ public class AddingNodeState implements AFNDState {
   private boolean namingState = false;
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
-    VisualAutomata visualAutomata = panel.getVisualAutomata();
-    if (event.getID() == KeyEvent.KEY_PRESSED) {
-      KeyEvent keyEvent = (KeyEvent) event;
-      if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-        if (addState(panel, visualAutomata.previewNodePos(), buttonID)) {
-          clearState(afndGraph, panel, afndStateDispatcher);
+  public void updateGraphState() {
+    if (isKeyPressed()) {
+      if (isEnterPressed()) {
+        if (insertState(visualAutomata.previewNodePos())) {
+          clearState();
         } else {
           dialogueBalloon.setText("Ese estado ya existe!");
           panel.repaint();
@@ -48,17 +40,17 @@ public class AddingNodeState implements AFNDState {
         }
       }
       if (namingState) {
-        nameState(panel, keyEvent);
+        nameState();
         return;
       }
     }
-    if (!namingState && event.getID() == MouseEvent.MOUSE_CLICKED) {
-      previewNewState(panel, (MouseEvent) event, buttonID);
+    if (!namingState && isMouseClicked()) {
+      previewNewState();
     }
   }
 
-  private void previewNewState(AFNDPanel panel, MouseEvent e, int stateId) {
-    VisualAutomata visualAutomata = panel.getVisualAutomata();
+  private void previewNewState() {
+    Point point = getMousePos();
     switch (stateId) {
       case Menu.INITIAL_STATE_ID:
       case Menu.INITIAL_FINAL_STATE_ID:
@@ -69,12 +61,12 @@ public class AddingNodeState implements AFNDState {
         }
     }
 
-    Point pressedNodePos = visualAutomata.getPosOfNodeBellow(e.getPoint());
+    Point pressedNodePos = visualAutomata.getPosOfNodeBellow(point);
 
     if (isNull(pressedNodePos)) {
-      visualAutomata.insertPreviewNode(stateId, e.getPoint());
+      visualAutomata.insertPreviewNode(stateId, point);
 
-      textTyper = new TextTyper(e.getPoint(), 6);
+      textTyper = new TextTyper(point, 6);
       panel.addComponent(textTyper);
 
       dialogueBalloon = new DialogueBalloon(panel, visualAutomata.previewNode(), "Inserte el nombre");
@@ -87,8 +79,7 @@ public class AddingNodeState implements AFNDState {
     }
   }
 
-  private boolean addState(AFNDPanel panel, Point center, int stateId) {
-    VisualAutomata visualAutomata = panel.getVisualAutomata();
+  private boolean insertState(Point pos) {
     String element = textTyper.getText();
     boolean elementInserted;
     if (element.length() <= 0) {
@@ -96,34 +87,33 @@ public class AddingNodeState implements AFNDState {
     }
     switch (stateId) {
       case Menu.INITIAL_STATE_ID:
-        elementInserted = visualAutomata.insertAsInitialState(element, center);
+        elementInserted = visualAutomata.insertAsInitialState(element, pos);
         break;
       case Menu.INITIAL_FINAL_STATE_ID:
-        elementInserted = visualAutomata.insertAsInitialAndFinalState(element, center);
+        elementInserted = visualAutomata.insertAsInitialAndFinalState(element, pos);
         break;
       case Menu.FINAL_STATE_ID:
-        elementInserted = visualAutomata.insertAsFinalState(element, center);
+        elementInserted = visualAutomata.insertAsFinalState(element, pos);
         break;
       default:
-        elementInserted = visualAutomata.insertElement(element, center);
+        elementInserted = visualAutomata.insertElement(element, pos);
     }
     panel.repaint();
     return elementInserted;
   }
 
-  private void nameState(AFNDPanel panel, KeyEvent event) {
-    textTyper.handleInputEvent(event);
+  private void nameState() {
+    textTyper.handleInputEvent(getAsKeyEvent());
     panel.repaint();
   }
 
   @Override
-  public void clearState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher) {
-    VisualAutomata visualAutomata = panel.getVisualAutomata();
+  public void clearState() {
     panel.removeComponent(textTyper);
     panel.removeComponent(dialogueBalloon);
     visualAutomata.removePreviewNode();
     namingState = false;
-    AFNDState.super.clearState(afndGraph, panel, afndStateDispatcher);
+    super.clearState();
   }
 
 }

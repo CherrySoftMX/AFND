@@ -1,25 +1,21 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.afnd.MatchResult;
 import me.hikingcarrot7.afnd.core.afnd.MatchResultStep;
-import me.hikingcarrot7.afnd.core.graphs.Connection;
-import me.hikingcarrot7.afnd.core.states.AFNDState;
-import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
+import me.hikingcarrot7.afnd.core.states.AutomataState;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextBox;
 import me.hikingcarrot7.afnd.view.components.Triangle;
 import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAutomata;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.Box;
 
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
-public class ResolvingStepByStepState implements AFNDState {
+import static java.util.Objects.isNull;
+
+public class ResolvingStepByStepState extends AutomataState {
   private static ResolvingStepByStepState instance;
 
   public synchronized static ResolvingStepByStepState getInstance() {
@@ -42,22 +38,21 @@ public class ResolvingStepByStepState implements AFNDState {
   }
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
-    if (event.getID() == MouseEvent.MOUSE_CLICKED) {
+  public void updateGraphState() {
+    if (isMouseClicked()) {
       if (inputMatched) {
-        markNextStep(panel);
+        markNextStep();
       } else {
-        testInput(panel);
+        testInput();
       }
     }
     if (!inputTested) {
-      testInput(panel);
+      testInput();
     }
     panel.repaint();
   }
 
-  private void testInput(AFNDPanel panel) {
-    VisualAutomata visualAutomata = panel.getVisualAutomata();
+  private void testInput() {
     String text = Menu.TEXT_FIELD.getText();
     try {
       result = visualAutomata.matches(text);
@@ -78,12 +73,12 @@ public class ResolvingStepByStepState implements AFNDState {
     }
   }
 
-  private void markNextStep(AFNDPanel panel) {
-    if (pathIterator == null) {
+  private void markNextStep() {
+    if (isNull(pathIterator)) {
       pathIterator = result.pathIterator();
     }
     if (pathIterator.hasNext()) {
-      clearAllMarks(panel);
+      clearAllMarks();
       MatchResultStep step = pathIterator.next();
       VisualConnection connection = (VisualConnection) step.getConnection();
       connection.getOrigin().setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
@@ -92,14 +87,13 @@ public class ResolvingStepByStepState implements AFNDState {
       connection.setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
       messageBox.setTitle("Palabra por ser consumida: " + step.inputSnapshot());
     } else {
-      clearAllMarks(panel);
+      clearAllMarks();
       messageBox.setTitle("La palabra ha sido consumida");
     }
     panel.repaint();
   }
 
-  private void clearAllMarks(AFNDPanel panel) {
-    VisualAutomata visualAutomata = panel.getVisualAutomata();
+  private void clearAllMarks() {
     visualAutomata.forEachVisualNode(node -> node.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE));
     visualAutomata.forEachVisualConnection(conn -> {
       conn.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
@@ -109,13 +103,13 @@ public class ResolvingStepByStepState implements AFNDState {
   }
 
   @Override
-  public void clearState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher) {
+  public void clearState() {
     inputTested = false;
     inputMatched = false;
     pathIterator = null;
     panel.removeComponent(messageBox);
-    clearAllMarks(panel);
-    AFNDState.super.clearState(afndGraph, panel, afndStateDispatcher);
+    clearAllMarks();
+    super.clearState();
   }
 
 }

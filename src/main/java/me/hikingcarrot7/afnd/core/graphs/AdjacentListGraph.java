@@ -158,6 +158,10 @@ public class AdjacentListGraph<T> extends Graph<T> {
     }
   }
 
+  public boolean hasAtLeastOneNode() {
+    return cardinality() > 1;
+  }
+
   private void throwIfMaxCapacityReached() {
     if (cardinality() == MAX_NODES) {
       throw new MaxCapacityReachedException();

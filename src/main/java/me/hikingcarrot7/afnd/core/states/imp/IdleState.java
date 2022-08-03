@@ -1,13 +1,8 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
-import me.hikingcarrot7.afnd.core.states.AFNDState;
-import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.core.states.AutomataState;
 
-import java.awt.event.InputEvent;
-
-public class IdleState implements AFNDState {
+public class IdleState extends AutomataState {
   private static IdleState instance;
 
   public synchronized static IdleState getInstance() {
@@ -21,8 +16,7 @@ public class IdleState implements AFNDState {
   }
 
   @Override
-  public void updateGraphState(AFNDGraph<String> graph, AFNDPanel panel, AFNDStateDispatcher graphStateManager, InputEvent event, int buttonID) {
-
+  public void updateGraphState() {
   }
 
 }

@@ -1,18 +1,11 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
-import me.hikingcarrot7.afnd.core.states.AFNDState;
-import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAutomata;
+import me.hikingcarrot7.afnd.core.states.AutomataState;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
-
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 
 import static java.util.Objects.isNull;
 
-public class DeletingNodeState implements AFNDState {
+public class DeletingNodeState extends AutomataState {
   private static DeletingNodeState instance;
 
   public synchronized static DeletingNodeState getInstance() {
@@ -26,20 +19,17 @@ public class DeletingNodeState implements AFNDState {
   }
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
-    if (event.getID() == MouseEvent.MOUSE_PRESSED) {
-      deletePressedNode(panel, event);
+  public void updateGraphState() {
+    if (isMousePressed()) {
+      deletePressedNode();
       panel.repaint();
     }
   }
 
-  private void deletePressedNode(AFNDPanel panel, InputEvent event) {
-    VisualAutomata visualAutomata = panel.getVisualAutomata();
-    MouseEvent e = (MouseEvent) event;
-    VisualNode pressedNode = visualAutomata.getVisualNodeBellow(e.getPoint());
+  private void deletePressedNode() {
+    VisualNode pressedNode = visualAutomata.getVisualNodeBellow(getMousePos());
     if (!isNull(pressedNode)) {
       visualAutomata.removeElement(pressedNode.element());
-      visualAutomata.printGraph();
     }
   }
 
