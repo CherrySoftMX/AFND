@@ -24,10 +24,10 @@ public class InitialState extends VisualNode {
   }
 
   private void updateTrianglePos() {
-    triangle.setOrigenX(xCenter() - TRIANGLE_LENGTH - VisualNode.NODE_RADIUS - VisualNode.STROKE_WIDTH);
-    triangle.setOrigenY(yCenter());
-    triangle.setDestinoX(xCenter());
-    triangle.setDestinoY(yCenter());
+    triangle.setOriginX(xCenter() - TRIANGLE_LENGTH - VisualNode.NODE_RADIUS - VisualNode.STROKE_WIDTH);
+    triangle.setOriginY(yCenter());
+    triangle.setDestinationX(xCenter());
+    triangle.setDestinationY(yCenter());
     triangle.setLength(TRIANGLE_LENGTH);
     triangle.setOffset(VisualNode.NODE_RADIUS + VisualNode.STROKE_WIDTH);
   }

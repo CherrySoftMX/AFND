@@ -36,6 +36,7 @@ public abstract class VisualConnection extends GraphConnection<String> implement
   protected Triangle triangle;
   protected ColorPalette colorPalette;
   protected boolean previewMode;
+  private int layer;
 
   public VisualConnection(VisualNode origin, VisualNode destination, String condition, boolean previewMode, ColorPalette colorPalette) {
     this(origin, destination, condition, previewMode);
@@ -57,14 +58,17 @@ public abstract class VisualConnection extends GraphConnection<String> implement
     this.conditionNode = new ConditionNode(condition);
     this.triangle = new Triangle();
     this.triangle.setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
+    this.layer = AFNDPanel.MIN_LAYER;
   }
 
   public abstract void updateTrianglePos(Graphics2D g);
 
   public abstract void updateConditionNodePos(Graphics2D g);
 
+  @Override
   public void setCondition(String condition) {
     conditionNode.setElement(condition);
+    super.setCondition(condition);
   }
 
   public String condition() {
@@ -72,24 +76,26 @@ public abstract class VisualConnection extends GraphConnection<String> implement
   }
 
   public Point originPos() {
-    return getVisualOriginNode().getPos();
+    return getOrigin().getPos();
   }
 
   public Point destinationPos() {
-    return getVisualDestinationNode().getPos();
+    return getDestination().getPos();
   }
 
-  public VisualNode getVisualOriginNode() {
-    return (VisualNode) getOrigin();
+  @Override
+  public VisualNode getOrigin() {
+    return (VisualNode) super.getOrigin();
   }
 
-  public VisualNode getVisualDestinationNode() {
-    return (VisualNode) getDestination();
+  @Override
+  public VisualNode getDestination() {
+    return (VisualNode) super.getDestination();
   }
 
   @Override
   public int getLayer() {
-    return AFNDPanel.MIDDLE_LAYER;
+    return layer;
   }
 
 }

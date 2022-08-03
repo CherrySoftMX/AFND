@@ -16,10 +16,6 @@ public class NormalConnection extends VisualConnection {
     super(origin, destination, condition);
   }
 
-  public NormalConnection(VisualNode origin, VisualNode destination, boolean previewMode) {
-    super(origin, destination, previewMode);
-  }
-
   @Override
   public void draw(Graphics2D g) {
     Stroke defaultStroke = g.getStroke();
@@ -50,6 +46,9 @@ public class NormalConnection extends VisualConnection {
 
       updateConditionNodePos(g);
       updateTrianglePos(g);
+
+      triangle.draw(g);
+      conditionNode.draw(g);
     }
 
     g.setStroke(defaultStroke);
@@ -62,10 +61,10 @@ public class NormalConnection extends VisualConnection {
     Point midPoint = MathHelper.midPoint(originPos(), destinationPos);
     Point controlPoint = MathHelper.controlPoint(originPos(), destinationPos, ALTURA_CURVATURA);
 
-    triangle.setOrigenX(midPoint.x + controlPoint.x);
-    triangle.setOrigenY(midPoint.y + controlPoint.y);
-    triangle.setDestinoX(destinationPos.x);
-    triangle.setDestinoY(destinationPos.y);
+    triangle.setOriginX(midPoint.x + controlPoint.x);
+    triangle.setOriginY(midPoint.y + controlPoint.y);
+    triangle.setDestinationX(destinationPos.x);
+    triangle.setDestinationY(destinationPos.y);
     triangle.setLength(TRIANGLE_LENGTH);
     triangle.setOffset(VisualNode.NODE_RADIUS + STROKE_WIDTH);
   }
@@ -76,9 +75,9 @@ public class NormalConnection extends VisualConnection {
     Point controlPoint = MathHelper.controlPoint(originPos(), destinationPos(), ALTURA_CURVATURA);
     g.setColor(Menu.GRAY_TEXT_COLOR);
     int textWidth = GraphicsUtils.getStringWidth(g, conditionNode.element());
-    int blobRadio = textWidth / 2 + BLOB_PADDING * 2;
+    int nodeRadius = textWidth / 2 + BLOB_PADDING * 2;
 
-    conditionNode.radius(blobRadio);
+    conditionNode.radius(nodeRadius);
     conditionNode.setXCenter(midPoint.x + controlPoint.x);
     conditionNode.setYCenter(midPoint.y + controlPoint.y);
   }

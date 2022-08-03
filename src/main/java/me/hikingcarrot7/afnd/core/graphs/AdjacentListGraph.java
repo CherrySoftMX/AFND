@@ -4,6 +4,7 @@ import me.hikingcarrot7.afnd.core.graphs.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdjacentListGraph<T> extends Graph<T> {
   public static final int MAX_NODES = 50;
@@ -106,6 +107,55 @@ public class AdjacentListGraph<T> extends Graph<T> {
 
   protected List<Node<T>> getNodes() {
     return adjTable;
+  }
+
+  protected List<Connection<?>> getConnections() {
+    List<Connection<?>> connections = new ArrayList<>();
+    for (int i = 0; i < cardinality(); i++) {
+      connections.addAll(adjTable.get(i).getConnections());
+    }
+    return connections;
+  }
+
+  protected List<Connection<?>> getAdjacentConnectionsFor(String origin) {
+    List<Connection<?>> allConnections = getConnections();
+    return allConnections.stream()
+        .filter(conn -> origin.equals(conn.getOrigin().element()))
+        .collect(Collectors.toList());
+  }
+
+  public boolean hasAdjacentConnections(String origin) {
+    return !getAdjacentConnectionsFor(origin).isEmpty();
+  }
+
+  protected Connection<?> getConnection(T origin, T destination) {
+    Node<T> originNode = getNode(origin);
+    return originNode.getConnections().stream()
+        .filter(connection -> connection.getDestination().element().equals(destination))
+        .findAny()
+        .orElseThrow(RuntimeException::new);
+  }
+
+  public void printGraph() {
+    for (int i = 0; i < cardinality(); i++) {
+      System.out.printf("%15s:[%d]>", adjTable.get(i).element(), i);
+
+      if (!adjTable.get(i).getConnections().isEmpty()) {
+        System.out.printf("[%s (%s)]",
+            adjTable.get(i).getConnections().get(0).getDestination().element(),
+            adjTable.get(i).getConnections().get(0).getCondition().toString()
+        );
+      }
+
+      for (int j = 1; j < adjTable.get(i).getConnections().size(); j++) {
+        System.out.printf("->[%s (%s)]",
+            adjTable.get(i).getConnections().get(j).getDestination().element(),
+            adjTable.get(i).getConnections().get(j).getCondition().toString()
+        );
+      }
+
+      System.out.println();
+    }
   }
 
   private void throwIfMaxCapacityReached() {

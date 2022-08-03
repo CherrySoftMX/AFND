@@ -85,7 +85,7 @@ public class Triangle implements Drawable {
     return origenX;
   }
 
-  public void setOrigenX(int origenX) {
+  public void setOriginX(int origenX) {
     this.origenX = origenX;
   }
 
@@ -93,7 +93,7 @@ public class Triangle implements Drawable {
     return origenY;
   }
 
-  public void setOrigenY(int origenY) {
+  public void setOriginY(int origenY) {
     this.origenY = origenY;
   }
 
@@ -101,7 +101,7 @@ public class Triangle implements Drawable {
     return destinoX;
   }
 
-  public void setDestinoX(int destinoX) {
+  public void setDestinationX(int destinoX) {
     this.destinoX = destinoX;
   }
 
@@ -109,7 +109,7 @@ public class Triangle implements Drawable {
     return destinoY;
   }
 
-  public void setDestinoY(int destinoY) {
+  public void setDestinationY(int destinoY) {
     this.destinoY = destinoY;
   }
 

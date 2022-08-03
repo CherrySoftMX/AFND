@@ -8,15 +8,15 @@ import java.awt.event.InputEvent;
 
 public interface AFNDState {
 
-  void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID);
+  void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID);
 
-  default void clearState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher) {
-    AFNDPanel.getDefaultTextBox().clearTextBox();
-    AFNDPanel.repaint();
+  default void clearState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher) {
+    panel.textBox().clearTextBox();
+    panel.repaint();
   }
 
-  default void exitState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher) {
-    clearState(afndGraph, AFNDPanel, afndStateDispatcher);
+  default void exitState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher) {
+    clearState(afndGraph, panel, afndStateDispatcher);
     afndStateDispatcher.setCurrentState(IdleState.getInstance());
   }
 

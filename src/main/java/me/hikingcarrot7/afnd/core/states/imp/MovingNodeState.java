@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 
+import static java.util.Objects.isNull;
+
 public class MovingNodeState implements AFNDState {
   private static MovingNodeState instance;
 
@@ -31,7 +33,7 @@ public class MovingNodeState implements AFNDState {
   public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
     if (event.getID() == MouseEvent.MOUSE_RELEASED) {
       posStateToMove = null;
-      panel.getDefaultTextBox().clearTextBox();
+      panel.textBox().clearTextBox();
       panel.repaint();
       return;
     }
@@ -50,7 +52,7 @@ public class MovingNodeState implements AFNDState {
       if (nodeSelected()) {
         offsetX = e.getX() - posStateToMove.x;
         offsetY = e.getY() - posStateToMove.y;
-        panel.getDefaultTextBox().setTitle("Moviendo estado");
+        panel.textBox().setTitle("Moviendo estado");
       }
     }
   }
@@ -66,7 +68,7 @@ public class MovingNodeState implements AFNDState {
   }
 
   private boolean nodeSelected() {
-    return posStateToMove != null;
+    return !isNull(posStateToMove);
   }
 
 }

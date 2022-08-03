@@ -7,28 +7,36 @@ import me.hikingcarrot7.afnd.core.graphs.Node;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.afnd.connections.LoopConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.connections.NormalConnection;
+import me.hikingcarrot7.afnd.view.components.afnd.states.NormalState;
 import me.hikingcarrot7.afnd.view.components.afnd.states.VisualStateFactory;
-import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 
 import java.awt.*;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
+import static java.util.Objects.isNull;
 import static me.hikingcarrot7.afnd.core.utils.MathHelper.distanceBetweenTwoPoints;
 
 @RequiredArgsConstructor
 public class VisualAutomata extends AFNDGraph<String> implements Drawable {
   private final VisualStateFactory stateFactory;
-  private int stateId;
+  private VisualConnection previewConnection;
+  private int stateId = NormalState.NORMAL_STATE_ID;
   private int connectionId;
 
   public boolean insertElement(String element, Point pos) {
     boolean elementInserted = insertElement(element);
     if (elementInserted) {
       setNodePos(element, pos);
+      this.stateId = NormalState.NORMAL_STATE_ID;
     }
     return elementInserted;
+  }
+
+  @Override
+  protected Node<String> createNode(String element) {
+    return stateFactory.createState(stateId, element, new Point());
   }
 
   public void insertPreviewNode(int stateId, Point pos) {
@@ -52,14 +60,45 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
           return visualNode.isPreviewNode();
         })
         .findAny()
-        .orElseThrow(IllegalStateException::new);
+        .orElse(null);
   }
 
   public void removePreviewNode() {
-    getNodes().removeIf(node -> {
-      VisualNode visualNode = (VisualNode) node;
-      return visualNode.isPreviewNode();
-    });
+    VisualNode previewNode = previewNode();
+    if (!isNull(previewNode)) {
+      removeElement(previewNode.element());
+    }
+  }
+
+  public void insertCursorPreview(Point pos) {
+    this.stateId = NormalState.NORMAL_STATE_ID;
+    String element = UUID.randomUUID().toString();
+    boolean elementInserted = insertElement(element, pos);
+    if (elementInserted) {
+      VisualNode visualNode = getVisualNode(element);
+      visualNode.setCursorPreview(true);
+    }
+  }
+
+  public Point cursorPreviewPos() {
+    return cursorPreview().getPos();
+  }
+
+  private VisualNode cursorPreview() {
+    return (VisualNode) getNodes().stream()
+        .filter(node -> {
+          VisualNode visualNode = (VisualNode) node;
+          return visualNode.isCursorPreview();
+        })
+        .findAny()
+        .orElse(null);
+  }
+
+  public void removeCursorPreview() {
+    VisualNode cursorPreview = cursorPreview();
+    if (!isNull(cursorPreview)) {
+      removeElement(cursorPreview.element());
+    }
   }
 
   public boolean insertAsInitialState(String element, Point pos) {
@@ -90,30 +129,43 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
   }
 
   public Point getPosOfNodeBellow(Point point) {
-    return getVisualNodeBellow(point)
-        .map(VisualNode::getPos)
-        .orElse(null);
+    VisualNode visualNodeBellow = getVisualNodeBellow(point);
+    if (!isNull(visualNodeBellow)) {
+      return visualNodeBellow.getPos();
+    }
+    return null;
   }
 
-  public String getElementOfNodeBellow(Point point) {
-    return getVisualNodeBellow(point)
-        .map(Node::element)
-        .orElse(null);
-  }
-
-  protected Optional<VisualNode> getVisualNodeBellow(Point point) {
-    return getNodes().stream()
+  public VisualNode getVisualNodeBellow(Point point) {
+    return (VisualNode) getNodes().stream()
         .filter(node -> {
           VisualNode visualNode = (VisualNode) node;
           return distanceBetweenTwoPoints(visualNode.getPos(), point) <= VisualNode.NODE_RADIUS;
         })
         .findAny()
-        .map(node -> (VisualNode) node);
+        .orElse(null);
   }
 
-  public void setColorPaletteOf(String element, ColorPalette colorPalette) {
-    VisualNode visualNode = getVisualNode(element);
-    visualNode.setColorPalette(colorPalette);
+  public boolean insertPreviewConnection(String origin) {
+    VisualNode cursorPreview = cursorPreview();
+    if (isNull(cursorPreview)) {
+      VisualNode visualNode = getVisualNode(origin);
+      insertCursorPreview(new Point(visualNode.getPos().x, visualNode.getPos().y));
+      insertNormalConnection(origin, cursorPreview().element(), "");
+      previewConnection = getVisualConnection(origin, cursorPreview().element());
+      previewConnection.setPreviewMode(true);
+      return true;
+    }
+    return false;
+  }
+
+  public void removePreviewConnection() {
+    removeConnection(
+        previewConnection.getOrigin().element(),
+        previewConnection.getDestination().element()
+    );
+    removeCursorPreview();
+    previewConnection = null;
   }
 
   public boolean insertNormalConnection(String origin, String destination, String condition) {
@@ -127,14 +179,9 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
   }
 
   @Override
-  protected Node<String> createNode(String element) {
-    return stateFactory.createState(stateId, element, new Point());
-  }
-
-  @Override
   protected Connection<?> createConnection(Node<String> origin, Node<String> destination, Object element) {
-    VisualNode visualOriginNode = getVisualNode(origin);
-    VisualNode visualDestinationNode = getVisualNode(destination);
+    VisualNode visualOriginNode = getVisualNode(origin.element());
+    VisualNode visualDestinationNode = getVisualNode(destination.element());
     switch (connectionId) {
       case 1:
         return new NormalConnection(visualOriginNode, visualDestinationNode, element.toString());
@@ -142,6 +189,10 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
         return new LoopConnection(visualOriginNode, visualDestinationNode, element.toString());
     }
     throw new RuntimeException();
+  }
+
+  public VisualConnection getVisualConnection(String origin, String destination) {
+    return (VisualConnection) getConnection(origin, destination);
   }
 
   private VisualNode getVisualNode(Object element) {
@@ -155,15 +206,45 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
 
   @Override
   public void draw(Graphics2D g) {
+    // Sort by layer
+    getConnections().forEach(conn -> {
+      VisualConnection visualConnection = (VisualConnection) conn;
+      visualConnection.draw(g);
+    });
     getNodes().forEach(node -> {
       VisualNode visualNode = (VisualNode) node;
       visualNode.draw(g);
     });
   }
 
+  public void forEachVisualNode(Consumer<VisualNode> consumer) {
+    getNodes().forEach(node -> {
+      VisualNode visualNode = (VisualNode) node;
+      consumer.accept(visualNode);
+    });
+  }
+
+  public void forEachVisualAdjacentConnectionFor(String origin, Consumer<VisualConnection> consumer) {
+    getAdjacentConnectionsFor(origin).forEach(conn -> {
+      VisualConnection visualConnection = (VisualConnection) conn;
+      consumer.accept(visualConnection);
+    });
+  }
+
+  public void forEachVisualConnection(Consumer<VisualConnection> consumer) {
+    getConnections().forEach(conn -> {
+      VisualConnection visualConnection = (VisualConnection) conn;
+      consumer.accept(visualConnection);
+    });
+  }
+
   @Override
   public int getLayer() {
     return AFNDPanel.MAX_LAYER;
+  }
+
+  public VisualConnection getPreviewConnection() {
+    return previewConnection;
   }
 
 }

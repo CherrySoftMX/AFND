@@ -33,7 +33,7 @@ public final class AFNDPanel extends JPanel {
   private final List<Pair<VisualConnection, Integer>> visualConnections;
   private final List<Drawable> components;
   private final List<JComponent> swingComponents;
-  private TextBox defaultTextBox;
+  private TextBox textBox;
 
   private AFNDPanel() {
     visualNodes = new ArrayList<>();
@@ -53,14 +53,11 @@ public final class AFNDPanel extends JPanel {
     configGraphics(g2d);
 
     visualAutomata.draw(g2d);
-
-    components.forEach(component -> component.draw(g2d));
-
-    if (!defaultTextBox.isEmpty()) {
-      defaultTextBox.draw(g2d);
+    if (!textBox.isEmpty()) {
+      textBox.draw(g2d);
     }
-
     EventQueue.invokeLater(() -> swingComponents.forEach(Component::repaint));
+
     g.dispose();
     g2d.dispose();
   }
@@ -69,26 +66,13 @@ public final class AFNDPanel extends JPanel {
     g.setFont(DEFAULT_FONT);
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    if (defaultTextBox == null) {
-      defaultTextBox = new TextBox.TextBoxBuilder().build();
+    if (textBox == null) {
+      textBox = new TextBox.TextBoxBuilder().build();
     }
   }
 
   public VisualNode getVNode(int idx) {
     return visualNodes.get(idx);
-  }
-
-  public VisualNode getVNode(String name) {
-    for (VisualNode visualNode : visualNodes) {
-      if (visualNode.element().equals(name)) {
-        return visualNode;
-      }
-    }
-    return null;
-  }
-
-  public void removeVNode(VisualNode vnode) {
-    visualNodes.remove(vnode);
   }
 
   public List<VisualNode> getVNodes() {
@@ -106,16 +90,6 @@ public final class AFNDPanel extends JPanel {
     visualConnections.removeIf(pair -> pair.getLeft() == varch);
     components.removeIf(component -> component == varch.getConditionNode()
         || component == varch.getTriangle());
-  }
-
-  public void setVArchZIndex(VisualConnection varch, int zIndex) {
-    for (Pair<VisualConnection, Integer> vArchIntegerPair : visualConnections) {
-      VisualConnection currentVisualConnection = vArchIntegerPair.getLeft();
-      if (currentVisualConnection == varch) {
-        vArchIntegerPair.setRight(zIndex);
-      }
-    }
-    visualConnections.sort(Comparator.comparing(Pair::getRight));
   }
 
   public VisualConnection getVArch(Movable origin, Movable destination) {
@@ -148,8 +122,8 @@ public final class AFNDPanel extends JPanel {
     add(component);
   }
 
-  public TextBox getDefaultTextBox() {
-    return defaultTextBox;
+  public TextBox textBox() {
+    return textBox;
   }
 
   public VisualAutomata getVisualAutomata() {

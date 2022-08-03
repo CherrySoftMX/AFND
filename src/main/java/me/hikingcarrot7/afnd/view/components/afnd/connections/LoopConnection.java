@@ -56,10 +56,10 @@ public class LoopConnection extends VisualConnection {
 
   @Override
   public void updateTrianglePos(Graphics2D g) {
-    triangle.setOrigenX(originPos().x + rightPointControl.x);
-    triangle.setOrigenY(originPos().y + rightPointControl.y);
-    triangle.setDestinoX(destinationPos().x + startRightPoint.x);
-    triangle.setDestinoY(destinationPos().y + startRightPoint.y);
+    triangle.setOriginX(originPos().x + rightPointControl.x);
+    triangle.setOriginY(originPos().y + rightPointControl.y);
+    triangle.setDestinationX(destinationPos().x + startRightPoint.x);
+    triangle.setDestinationY(destinationPos().y + startRightPoint.y);
     triangle.setLength(TRIANGLE_LENGTH);
     triangle.setOffset(VisualNode.STROKE_WIDTH);
   }

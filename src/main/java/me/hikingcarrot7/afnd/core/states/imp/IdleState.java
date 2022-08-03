@@ -21,7 +21,7 @@ public class IdleState implements AFNDState {
   }
 
   @Override
-  public void updateGraphState(AFNDGraph<String> graph, AFNDPanel vgraph, AFNDStateDispatcher graphStateManager, InputEvent event, int buttonID) {
+  public void updateGraphState(AFNDGraph<String> graph, AFNDPanel panel, AFNDStateDispatcher graphStateManager, InputEvent event, int buttonID) {
 
   }
 

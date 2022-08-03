@@ -3,7 +3,6 @@ package me.hikingcarrot7.afnd.core.states.imp;
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
-import me.hikingcarrot7.afnd.core.utils.GraphUtils;
 import me.hikingcarrot7.afnd.view.components.DialogueBalloon;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
@@ -14,6 +13,8 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+import static java.util.Objects.isNull;
 
 public class AddingNodeState implements AFNDState {
   private static AddingNodeState instance;
@@ -52,25 +53,25 @@ public class AddingNodeState implements AFNDState {
       }
     }
     if (!namingState && event.getID() == MouseEvent.MOUSE_CLICKED) {
-      previewNewState(afndGraph, panel, (MouseEvent) event, buttonID);
+      previewNewState(panel, (MouseEvent) event, buttonID);
     }
   }
 
-  private void previewNewState(AFNDGraph<String> afndGraph, AFNDPanel panel, MouseEvent e, int stateId) {
+  private void previewNewState(AFNDPanel panel, MouseEvent e, int stateId) {
+    VisualAutomata visualAutomata = panel.getVisualAutomata();
     switch (stateId) {
       case Menu.INITIAL_STATE_ID:
       case Menu.INITIAL_FINAL_STATE_ID:
-        if (afndGraph.hasInitialState()) {
-          panel.getDefaultTextBox().setTitle("Ya has establecido el estado inicial!");
+        if (visualAutomata.hasInitialState()) {
+          panel.textBox().setTitle("Ya has establecido el estado inicial!");
           panel.repaint();
           return;
         }
     }
 
-    int pressedNode = GraphUtils.getPressedNode(afndGraph, panel.getVNodes(), e.getPoint());
+    Point pressedNodePos = visualAutomata.getPosOfNodeBellow(e.getPoint());
 
-    if (pressedNode < 0) {
-      VisualAutomata visualAutomata = panel.getVisualAutomata();
+    if (isNull(pressedNodePos)) {
       visualAutomata.insertPreviewNode(stateId, e.getPoint());
 
       textTyper = new TextTyper(e.getPoint(), 6);
@@ -81,7 +82,7 @@ public class AddingNodeState implements AFNDState {
 
       namingState = true;
 
-      panel.getDefaultTextBox().setTitle("Ponle un nombre al estado, acepta con ENTER");
+      panel.textBox().setTitle("Ponle un nombre al estado, acepta con ENTER");
       panel.repaint();
     }
   }

@@ -3,11 +3,11 @@ package me.hikingcarrot7.afnd.core.states.imp;
 import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
 import me.hikingcarrot7.afnd.core.afnd.MatchResult;
 import me.hikingcarrot7.afnd.core.afnd.MatchResultStep;
-import me.hikingcarrot7.afnd.core.graphs.Connection;
 import me.hikingcarrot7.afnd.core.states.AFNDState;
 import me.hikingcarrot7.afnd.core.states.AFNDStateDispatcher;
 import me.hikingcarrot7.afnd.view.components.*;
 import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.VisualAutomata;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.Box;
@@ -35,57 +35,56 @@ public class VerifyingInputState implements AFNDState {
   }
 
   @Override
-  public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
+  public void updateGraphState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher, InputEvent event, int buttonID) {
     if (!inputTested) {
-      testInput(afndGraph, AFNDPanel);
+      testInput(panel);
     }
-    AFNDPanel.repaint();
+    panel.repaint();
   }
 
-  private void testInput(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel) {
+  private void testInput(AFNDPanel panel) {
+    VisualAutomata visualAutomata = panel.getVisualAutomata();
     String text = Menu.TEXT_FIELD.getText();
     try {
-      result = afndGraph.matches(text);
-      AFNDPanel.addComponent(messageBox);
+      result = visualAutomata.matches(text);
+      panel.addComponent(messageBox);
       if (result.matches()) {
         messageBox.setTitle("La palabra FUE ACEPTADA por el autómata");
         messageBox.setColorPalette(TextBox.GREEN_TEXTBOX_COLOR_PALETTE);
-        paintPath(AFNDPanel);
+        markPath();
       } else {
         messageBox.setTitle("La palabra NO FUE ACEPTADA por el autómata");
         messageBox.setColorPalette(TextBox.RED_TEXTBOX_COLOR_PALETTE);
       }
     } catch (IllegalStateException e) {
-      AFNDPanel.getDefaultTextBox().setTitle(e.getMessage());
-      AFNDPanel.repaint();
+      panel.textBox().setTitle(e.getMessage());
+      panel.repaint();
     }
     inputTested = true;
   }
 
-  private void paintPath(AFNDPanel AFNDPanel) {
+  private void markPath() {
     for (MatchResultStep step : result.getPath()) {
-      Connection<?> connection = step.getConnection();
-      VisualNode origin = AFNDPanel.getVNode(connection.getOrigin().element().toString());
-      VisualNode destination = AFNDPanel.getVNode(connection.getDestination().element().toString());
-      VisualConnection varch = AFNDPanel.getVArch(origin, destination);
-      origin.setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
-      destination.setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
-      varch.setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
-      varch.getTriangle().setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
+      VisualConnection connection = (VisualConnection) step.getConnection();
+      connection.getOrigin().setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
+      connection.getDestination().setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
+      connection.getTriangle().setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
+      connection.setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
     }
   }
 
   @Override
-  public void clearState(AFNDGraph<String> afndGraph, AFNDPanel AFNDPanel, AFNDStateDispatcher afndStateDispatcher) {
-    AFNDPanel.getVNodes().forEach(vnode -> vnode.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE));
-    AFNDPanel.getVisualConnections().forEach(varch -> {
-      varch.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
-      varch.getTriangle().setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
-      AFNDPanel.setVArchZIndex(varch, AFNDPanel.MIN_LAYER);
+  public void clearState(AFNDGraph<String> afndGraph, AFNDPanel panel, AFNDStateDispatcher afndStateDispatcher) {
+    VisualAutomata visualAutomata = panel.getVisualAutomata();
+    visualAutomata.forEachVisualNode(node -> node.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE));
+    visualAutomata.forEachVisualConnection(conn -> {
+      conn.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
+      conn.getTriangle().setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
+      conn.setLayer(AFNDPanel.MIN_LAYER);
     });
     inputTested = false;
-    AFNDPanel.removeComponent(messageBox);
-    AFNDState.super.clearState(afndGraph, AFNDPanel, afndStateDispatcher);
+    panel.removeComponent(messageBox);
+    AFNDState.super.clearState(afndGraph, panel, afndStateDispatcher);
   }
 
 }
