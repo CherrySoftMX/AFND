@@ -28,7 +28,7 @@ public class TextBox implements Box, Drawable {
       .build();
 
   public static final ColorPalette GREEN_TEXTBOX_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.COLOR_SELECTED_ARCH)
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.COLOR_SELECTED_CONNECTION)
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
       .build();
 

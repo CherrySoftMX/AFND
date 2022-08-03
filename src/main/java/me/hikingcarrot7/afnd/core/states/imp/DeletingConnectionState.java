@@ -75,7 +75,7 @@ public class DeletingConnectionState extends AutomataState {
     visualAutomata.forEachVisualConnection(conn -> {
       conn.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
       conn.getConditionNode().setColorPalette(ConditionNode.DEFAULT_CONDITION_NODE_COLOR_PALETTE);
-      conn.getTriangle().setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
+      conn.getTriangle().setColorPalette(Triangle.CONNECTION_TRIANGLE_COLOR_PALETTE);
       conn.setLayer(AFNDPanel.MIN_LAYER);
     });
     if (!isNull(origin)) {

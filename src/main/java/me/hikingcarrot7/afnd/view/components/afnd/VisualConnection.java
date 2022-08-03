@@ -15,17 +15,17 @@ public abstract class VisualConnection extends GraphConnection<String> implement
   public static final int TRIANGLE_LENGTH = 7;
   public static final int STROKE_WIDTH = 2;
   public static final int BLOB_PADDING = 3;
-  public static final int ALTURA_CURVATURA = 40;
-  public static final Color COLOR_ARCH = new Color(155, 92, 181);
-  public static final Color COLOR_SELECTED_ARCH = new Color(25, 229, 39);
+  public static final int BEND_HEIGHT = 40;
+  public static final Color COLOR_CONNECTION = new Color(155, 92, 181);
+  public static final Color COLOR_SELECTED_CONNECTION = new Color(25, 229, 39);
   public static final Color RED_CONNECTION_COLOR = new Color(255, 80, 80);
 
   public static final ColorPalette DEFAULT_CONNECTION_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, COLOR_ARCH)
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, COLOR_CONNECTION)
       .build();
 
   public static final ColorPalette SELECTED_CONNECTION_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, COLOR_SELECTED_ARCH)
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, COLOR_SELECTED_CONNECTION)
       .build();
 
   public static final ColorPalette RED_CONNECTION_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
@@ -57,7 +57,7 @@ public abstract class VisualConnection extends GraphConnection<String> implement
     this.colorPalette = DEFAULT_CONNECTION_COLOR_PALETTE;
     this.conditionNode = new ConditionNode(condition);
     this.triangle = new Triangle();
-    this.triangle.setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
+    this.triangle.setColorPalette(Triangle.CONNECTION_TRIANGLE_COLOR_PALETTE);
     this.layer = AFNDPanel.MIN_LAYER;
   }
 

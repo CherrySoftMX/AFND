@@ -87,12 +87,12 @@ public class LoopConnection extends VisualConnection {
 
   private Point calculateRightPointControl() {
     Point startRightPoint = calculateStartRightPoint();
-    return new Point(startRightPoint.x, startRightPoint.y - ALTURA_CURVATURA - 15);
+    return new Point(startRightPoint.x, startRightPoint.y - BEND_HEIGHT - 15);
   }
 
   private Point calculateLeftPointControl() {
     Point startLeftPoint = calculateStartLeftPoint();
-    return new Point(startLeftPoint.x, startLeftPoint.y - ALTURA_CURVATURA - 15);
+    return new Point(startLeftPoint.x, startLeftPoint.y - BEND_HEIGHT - 15);
   }
 
 }

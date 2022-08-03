@@ -74,7 +74,7 @@ public class VerifyingInputState extends AutomataState {
     visualAutomata.forEachVisualNode(node -> node.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE));
     visualAutomata.forEachVisualConnection(conn -> {
       conn.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
-      conn.getTriangle().setColorPalette(Triangle.VARCH_TRIANGLE_COLOR_PALETTE);
+      conn.getTriangle().setColorPalette(Triangle.CONNECTION_TRIANGLE_COLOR_PALETTE);
       conn.setLayer(AFNDPanel.MIN_LAYER);
     });
     inputTested = false;

@@ -22,9 +22,9 @@ public class Triangle implements Drawable {
       .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualNode.NODE_STROKE_COLOR)
       .build();
 
-  public static final ColorPalette VARCH_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
-      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.COLOR_ARCH)
-      .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualConnection.COLOR_ARCH)
+  public static final ColorPalette CONNECTION_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
+      .addColor(ColorPalette.ColorKey.FILL_COLOR_KEY, VisualConnection.COLOR_CONNECTION)
+      .addColor(ColorPalette.ColorKey.STROKE_COLOR_KEY, VisualConnection.COLOR_CONNECTION)
       .build();
 
   public static final ColorPalette RED_TRIANGLE_COLOR_PALETTE = new ColorPalette.ColorPaletteBuilder()
