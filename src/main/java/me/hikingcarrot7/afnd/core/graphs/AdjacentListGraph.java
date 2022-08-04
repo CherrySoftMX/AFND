@@ -1,6 +1,8 @@
 package me.hikingcarrot7.afnd.core.graphs;
 
-import me.hikingcarrot7.afnd.core.graphs.exceptions.*;
+import me.hikingcarrot7.afnd.core.graphs.exceptions.ConnectionNotFoundException;
+import me.hikingcarrot7.afnd.core.graphs.exceptions.ElementNotFoundException;
+import me.hikingcarrot7.afnd.core.graphs.exceptions.MaxCapacityReachedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,29 +135,7 @@ public class AdjacentListGraph<T> extends Graph<T> {
     return originNode.getConnections().stream()
         .filter(connection -> connection.getDestination().element().equals(destination))
         .findAny()
-        .orElseThrow(RuntimeException::new);
-  }
-
-  public void printGraph() {
-    for (int i = 0; i < cardinality(); i++) {
-      System.out.printf("%15s:[%d]>", adjTable.get(i).element(), i);
-
-      if (!adjTable.get(i).getConnections().isEmpty()) {
-        System.out.printf("[%s (%s)]",
-            adjTable.get(i).getConnections().get(0).getDestination().element(),
-            adjTable.get(i).getConnections().get(0).getCondition().toString()
-        );
-      }
-
-      for (int j = 1; j < adjTable.get(i).getConnections().size(); j++) {
-        System.out.printf("->[%s (%s)]",
-            adjTable.get(i).getConnections().get(j).getDestination().element(),
-            adjTable.get(i).getConnections().get(j).getCondition().toString()
-        );
-      }
-
-      System.out.println();
-    }
+        .orElseThrow(() -> new ConnectionNotFoundException(origin.toString(), destination.toString()));
   }
 
   public boolean hasAtLeastOneNode() {
