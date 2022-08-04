@@ -1,7 +1,7 @@
 package me.hikingcarrot7.afnd.core.matchers;
 
 import lombok.AllArgsConstructor;
-import me.hikingcarrot7.afnd.core.afnd.MatchResult;
+import me.hikingcarrot7.afnd.core.automata.MatchResult;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

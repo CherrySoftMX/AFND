@@ -6,6 +6,7 @@ import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import java.awt.*;
 
 public class FinalState extends VisualNode {
+  public static final int FINAL_STATE_ID = 3;
   public static final int INTERN_CIRCLE_STROKE_WIDTH = 3;
   public static final int INTERN_CIRCLE_OFFSET = 6;
 

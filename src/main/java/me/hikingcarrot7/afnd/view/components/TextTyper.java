@@ -1,7 +1,7 @@
 package me.hikingcarrot7.afnd.view.components;
 
 import me.hikingcarrot7.afnd.controller.TextValidator;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
 import me.hikingcarrot7.afnd.view.graphics.Movable;
@@ -30,7 +30,7 @@ public class TextTyper implements Drawable, Movable {
 
   @Override
   public int getLayer() {
-    return AFNDPanel.MIDDLE_LAYER;
+    return AutomataPanel.MIDDLE_LAYER;
   }
 
   public void handleInputEvent(KeyEvent e) {

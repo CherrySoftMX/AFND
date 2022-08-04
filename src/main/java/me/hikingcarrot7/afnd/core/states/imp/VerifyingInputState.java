@@ -1,12 +1,12 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.afnd.MatchResult;
-import me.hikingcarrot7.afnd.core.afnd.MatchResultStep;
+import me.hikingcarrot7.afnd.core.automata.MatchResult;
+import me.hikingcarrot7.afnd.core.automata.MatchResultStep;
 import me.hikingcarrot7.afnd.core.states.AutomataState;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextBox;
 import me.hikingcarrot7.afnd.view.components.Triangle;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.Box;
@@ -45,11 +45,11 @@ public class VerifyingInputState extends AutomataState {
       result = visualAutomata.matches(text);
       panel.addComponent(messageBox);
       if (result.matches()) {
-        messageBox.setTitle("La palabra FUE ACEPTADA por el autómata");
+        messageBox.setTitle("Input ACCEPTED by the automata");
         messageBox.setColorPalette(TextBox.GREEN_TEXTBOX_COLOR_PALETTE);
         markPath();
       } else {
-        messageBox.setTitle("La palabra NO FUE ACEPTADA por el autómata");
+        messageBox.setTitle("Input REJECTED by the automata");
         messageBox.setColorPalette(TextBox.RED_TEXTBOX_COLOR_PALETTE);
       }
     } catch (IllegalStateException e) {
@@ -75,7 +75,7 @@ public class VerifyingInputState extends AutomataState {
     visualAutomata.forEachVisualConnection(conn -> {
       conn.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
       conn.getTriangle().setColorPalette(Triangle.CONNECTION_TRIANGLE_COLOR_PALETTE);
-      conn.setLayer(AFNDPanel.MIN_LAYER);
+      conn.setLayer(AutomataPanel.MIN_LAYER);
     });
     inputTested = false;
     panel.removeComponent(messageBox);

@@ -35,3 +35,4 @@ build/
 
 # Others
 *.tmp
+dependency-reduced-pom.xml

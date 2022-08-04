@@ -2,9 +2,10 @@ package me.hikingcarrot7.afnd.core.states.imp;
 
 import me.hikingcarrot7.afnd.core.states.AutomataState;
 import me.hikingcarrot7.afnd.view.components.DialogueBalloon;
-import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextTyper;
-import me.hikingcarrot7.afnd.view.components.afnd.VisualAutomata;
+import me.hikingcarrot7.afnd.view.components.afnd.states.FinalState;
+import me.hikingcarrot7.afnd.view.components.afnd.states.InitialFinalState;
+import me.hikingcarrot7.afnd.view.components.afnd.states.InitialState;
 
 import java.awt.*;
 
@@ -34,7 +35,7 @@ public class AddingNodeState extends AutomataState {
         if (insertState(visualAutomata.previewNodePos())) {
           clearState();
         } else {
-          dialogueBalloon.setText("Ese estado ya existe!");
+          dialogueBalloon.setText("State already exists!");
           panel.repaint();
           return;
         }
@@ -52,10 +53,10 @@ public class AddingNodeState extends AutomataState {
   private void previewNewState() {
     Point point = getMousePos();
     switch (stateId) {
-      case Menu.INITIAL_STATE_ID:
-      case Menu.INITIAL_FINAL_STATE_ID:
+      case InitialState.INITIAL_STATE_ID:
+      case InitialFinalState.INITIAL_FINAL_STATE_ID:
         if (visualAutomata.hasInitialState()) {
-          panel.textBox().setTitle("Ya has establecido el estado inicial!");
+          panel.textBox().setTitle("You have already established the initial state!");
           panel.repaint();
           return;
         }
@@ -69,12 +70,12 @@ public class AddingNodeState extends AutomataState {
       textTyper = new TextTyper(point, 6);
       panel.addComponent(textTyper);
 
-      dialogueBalloon = new DialogueBalloon(panel, visualAutomata.previewNode(), "Inserte el nombre");
+      dialogueBalloon = new DialogueBalloon(panel, visualAutomata.previewNode(), "Insert name");
       panel.addComponent(dialogueBalloon);
 
       namingState = true;
 
-      panel.textBox().setTitle("Ponle un nombre al estado, acepta con ENTER");
+      panel.textBox().setTitle("Name the state, accept with ENTER");
       panel.repaint();
     }
   }
@@ -86,14 +87,14 @@ public class AddingNodeState extends AutomataState {
       return false;
     }
     switch (stateId) {
-      case Menu.INITIAL_STATE_ID:
+      case InitialState.INITIAL_STATE_ID:
         elementInserted = visualAutomata.insertAsInitialState(element, pos);
         break;
-      case Menu.INITIAL_FINAL_STATE_ID:
-        elementInserted = visualAutomata.insertAsInitialAndFinalState(element, pos);
-        break;
-      case Menu.FINAL_STATE_ID:
+      case FinalState.FINAL_STATE_ID:
         elementInserted = visualAutomata.insertAsFinalState(element, pos);
+        break;
+      case InitialFinalState.INITIAL_FINAL_STATE_ID:
+        elementInserted = visualAutomata.insertAsInitialAndFinalState(element, pos);
         break;
       default:
         elementInserted = visualAutomata.insertElement(element, pos);

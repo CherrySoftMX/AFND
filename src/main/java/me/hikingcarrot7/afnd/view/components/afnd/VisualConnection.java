@@ -58,7 +58,7 @@ public abstract class VisualConnection extends GraphConnection<String> implement
     this.conditionNode = new ConditionNode(condition);
     this.triangle = new Triangle();
     this.triangle.setColorPalette(Triangle.CONNECTION_TRIANGLE_COLOR_PALETTE);
-    this.layer = AFNDPanel.MIN_LAYER;
+    this.layer = AutomataPanel.MIN_LAYER;
   }
 
   public abstract void updateTrianglePos(Graphics2D g);

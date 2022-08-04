@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.graphics.*;
 
@@ -32,7 +32,7 @@ public class TextBox implements Box, Drawable {
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.BLACK)
       .build();
 
-  private final AFNDPanel visualAutomata;
+  private final AutomataPanel visualAutomata;
   private final Dimension dimension = new Dimension(-1, -1);
   private final BoxPosition boxPosition;
   private final ArrayList<String> content;
@@ -41,7 +41,7 @@ public class TextBox implements Box, Drawable {
   private String footer;
   private ColorPalette colorPalette;
 
-  public TextBox(AFNDPanel visualAutomata, String title, ArrayList<String> content, String footer, BoxPosition boxPosition, ColorPalette colorPalette) {
+  public TextBox(AutomataPanel visualAutomata, String title, ArrayList<String> content, String footer, BoxPosition boxPosition, ColorPalette colorPalette) {
     this.title = title;
     this.content = content;
     this.footer = footer;
@@ -72,7 +72,7 @@ public class TextBox implements Box, Drawable {
 
   @Override
   public int getLayer() {
-    return AFNDPanel.MAX_LAYER;
+    return AutomataPanel.MAX_LAYER;
   }
 
   @Override
@@ -230,7 +230,7 @@ public class TextBox implements Box, Drawable {
     }
 
     public TextBox build() {
-      return new TextBox(AFNDPanel.getInstance(), title, content, footer, boxPosition, colorPalette);
+      return new TextBox(AutomataPanel.getInstance(), title, content, footer, boxPosition, colorPalette);
     }
 
   }

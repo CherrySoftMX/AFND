@@ -1,14 +1,12 @@
 package me.hikingcarrot7.afnd.view.components.afnd;
 
-import me.hikingcarrot7.afnd.core.afnd.AFNDGraph;
+import me.hikingcarrot7.afnd.core.automata.AutomataGraph;
 import me.hikingcarrot7.afnd.core.graphs.Connection;
 import me.hikingcarrot7.afnd.core.graphs.Node;
-import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.afnd.connections.LoopConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.connections.NormalConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.connections.VisualConnectionFactory;
-import me.hikingcarrot7.afnd.view.components.afnd.states.NormalState;
-import me.hikingcarrot7.afnd.view.components.afnd.states.VisualNodeFactory;
+import me.hikingcarrot7.afnd.view.components.afnd.states.*;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 
 import java.awt.*;
@@ -19,7 +17,7 @@ import java.util.function.Consumer;
 import static java.util.Objects.isNull;
 import static me.hikingcarrot7.afnd.core.utils.MathHelper.distanceBetweenTwoPoints;
 
-public class VisualAutomata extends AFNDGraph<String> implements Drawable {
+public class VisualAutomata extends AutomataGraph<String> implements Drawable {
   private final VisualNodeFactory visualNodeFactory;
   private final VisualConnectionFactory visualConnectionFactory;
   private final VisualAutomataPainter painter;
@@ -110,7 +108,7 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
   }
 
   public boolean insertAsInitialState(String element, Point pos) {
-    this.stateId = Menu.INITIAL_STATE_ID;
+    this.stateId = InitialState.INITIAL_STATE_ID;
     boolean elementInserted = insertAsInitialState(element);
     if (elementInserted) {
       setNodePos(element, pos);
@@ -119,7 +117,7 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
   }
 
   public boolean insertAsInitialAndFinalState(String element, Point pos) {
-    this.stateId = Menu.INITIAL_FINAL_STATE_ID;
+    this.stateId = InitialFinalState.INITIAL_FINAL_STATE_ID;
     boolean elementInserted = insertAsInitialAndFinalState(element);
     if (elementInserted) {
       setNodePos(element, pos);
@@ -128,7 +126,7 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
   }
 
   public boolean insertAsFinalState(String element, Point pos) {
-    this.stateId = Menu.FINAL_STATE_ID;
+    this.stateId = FinalState.FINAL_STATE_ID;
     boolean elementInserted = insertAsFinalState(element);
     if (elementInserted) {
       setNodePos(element, pos);
@@ -244,7 +242,7 @@ public class VisualAutomata extends AFNDGraph<String> implements Drawable {
 
   @Override
   public int getLayer() {
-    return AFNDPanel.MAX_LAYER;
+    return AutomataPanel.MAX_LAYER;
   }
 
   public VisualConnection getPreviewConnection() {

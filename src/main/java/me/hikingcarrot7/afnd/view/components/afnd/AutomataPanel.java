@@ -13,18 +13,18 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-public final class AFNDPanel extends JPanel {
+public final class AutomataPanel extends JPanel {
   public static final Font DEFAULT_FONT = new Font("Open Sans SemiBold", Font.PLAIN, 14);
   public static final int MAX_LAYER = Integer.MAX_VALUE;
   public static final int MIDDLE_LAYER = Integer.MAX_VALUE / 2;
   public static final int MIN_LAYER = Integer.MIN_VALUE;
 
-  private static AFNDPanel instance;
+  private static AutomataPanel instance;
   private final VisualAutomata visualAutomata;
 
-  public synchronized static AFNDPanel getInstance() {
+  public synchronized static AutomataPanel getInstance() {
     if (instance == null) {
-      instance = new AFNDPanel();
+      instance = new AutomataPanel();
     }
     return instance;
   }
@@ -33,7 +33,7 @@ public final class AFNDPanel extends JPanel {
   private final List<JComponent> swingComponents;
   private TextBox textBox;
 
-  private AFNDPanel() {
+  private AutomataPanel() {
     components = new ArrayList<>();
     swingComponents = new ArrayList<>();
     visualAutomata = new VisualAutomata(

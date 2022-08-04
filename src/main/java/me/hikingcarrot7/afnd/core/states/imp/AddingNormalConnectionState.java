@@ -58,7 +58,7 @@ public class AddingNormalConnectionState extends AutomataState {
         if (insertConnection()) {
           clearState();
         } else {
-          dialogueBalloon.setText("El valor es inválido");
+          dialogueBalloon.setText("Invalid condition");
           panel.repaint();
         }
       }
@@ -74,7 +74,7 @@ public class AddingNormalConnectionState extends AutomataState {
       if (!isNull(pressedNode) && visualAutomata.hasAtLeastOneNode()) {
         origin = pressedNode;
         origin.setColorPalette(VisualNode.SELECTED_NODE_COLOR_PALETTE);
-        panel.textBox().setTitle("Da click derecho a otro estado para crear una conexión.");
+        panel.textBox().setTitle("Right click on another state to create a connection");
       }
     }
   }
@@ -96,11 +96,11 @@ public class AddingNormalConnectionState extends AutomataState {
         previewConnection.setPreviewMode(false);
 
         textTyper = new TextTyper(previewConnection.getConditionNode().getPos(), 1);
-        dialogueBalloon = new DialogueBalloon(panel, previewConnection.getConditionNode(), "Inserte la condición");
+        dialogueBalloon = new DialogueBalloon(panel, previewConnection.getConditionNode(), "Insert condition");
         insertingCondition = true;
 
         panel.addComponent(dialogueBalloon);
-        panel.textBox().setTitle("Asígnale una condición a la conexión.");
+        panel.textBox().setTitle("Insert connection's condition");
       }
     }
   }

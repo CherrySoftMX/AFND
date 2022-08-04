@@ -1,4 +1,4 @@
-package me.hikingcarrot7.afnd.core.afnd;
+package me.hikingcarrot7.afnd.core.automata;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;

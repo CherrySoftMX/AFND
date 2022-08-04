@@ -1,12 +1,12 @@
 package me.hikingcarrot7.afnd.core.states.imp;
 
-import me.hikingcarrot7.afnd.core.afnd.MatchResult;
-import me.hikingcarrot7.afnd.core.afnd.MatchResultStep;
+import me.hikingcarrot7.afnd.core.automata.MatchResult;
+import me.hikingcarrot7.afnd.core.automata.MatchResultStep;
 import me.hikingcarrot7.afnd.core.states.AutomataState;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.TextBox;
 import me.hikingcarrot7.afnd.view.components.Triangle;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import me.hikingcarrot7.afnd.view.graphics.Box;
@@ -58,11 +58,11 @@ public class ResolvingStepByStepState extends AutomataState {
       result = visualAutomata.matches(text);
       panel.addComponent(messageBox);
       if (result.matches()) {
-        messageBox.setTitle("Palabra ACEPTADA, presiona sobre el aútomata para iniciar el recorrido");
+        messageBox.setTitle("Input ACCEPTED, press on the automaton to start the tour");
         messageBox.setColorPalette(TextBox.GREEN_TEXTBOX_COLOR_PALETTE);
         inputMatched = true;
       } else {
-        messageBox.setTitle("Palabra NO ACEPTADA, no podemos iniciar el recorrido");
+        messageBox.setTitle("Input REJECTED, the tour cannot start");
         messageBox.setColorPalette(TextBox.RED_TEXTBOX_COLOR_PALETTE);
         inputMatched = false;
       }
@@ -85,10 +85,10 @@ public class ResolvingStepByStepState extends AutomataState {
       connection.getDestination().setColorPalette(VisualNode.SELECTED_PATH_NODE_COLOR_PALETTE);
       connection.getTriangle().setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
       connection.setColorPalette(VisualConnection.SELECTED_CONNECTION_COLOR_PALETTE);
-      messageBox.setTitle("Palabra por ser consumida: " + step.inputSnapshot());
+      messageBox.setTitle("Input left: " + step.inputSnapshot());
     } else {
       clearAllMarks();
-      messageBox.setTitle("La palabra ha sido consumida");
+      messageBox.setTitle("The tour has ended");
     }
     panel.repaint();
   }
@@ -98,7 +98,7 @@ public class ResolvingStepByStepState extends AutomataState {
     visualAutomata.forEachVisualConnection(conn -> {
       conn.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
       conn.getTriangle().setColorPalette(Triangle.CONNECTION_TRIANGLE_COLOR_PALETTE);
-      conn.setLayer(AFNDPanel.MIN_LAYER);
+      conn.setLayer(AutomataPanel.MIN_LAYER);
     });
   }
 

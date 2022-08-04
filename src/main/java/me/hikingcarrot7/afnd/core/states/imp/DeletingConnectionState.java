@@ -2,7 +2,7 @@ package me.hikingcarrot7.afnd.core.states.imp;
 
 import me.hikingcarrot7.afnd.core.states.AutomataState;
 import me.hikingcarrot7.afnd.view.components.Triangle;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.ConditionNode;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualConnection;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
@@ -46,7 +46,7 @@ public class DeletingConnectionState extends AutomataState {
         origin = pressedNode;
         origin.setColorPalette(VisualNode.SELECTED_NODE_COLOR_PALETTE);
         markAdjacentConnections();
-        panel.textBox().setTitle("Presione click izquierdo sobre algún estado adyacente para borrar la conexión");
+        panel.textBox().setTitle("Left click on any adjacent state to delete the connection");
         panel.repaint();
       } else {
         clearState();
@@ -58,7 +58,7 @@ public class DeletingConnectionState extends AutomataState {
     visualAutomata.forEachVisualAdjacentConnectionFor(origin.element(), (conn -> {
       conn.setColorPalette(VisualConnection.RED_CONNECTION_COLOR_PALETTE);
       conn.getTriangle().setColorPalette(Triangle.RED_TRIANGLE_COLOR_PALETTE);
-      conn.setLayer(AFNDPanel.MAX_LAYER);
+      conn.setLayer(AutomataPanel.MAX_LAYER);
     }));
   }
 
@@ -76,7 +76,7 @@ public class DeletingConnectionState extends AutomataState {
       conn.setColorPalette(VisualConnection.DEFAULT_CONNECTION_COLOR_PALETTE);
       conn.getConditionNode().setColorPalette(ConditionNode.DEFAULT_CONDITION_NODE_COLOR_PALETTE);
       conn.getTriangle().setColorPalette(Triangle.CONNECTION_TRIANGLE_COLOR_PALETTE);
-      conn.setLayer(AFNDPanel.MIN_LAYER);
+      conn.setLayer(AutomataPanel.MIN_LAYER);
     });
     if (!isNull(origin)) {
       origin.setColorPalette(VisualNode.DEFAULT_NODE_COLOR_PALETTE);

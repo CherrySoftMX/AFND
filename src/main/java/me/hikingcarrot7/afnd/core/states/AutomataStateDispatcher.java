@@ -1,7 +1,7 @@
 package me.hikingcarrot7.afnd.core.states;
 
 import me.hikingcarrot7.afnd.core.states.imp.IdleState;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 
 import java.awt.event.InputEvent;
 
@@ -24,7 +24,7 @@ public class AutomataStateDispatcher {
 
   public void setCurrentState(AutomataState newState) {
     currentState = newState;
-    currentState.setPanel(AFNDPanel.getInstance());
+    currentState.setPanel(AutomataPanel.getInstance());
     currentState.setDispatcher(this);
   }
 

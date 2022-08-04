@@ -5,7 +5,7 @@ import me.hikingcarrot7.afnd.controller.events.EventHandler;
 import me.hikingcarrot7.afnd.core.states.imp.*;
 import me.hikingcarrot7.afnd.view.MainView;
 import me.hikingcarrot7.afnd.view.components.Menu;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 
 import java.awt.*;
 import java.io.File;
@@ -25,7 +25,7 @@ public class AppBootstrapper {
   private void init() {
     loadCustomFont();
 
-    AFNDPanel panel = AFNDPanel.getInstance();
+    AutomataPanel panel = AutomataPanel.getInstance();
     Menu menu = new Menu(panel);
 
     AutomataController automataController = new AutomataController(view, panel, menu);
@@ -62,18 +62,18 @@ public class AppBootstrapper {
   }
 
   private void addBindings(AutomataController automataController) {
-    automataController.addBinding(Menu.BUTTON_ADD_ESTADO_INICIAL, AddingNodeState.getInstance());
-    automataController.addBinding(Menu.BUTTON_ADD_ESTADO_NORMAL, AddingNodeState.getInstance());
-    automataController.addBinding(Menu.BUTTON_ADD_ESTADO_INICIAL_FINAL, AddingNodeState.getInstance());
-    automataController.addBinding(Menu.BUTTON_ADD_ESTADO_FINAL, AddingNodeState.getInstance());
+    automataController.addBinding(Menu.ADD_INITIAL_STATE_BUTTON, AddingNodeState.getInstance());
+    automataController.addBinding(Menu.ADD_NORMAL_STATE_BUTTON, AddingNodeState.getInstance());
+    automataController.addBinding(Menu.ADD_INITIAL_FINAL_STATE_BUTTON, AddingNodeState.getInstance());
+    automataController.addBinding(Menu.ADD_FINAL_STATE_BUTTON, AddingNodeState.getInstance());
 
-    automataController.addBinding(Menu.BUTTON_MOVER_ESTADO, MovingNodeState.getInstance());
-    automataController.addBinding(Menu.BUTTON_ADD_CONEXION_NORMAL, AddingNormalConnectionState.getInstance());
-    automataController.addBinding(Menu.BUTTON_ELIMINAR_ESTADO, DeletingNodeState.getInstance());
-    automataController.addBinding(Menu.BUTTON_ADD_CONEXION_BUCLE, AddingLoopConnectionState.getInstance());
-    automataController.addBinding(Menu.BUTTON_ELIMINAR_CONEXION, DeletingConnectionState.getInstance());
-    automataController.addBinding(Menu.BUTTON_COMPROBAR_AUTOMATA, VerifyingInputState.getInstance());
-    automataController.addBinding(Menu.BUTTON_COMPROBACION_PASOS_AUTOMATA, ResolvingStepByStepState.getInstance());
+    automataController.addBinding(Menu.MOVE_STATE_BUTTON, MovingNodeState.getInstance());
+    automataController.addBinding(Menu.ADD_NORMAL_CONNECTION_BUTTON, AddingNormalConnectionState.getInstance());
+    automataController.addBinding(Menu.DELETE_STATE_BUTTON, DeletingNodeState.getInstance());
+    automataController.addBinding(Menu.ADD_LOOP_CONNECTION_BUTTON, AddingLoopConnectionState.getInstance());
+    automataController.addBinding(Menu.DELETE_CONNECTION_BUTTON, DeletingConnectionState.getInstance());
+    automataController.addBinding(Menu.VERIFY_AUTOMATA_BUTTON, VerifyingInputState.getInstance());
+    automataController.addBinding(Menu.STEP_VERIFICATION_BUTTON, ResolvingStepByStepState.getInstance());
   }
 
 }

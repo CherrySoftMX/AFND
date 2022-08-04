@@ -20,12 +20,8 @@ public class ToggleButton extends AbstractButton implements Toggleable {
 
   private boolean toggled = false;
 
-  public ToggleButton(List<String> content, int xPos, int yPos, int width, int height, int id, int fontSize, ColorPalette colorPalette) {
-    super(content, xPos, yPos, width, height, id, fontSize, colorPalette);
-  }
-
-  public ToggleButton(List<String> content, Point coords, Dimension dimension, int id, int fontSize, ColorPalette colorPalette) {
-    super(content, coords, dimension, id, fontSize, colorPalette);
+  public ToggleButton(List<String> content, Point pos, Dimension dimension, int id, int fontSize, ColorPalette colorPalette) {
+    super(content, pos, dimension, id, fontSize, colorPalette);
   }
 
   @Override
@@ -36,11 +32,11 @@ public class ToggleButton extends AbstractButton implements Toggleable {
 
     g.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), fontSize));
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
-    g.fillRoundRect(xPos, yPos, width, height, ARC_WIDTH, ARC_HEIGHT);
+    g.fillRoundRect(pos.x, pos.y, dimension.width, dimension.height, ARC_WIDTH, ARC_HEIGHT);
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.STROKE_COLOR_KEY));
     g.setStroke(new BasicStroke(STROKE_WIDTH));
-    g.drawRoundRect(xPos, yPos, width, height, ARC_WIDTH, ARC_HEIGHT);
+    g.drawRoundRect(pos.x, pos.y, dimension.width, dimension.height, ARC_WIDTH, ARC_HEIGHT);
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
     super.drawContent(g);
@@ -69,10 +65,6 @@ public class ToggleButton extends AbstractButton implements Toggleable {
 
   public boolean isToggled() {
     return toggled;
-  }
-
-  public void setToggled(boolean toggled) {
-    this.toggled = toggled;
   }
 
 }

@@ -45,7 +45,7 @@ public class MovingNodeState extends AutomataState {
       if (nodeSelected()) {
         offsetX = mousePos.x - posNodeToMove.x;
         offsetY = mousePos.y - posNodeToMove.y;
-        panel.textBox().setTitle("Moviendo estado");
+        panel.textBox().setTitle("Moving state");
       }
     }
   }

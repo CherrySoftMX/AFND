@@ -2,7 +2,7 @@ package me.hikingcarrot7.afnd.core.states;
 
 import lombok.Setter;
 import me.hikingcarrot7.afnd.core.states.imp.IdleState;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 import me.hikingcarrot7.afnd.view.components.afnd.VisualAutomata;
 
 import java.awt.*;
@@ -14,7 +14,7 @@ import static java.util.Objects.isNull;
 
 @Setter
 public abstract class AutomataState {
-  protected AFNDPanel panel;
+  protected AutomataPanel panel;
   protected VisualAutomata visualAutomata;
   protected AutomataStateDispatcher dispatcher;
   protected InputEvent event;
@@ -83,7 +83,7 @@ public abstract class AutomataState {
     return (KeyEvent) event;
   }
 
-  public void setPanel(AFNDPanel panel) {
+  public void setPanel(AutomataPanel panel) {
     this.panel = panel;
     this.visualAutomata = panel.getVisualAutomata();
   }

@@ -6,6 +6,7 @@ import me.hikingcarrot7.afnd.view.components.afnd.VisualNode;
 import java.awt.*;
 
 public class InitialState extends VisualNode {
+  public static final int INITIAL_STATE_ID = 1;
   public static final int TRIANGLE_LENGTH = 25;
   public static final int TRIANGLE_STROKE_WIDTH = 4;
   private final Triangle triangle;

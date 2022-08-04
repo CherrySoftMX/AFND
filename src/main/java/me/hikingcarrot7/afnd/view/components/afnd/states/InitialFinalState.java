@@ -5,6 +5,7 @@ import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import java.awt.*;
 
 public class InitialFinalState extends InitialState {
+  public static final int INITIAL_FINAL_STATE_ID = 4;
 
   public InitialFinalState(String element, Point pos) {
     super(element, pos);

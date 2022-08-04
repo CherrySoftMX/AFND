@@ -1,6 +1,6 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 import me.hikingcarrot7.afnd.view.graphics.ColorPalette;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
@@ -24,34 +24,26 @@ public abstract class AbstractButton implements Drawable {
   protected List<String> content;
   protected ColorPalette colorPalette;
   protected int fontSize;
-  protected int xPos;
-  protected int yPos;
-  protected int width;
-  protected int height;
+  protected Point pos;
+  protected Dimension dimension;
 
-  public AbstractButton(List<String> content, int xPos, int yPos, int width, int height, int id, int fontSize, ColorPalette colorPalette) {
+  public AbstractButton(List<String> content, Point pos, Dimension dimension, int id, int fontSize, ColorPalette colorPalette) {
     this.content = content;
-    this.xPos = xPos;
-    this.yPos = yPos;
-    this.width = width;
-    this.height = height;
+    this.pos = pos;
+    this.dimension = dimension;
     this.id = id;
     this.fontSize = fontSize;
     this.colorPalette = colorPalette;
   }
 
-  public AbstractButton(List<String> content, Point coords, Dimension dimension, int id, int fontSize, ColorPalette colorPalette) {
-    this(content, coords.x, coords.y, dimension.width, dimension.height, id, fontSize, colorPalette);
-  }
-
   public void drawContent(Graphics2D g) {
-    int heightPerLine = height / content.size();
+    int heightPerLine = dimension.height / content.size();
 
     for (int i = 0; i < content.size(); i++) {
       String line = content.get(i);
       GraphicsUtils.drawStringOnPoint(g, line,
-          xPos + width / 2,
-          yPos + heightPerLine / 2 + i * heightPerLine - 1);
+          pos.x + dimension.width / 2,
+          pos.y + heightPerLine / 2 + i * heightPerLine - 1);
     }
   }
 
@@ -61,33 +53,20 @@ public abstract class AbstractButton implements Drawable {
 
   @Override
   public int getLayer() {
-    return AFNDPanel.MAX_LAYER;
+    return AutomataPanel.MAX_LAYER;
   }
 
   public void setPosition(int xPos, int yPos) {
-    this.xPos = xPos;
-    this.yPos = yPos;
-  }
-
-  public void setPosition(Point coords) {
-    this.xPos = coords.x;
-    this.yPos = coords.y;
+    pos.x = xPos;
+    pos.y = yPos;
   }
 
   public boolean isClicked(Point point) {
-    return GraphicsUtils.intersects(new Rectangle(xPos, yPos, width, height), new Rectangle(point));
+    return GraphicsUtils.intersects(new Rectangle(pos, dimension), new Rectangle(point));
   }
 
   public int getID() {
     return id;
-  }
-
-  public List<String> getContent() {
-    return content;
-  }
-
-  public void setContent(List<String> content) {
-    this.content = content;
   }
 
   public ColorPalette getColorPalette() {
@@ -96,46 +75,6 @@ public abstract class AbstractButton implements Drawable {
 
   public void setColorPalette(ColorPalette colorPalette) {
     this.colorPalette = colorPalette;
-  }
-
-  public int getFontSize() {
-    return fontSize;
-  }
-
-  public void setFontSize(int fontSize) {
-    this.fontSize = fontSize;
-  }
-
-  public int getxPos() {
-    return xPos;
-  }
-
-  public void setxPos(int xPos) {
-    this.xPos = xPos;
-  }
-
-  public int getyPos() {
-    return yPos;
-  }
-
-  public void setyPos(int yPos) {
-    this.yPos = yPos;
-  }
-
-  public int getWidth() {
-    return width;
-  }
-
-  public void setWidth(int width) {
-    this.width = width;
-  }
-
-  public int getHeight() {
-    return height;
-  }
-
-  public void setHeight(int height) {
-    this.height = height;
   }
 
   public static class ButtonBuilder {
@@ -187,7 +126,7 @@ public abstract class AbstractButton implements Drawable {
     }
 
     public AbstractButton build() {
-      if (id == Menu.COMPROBAR_AUTOMATA_ID) {
+      if (id == Menu.VERIFY_AUTOMATA_ID) {
         return new Button(content, position, dimension, id, fontSize, colorPalette);
       }
       return new ToggleButton(content, position, dimension, id, fontSize, colorPalette);

@@ -88,7 +88,7 @@ public class VisualNode extends GraphNode<String> implements Drawable, Movable {
 
   @Override
   public int getLayer() {
-    return AFNDPanel.MIDDLE_LAYER;
+    return AutomataPanel.MIDDLE_LAYER;
   }
 
   @Override

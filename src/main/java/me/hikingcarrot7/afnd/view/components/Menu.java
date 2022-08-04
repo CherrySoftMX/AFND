@@ -1,6 +1,10 @@
 package me.hikingcarrot7.afnd.view.components;
 
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.states.FinalState;
+import me.hikingcarrot7.afnd.view.components.afnd.states.InitialFinalState;
+import me.hikingcarrot7.afnd.view.components.afnd.states.InitialState;
+import me.hikingcarrot7.afnd.view.components.afnd.states.NormalState;
 import me.hikingcarrot7.afnd.view.graphics.Drawable;
 import me.hikingcarrot7.afnd.view.graphics.GraphicsUtils;
 
@@ -11,91 +15,86 @@ public class Menu implements Drawable {
   public static final Color GRAY_TEXT_COLOR = new Color(159, 162, 166);
   public static final int MENU_WIDTH = 290;
 
-  public static final int INITIAL_STATE_ID = 1;
-  public static final int ESTADO_NORMAL_ID = 2;
-  public static final int FINAL_STATE_ID = 3;
-  public static final int INITIAL_FINAL_STATE_ID = 4;
-  public static final int MOVER_ESTADO_ID = 5;
-  public static final int ELIMINAR_ESTADO_ID = 6;
-  public static final int CONEXION_NORMAL_ID = 7;
-  public static final int CONEXION_BUCLE_ID = 8;
-  public static final int ELIMINAR_CONEXION_ID = 9;
-  public static final int COMPROBAR_AUTOMATA_ID = 10;
-  public static final int COMPROBACION_PASOS_ID = 11;
+  public static final int MOVE_STATE_ID = 5;
+  public static final int DELETE_STATE_ID = 6;
+  public static final int NORMAL_CONNECTION_ID = 7;
+  public static final int LOOP_CONNECTION_ID = 8;
+  public static final int DELETE_CONNECTION_ID = 9;
+  public static final int VERIFY_AUTOMATA_ID = 10;
+  public static final int STEP_VERIFICATION_ID = 11;
 
-  public static AbstractButton BUTTON_ADD_ESTADO_INICIAL = new AbstractButton.ButtonBuilder()
-      .addLine("Estado inicial")
-      .setID(INITIAL_STATE_ID)
+  public static AbstractButton ADD_INITIAL_STATE_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Initial state")
+      .setID(InitialState.INITIAL_STATE_ID)
       .build();
 
-  public static AbstractButton BUTTON_ADD_ESTADO_NORMAL = new AbstractButton.ButtonBuilder()
-      .addLine("Estado normal")
-      .setID(ESTADO_NORMAL_ID)
+  public static AbstractButton ADD_NORMAL_STATE_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Normal state")
+      .setID(NormalState.NORMAL_STATE_ID)
       .build();
 
-  public static AbstractButton BUTTON_ADD_ESTADO_FINAL = new AbstractButton.ButtonBuilder()
-      .addLine("Estado final")
-      .setID(FINAL_STATE_ID)
+  public static AbstractButton ADD_FINAL_STATE_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Final state")
+      .setID(FinalState.FINAL_STATE_ID)
       .build();
 
-  public static AbstractButton BUTTON_ADD_ESTADO_INICIAL_FINAL = new AbstractButton.ButtonBuilder()
-      .addLine("Estado inicial-")
-      .addLine("final")
-      .setID(INITIAL_FINAL_STATE_ID)
+  public static AbstractButton ADD_INITIAL_FINAL_STATE_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Initial-final")
+      .addLine("state")
+      .setID(InitialFinalState.INITIAL_FINAL_STATE_ID)
       .build();
 
-  public static AbstractButton BUTTON_MOVER_ESTADO = new AbstractButton.ButtonBuilder()
-      .addLine("Mover estado")
-      .setID(MOVER_ESTADO_ID)
+  public static AbstractButton MOVE_STATE_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Move state")
+      .setID(MOVE_STATE_ID)
       .build();
 
-  public static AbstractButton BUTTON_ELIMINAR_ESTADO = new AbstractButton.ButtonBuilder()
-      .addLine("Borrar estado")
-      .setID(ELIMINAR_ESTADO_ID)
+  public static AbstractButton DELETE_STATE_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Delete state")
+      .setID(DELETE_STATE_ID)
       .build();
 
-  public static AbstractButton BUTTON_ADD_CONEXION_NORMAL = new AbstractButton.ButtonBuilder()
-      .addLine("Conexión")
-      .addLine("normal")
-      .setID(CONEXION_NORMAL_ID)
+  public static AbstractButton ADD_NORMAL_CONNECTION_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Normal")
+      .addLine("connection")
+      .setID(NORMAL_CONNECTION_ID)
       .build();
 
-  public static AbstractButton BUTTON_ADD_CONEXION_BUCLE = new AbstractButton.ButtonBuilder()
-      .addLine("Conexión")
-      .addLine("bucle")
-      .setID(CONEXION_BUCLE_ID)
+  public static AbstractButton ADD_LOOP_CONNECTION_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Loop")
+      .addLine("connection")
+      .setID(LOOP_CONNECTION_ID)
       .build();
 
-  public static AbstractButton BUTTON_ELIMINAR_CONEXION = new AbstractButton.ButtonBuilder()
-      .addLine("Borrar")
-      .addLine("conexión")
-      .setID(ELIMINAR_CONEXION_ID)
+  public static AbstractButton DELETE_CONNECTION_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Delete")
+      .addLine("connection")
+      .setID(DELETE_CONNECTION_ID)
       .build();
 
-  public static AbstractButton BUTTON_COMPROBAR_AUTOMATA = new AbstractButton.ButtonBuilder()
-      .addLine("COMPROBAR")
+  public static AbstractButton VERIFY_AUTOMATA_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("VERIFY")
       .setColorPalette(Button.BUTTON_COLOR_PALETTE)
       .setDimension(50, 40)
       .setFontSize(8)
-      .setID(COMPROBAR_AUTOMATA_ID)
+      .setID(VERIFY_AUTOMATA_ID)
       .build();
 
-  public static AbstractButton BUTTON_COMPROBACION_PASOS_AUTOMATA = new AbstractButton.ButtonBuilder()
-      .addLine("Paso a paso")
-      .setID(COMPROBACION_PASOS_ID)
+  public static AbstractButton STEP_VERIFICATION_BUTTON = new AbstractButton.ButtonBuilder()
+      .addLine("Step by step")
+      .setID(STEP_VERIFICATION_ID)
       .build();
 
   public static JTextField TEXT_FIELD = new JTextField();
+  private final AutomataPanel panel;
 
-  private final AFNDPanel AFNDPanel;
-
-  public Menu(AFNDPanel AFNDPanel) {
-    this.AFNDPanel = AFNDPanel;
+  public Menu(AutomataPanel panel) {
+    this.panel = panel;
     initComponents();
   }
 
   private void initComponents() {
-    AFNDPanel.addSwingComponent(TEXT_FIELD);
+    panel.addSwingComponent(TEXT_FIELD);
   }
 
   @Override
@@ -113,57 +112,57 @@ public class Menu implements Drawable {
 
   @Override
   public int getLayer() {
-    return AFNDPanel.MAX_LAYER;
+    return panel.MAX_LAYER;
   }
 
   private void drawButtons(Graphics2D g) {
-    BUTTON_ADD_ESTADO_INICIAL.setPosition(AFNDPanel.getWidth() - 260, 80);
-    BUTTON_ADD_ESTADO_NORMAL.setPosition(AFNDPanel.getWidth() - 140, 80);
-    BUTTON_ADD_ESTADO_FINAL.setPosition(AFNDPanel.getWidth() - 260, 140);
-    BUTTON_ADD_ESTADO_INICIAL_FINAL.setPosition(AFNDPanel.getWidth() - 140, 140);
-    BUTTON_MOVER_ESTADO.setPosition(AFNDPanel.getWidth() - 260, 200);
-    BUTTON_ELIMINAR_ESTADO.setPosition(AFNDPanel.getWidth() - 140, 200);
-    BUTTON_ADD_CONEXION_NORMAL.setPosition(AFNDPanel.getWidth() - 260, 290);
-    BUTTON_ADD_CONEXION_BUCLE.setPosition(AFNDPanel.getWidth() - 140, 290);
-    BUTTON_ELIMINAR_CONEXION.setPosition(AFNDPanel.getWidth() - 200, 350);
-    BUTTON_COMPROBAR_AUTOMATA.setPosition(AFNDPanel.getWidth() - 80, 440);
-    BUTTON_COMPROBACION_PASOS_AUTOMATA.setPosition(AFNDPanel.getWidth() - 200, 490);
-    TEXT_FIELD.setBounds(AFNDPanel.getWidth() - 200, 440, 110, 40);
+    ADD_INITIAL_STATE_BUTTON.setPosition(panel.getWidth() - 260, 80);
+    ADD_NORMAL_STATE_BUTTON.setPosition(panel.getWidth() - 140, 80);
+    ADD_FINAL_STATE_BUTTON.setPosition(panel.getWidth() - 260, 140);
+    ADD_INITIAL_FINAL_STATE_BUTTON.setPosition(panel.getWidth() - 140, 140);
+    MOVE_STATE_BUTTON.setPosition(panel.getWidth() - 260, 200);
+    DELETE_STATE_BUTTON.setPosition(panel.getWidth() - 140, 200);
+    ADD_NORMAL_CONNECTION_BUTTON.setPosition(panel.getWidth() - 260, 290);
+    ADD_LOOP_CONNECTION_BUTTON.setPosition(panel.getWidth() - 140, 290);
+    DELETE_CONNECTION_BUTTON.setPosition(panel.getWidth() - 200, 350);
+    VERIFY_AUTOMATA_BUTTON.setPosition(panel.getWidth() - 80, 440);
+    STEP_VERIFICATION_BUTTON.setPosition(panel.getWidth() - 200, 490);
+    TEXT_FIELD.setBounds(panel.getWidth() - 200, 440, 110, 40);
 
-    BUTTON_ADD_ESTADO_INICIAL.draw(g);
-    BUTTON_ADD_ESTADO_NORMAL.draw(g);
-    BUTTON_ADD_ESTADO_FINAL.draw(g);
-    BUTTON_ADD_ESTADO_INICIAL_FINAL.draw(g);
-    BUTTON_MOVER_ESTADO.draw(g);
-    BUTTON_ELIMINAR_ESTADO.draw(g);
-    BUTTON_ADD_CONEXION_NORMAL.draw(g);
-    BUTTON_ADD_CONEXION_BUCLE.draw(g);
-    BUTTON_ELIMINAR_CONEXION.draw(g);
-    BUTTON_COMPROBAR_AUTOMATA.draw(g);
-    BUTTON_COMPROBACION_PASOS_AUTOMATA.draw(g);
+    ADD_INITIAL_STATE_BUTTON.draw(g);
+    ADD_NORMAL_STATE_BUTTON.draw(g);
+    ADD_FINAL_STATE_BUTTON.draw(g);
+    ADD_INITIAL_FINAL_STATE_BUTTON.draw(g);
+    MOVE_STATE_BUTTON.draw(g);
+    DELETE_STATE_BUTTON.draw(g);
+    ADD_NORMAL_CONNECTION_BUTTON.draw(g);
+    ADD_LOOP_CONNECTION_BUTTON.draw(g);
+    DELETE_CONNECTION_BUTTON.draw(g);
+    VERIFY_AUTOMATA_BUTTON.draw(g);
+    STEP_VERIFICATION_BUTTON.draw(g);
   }
 
   private void drawLabels(Graphics2D g) {
     g.setColor(Color.WHITE);
-    GraphicsUtils.drawStringOnPoint(g, "Menú", AFNDPanel.getWidth() - 285 / 2, 20);
+    GraphicsUtils.drawStringOnPoint(g, "Menu", panel.getWidth() - 285 / 2, 20);
 
     g.setColor(GRAY_TEXT_COLOR);
-    GraphicsUtils.drawStringOnPoint(g, "Agregar estados", AFNDPanel.getWidth() - 285 / 2, 55);
-    GraphicsUtils.drawStringOnPoint(g, "Agregar conexiones", AFNDPanel.getWidth() - 285 / 2, 267);
-    GraphicsUtils.drawStringOnPoint(g, "Ejecutar autómata", AFNDPanel.getWidth() - 285 / 2, 415);
+    GraphicsUtils.drawStringOnPoint(g, "Add states", panel.getWidth() - 285 / 2, 55);
+    GraphicsUtils.drawStringOnPoint(g, "Add connections", panel.getWidth() - 285 / 2, 267);
+    GraphicsUtils.drawStringOnPoint(g, "Verify automata", panel.getWidth() - 285 / 2, 415);
   }
 
   private void drawBackground(Graphics2D g) {
     g.setColor(ToggleButton.DEFAULT_COLOR);
-    g.fillRect(AFNDPanel.getWidth() - MENU_WIDTH, 0, MENU_WIDTH, AFNDPanel.getHeight());
+    g.fillRect(panel.getWidth() - MENU_WIDTH, 0, MENU_WIDTH, panel.getHeight());
 
     g.setColor(Color.WHITE);
-    g.fillRect(AFNDPanel.getWidth() - 285, 40, 285, AFNDPanel.getHeight());
+    g.fillRect(panel.getWidth() - 285, 40, 285, panel.getHeight());
   }
 
   public boolean clicked(Point point) {
     return GraphicsUtils.intersects(
-        new Rectangle(AFNDPanel.getWidth() - MENU_WIDTH, 0, MENU_WIDTH, AFNDPanel.getHeight()),
+        new Rectangle(panel.getWidth() - MENU_WIDTH, 0, MENU_WIDTH, panel.getHeight()),
         new Rectangle(point)
     );
   }

@@ -12,12 +12,8 @@ public class Button extends AbstractButton {
       .addColor(ColorPalette.ColorKey.TEXT_COLOR_KEY, Color.WHITE)
       .build();
 
-  public Button(List<String> content, int xPos, int yPos, int width, int height, int id, int fontSize, ColorPalette colorPalette) {
-    super(content, xPos, yPos, width, height, id, fontSize, colorPalette);
-  }
-
-  public Button(List<String> content, Point coords, Dimension dimension, int id, int fontSize, ColorPalette colorPalette) {
-    super(content, coords, dimension, id, fontSize, colorPalette);
+  public Button(List<String> content, Point pos, Dimension dimension, int id, int fontSize, ColorPalette colorPalette) {
+    super(content, pos, dimension, id, fontSize, colorPalette);
   }
 
   @Override
@@ -29,7 +25,7 @@ public class Button extends AbstractButton {
     g.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), fontSize));
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.FILL_COLOR_KEY));
-    g.fillRect(xPos, yPos, width, height);
+    g.fillRect(pos.x, pos.y, dimension.width, dimension.height);
 
     g.setColor(colorPalette.getColor(ColorPalette.ColorKey.TEXT_COLOR_KEY));
     super.drawContent(g);

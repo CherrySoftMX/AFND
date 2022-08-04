@@ -1,16 +1,16 @@
-package me.hikingcarrot7.afnd.core.afnd;
+package me.hikingcarrot7.afnd.core.automata;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AFNDInputTest {
-  private AFNDInput input;
+class AutomataInputTest {
+  private AutomataInput input;
 
   @BeforeEach
   void setUp() {
-    input = new AFNDInput("test");
+    input = new AutomataInput("test");
   }
 
   @Test
@@ -51,13 +51,13 @@ class AFNDInputTest {
   void whenMakeCopy_thenReturnsNewObjectWithCurrentState() {
     input.removeFirstChar();
 
-    AFNDInput inputCopy = input.makeCopy();
+    AutomataInput inputCopy = input.makeCopy();
 
     assertNotEquals(inputCopy, input);
     assertEquals("est", inputCopy.toString());
   }
 
-  private void emptyInput(AFNDInput input) {
+  private void emptyInput(AutomataInput input) {
     for (char ch : input.toString().toCharArray()) {
       input.removeFirstChar();
     }

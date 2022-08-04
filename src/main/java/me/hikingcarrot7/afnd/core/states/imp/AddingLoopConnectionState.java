@@ -40,7 +40,7 @@ public class AddingLoopConnectionState extends AutomataState {
         if (insertConnection()) {
           clearState();
         } else {
-          dialogueBalloon.setText("El valor es inválido");
+          dialogueBalloon.setText("Invalid condition!");
           panel.repaint();
         }
       }
@@ -68,11 +68,11 @@ public class AddingLoopConnectionState extends AutomataState {
         previewConnection.setPreviewMode(false);
 
         textTyper = new TextTyper(previewConnection.getConditionNode().getPos(), 1);
-        dialogueBalloon = new DialogueBalloon(panel, previewConnection.getConditionNode(), "Inserte la condición");
+        dialogueBalloon = new DialogueBalloon(panel, previewConnection.getConditionNode(), "Insert condition");
         insertingCondition = true;
 
         panel.addComponent(dialogueBalloon);
-        panel.textBox().setTitle("Inserte la condición para el estado");
+        panel.textBox().setTitle("Insert state's condition");
       }
     }
   }

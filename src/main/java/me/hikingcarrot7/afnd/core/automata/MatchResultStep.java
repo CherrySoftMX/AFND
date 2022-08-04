@@ -1,4 +1,4 @@
-package me.hikingcarrot7.afnd.core.afnd;
+package me.hikingcarrot7.afnd.core.automata;
 
 import lombok.ToString;
 import me.hikingcarrot7.afnd.core.graphs.Connection;

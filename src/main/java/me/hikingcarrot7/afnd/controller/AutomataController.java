@@ -8,7 +8,7 @@ import me.hikingcarrot7.afnd.view.components.AbstractButton;
 import me.hikingcarrot7.afnd.view.components.Button;
 import me.hikingcarrot7.afnd.view.components.Menu;
 import me.hikingcarrot7.afnd.view.components.ToggleButton;
-import me.hikingcarrot7.afnd.view.components.afnd.AFNDPanel;
+import me.hikingcarrot7.afnd.view.components.afnd.AutomataPanel;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -21,10 +21,10 @@ public class AutomataController implements Observer {
   private final AutomataStateDispatcher automataStateDispatcher;
   private final MainView view;
   private final Menu menu;
-  private final AFNDPanel panel;
+  private final AutomataPanel panel;
   private AbstractButton latestPressedButton;
 
-  public AutomataController(MainView view, AFNDPanel panel, Menu menu) {
+  public AutomataController(MainView view, AutomataPanel panel, Menu menu) {
     this.view = view;
     this.latestPressedButton = null;
     this.menu = menu;
@@ -87,7 +87,7 @@ public class AutomataController implements Observer {
 
     if (!menu.clicked(e.getPoint())
         || button instanceof Button
-        || button != null && button.getID() == Menu.COMPROBACION_PASOS_ID) {
+        || button != null && button.getID() == Menu.STEP_VERIFICATION_ID) {
       deliverInputEvent(e);
     }
   }
