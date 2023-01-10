@@ -33,13 +33,13 @@ public class AutomataResolver {
 
   private void ensureInputIsValid(AutomataInput input) {
     if (input.isEmpty()) {
-      throw new IllegalStateException("La cadena está vacía");
+      throw new IllegalStateException("The input is empty!");
     }
   }
 
   private void ensureAFNDIsInValidState() {
     if (!afnd.hasInitialState()) {
-      throw new IllegalStateException("Aún no has establecido el estado inicial");
+      throw new IllegalStateException("The initial state is not set yet!");
     }
   }
 

@@ -17,6 +17,7 @@ public class AddingLoopConnectionState extends AutomataState {
   private VisualConnection previousConnection;
   private TextTyper textTyper;
   private DialogueBalloon dialogueBalloon;
+
   private AddingLoopConnectionState() {
   }
 
